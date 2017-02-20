@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">wtm</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="women_techmakers_montreal">Women Techmakers | Montreal 2017</string>
+    <string name="powered_by">powered by GDG Montreal Android</string>
+    <string name="speakers">Speakers</string>
+    <string name="sponsors">Sponsors</string>
+    <string name="my_schedule">My Schedule</string>
+    <string name="program">Program</string>
+    <string name="women_techmakers_montreal_2017">Women Techmakers Montreal 2017</string>
+    <string name="information">Information</string>
+    <string name="twitter">Twitter</string>
+
+
+    <string name="error_field_required">Require field</string>
+
+    <string name="default_error_message">No internet connection</string>
+    <string name="error_message_serveur_prob">The server is unavailable</string>
+    <string name="retry_connection">Retry</string>
+
+
+    <!-- Utils -->
+    <!-- Update alert -->
+    <string name="update_alert_force_title">Update</string>
+    <string name="update_alert_force_message">Your application is too old, you must update to continue</string>
+    <string name="update_alert_force_ok_button">Download</string>
+    <string name="update_alert_force_cancel_button">Cancel</string>
+    <string name="update_alert_title">Update</string>
+    <string name="update_alert_message">A new version is available, do you want to download?</string>
+    <string name="update_alert_ok_button">Yes</string>
+    <string name="update_alert_cancel_button">No</string>
+</resources>

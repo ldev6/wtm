@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_field_required">Champ requis</string>
+
+    <string name="default_error_message">Aucune connexion Internet</string>
+    <string name="error_message_serveur_prob">Le serveur est indisponible</string>
+    <string name="retry_connection">Réessayer</string>
+
+
+    <!-- Utils -->
+    <!-- Update alert -->
+    <string name="update_alert_force_title">Mise à jour</string>
+    <string name="update_alert_force_message">Votre application est trop vieille, vous devez la mettre à jour pour pouvoir continuer</string>
+    <string name="update_alert_force_ok_button">Télécharger</string>
+    <string name="update_alert_force_cancel_button">Annuler</string>
+    <string name="update_alert_title">Mise à jour</string>
+    <string name="update_alert_message">Une nouvelle version est disponible, voulez-vous la télécharger?</string>
+    <string name="update_alert_ok_button">Oui</string>
+    <string name="update_alert_cancel_button">Non</string>
+
+</resources>
