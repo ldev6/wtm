@@ -1,27 +1,22 @@
 package com.montreal.wtm.utils;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
+
 import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.montreal.wtm.R;
 import com.montreal.wtm.utils.view.ViewUtils;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
+
 
 import java.io.File;
 import java.util.Locale;
@@ -37,7 +32,7 @@ public class Utils {
      * @param idView
      * @param fragment
      */
-    public static void changeFragment(FragmentActivity activity, int idView, Fragment fragment) {
+    public static void changeFragment(FragmentActivity activity, int idView, android.support.v4.app.Fragment fragment) {
         if (!fragment.isAdded()) {
             activity.getSupportFragmentManager().beginTransaction().replace(idView, fragment).commit();
         }
@@ -96,83 +91,6 @@ public class Utils {
      */
     public static boolean isRooted() {
         return findBinary("su");
-    }
-
-    // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // //
-    // // DOWNLOAD IMAGE
-    // //
-    // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public static void downloadImage(String url, final ImageView imageView) {
-        downloadImage(url, imageView, 0, false);
-    }
-
-    public static void downloadImage(String url, final ImageView imageView, boolean notUseCache) {
-        downloadImage(url, imageView, 0, notUseCache);
-    }
-
-    public static void downloadImage(String url, final ImageView imageView, int defaultImage) {
-        downloadImage(url, imageView, defaultImage, false);
-    }
-
-    public static void downloadImage(final String url, final ImageView imageView, final int placeHolderRes, boolean notUseCache, final boolean enableLog) {
-        if (url != null && url.length() > 0) {
-
-            if (enableLog) {
-                LogU.v("DOWNLOADIDMAGE", "DOWNLOAD IMAGE:" + url);
-            }
-
-
-            if (notUseCache) {
-                clearCacheUrl(url);
-            }
-
-            ImageLoader.getInstance().displayImage(url, imageView, new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    if (enableLog) {
-                        LogU.e("DOWNLOADIDMAGE", "setImage:" + imageUri + " imageViewId=" + imageView.getId());
-                    }
-
-                    super.onLoadingComplete(imageUri, view, loadedImage);
-                }
-
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-                    if (enableLog) {
-                        LogU.e("DOWNLOADIDMAGE", "onLoadingCancelled:" + imageUri + " imageViewId=" + imageView.getId());
-                    }
-                    super.onLoadingCancelled(imageUri, view);
-                }
-
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                    super.onLoadingFailed(imageUri, view, failReason);
-                    if (enableLog) {
-                        LogU.e("DOWNLOADIDMAGE", "loadingFailed, imageUri=" + imageUri + " fail reason=" + failReason);
-                    }
-                    imageView.setImageResource(placeHolderRes);
-                }
-            });
-
-        } else {
-            imageView.setImageResource(placeHolderRes);
-        }
-    }
-
-    public static void downloadImage(final String url, final ImageView imageView, final int placeHolderRes, boolean notUseCache) {
-        downloadImage(url, imageView, placeHolderRes, notUseCache, false);
-    }
-
-
-    /**
-     * Parse the url to remove image from all format from the cache
-     *
-     * @param url
-     */
-    public static void clearCacheUrl(String url) {
-        MemoryCacheUtils.removeFromCache(url, ImageLoader.getInstance().getMemoryCache());
     }
 
 

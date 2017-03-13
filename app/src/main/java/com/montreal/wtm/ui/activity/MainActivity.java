@@ -15,36 +15,28 @@ import android.view.MenuItem;
 
 import com.montreal.wtm.BuildConfig;
 import com.montreal.wtm.R;
-import com.montreal.wtm.ui.fragment.ProgramDayFragment;
 import com.montreal.wtm.ui.fragment.ProgramFragment;
+import com.montreal.wtm.ui.fragment.SpeakersFragment;
 import com.montreal.wtm.utils.Utils;
 import com.montreal.wtm.utils.ui.activity.BaseUtilsAppCompatActivity;
 
 public class MainActivity extends BaseUtilsAppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         layoutId = R.layout.activity_main;
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             enableDebugView = true;
         }
         super.onCreate(savedInstanceState);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -89,21 +81,22 @@ public class MainActivity extends BaseUtilsAppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Fragment fragment = null;
-       if (id == R.id.nav_program) {
+        if (id == R.id.nav_program) {
             fragment = ProgramFragment.newInstance();
         } else if (id == R.id.nav_my_schedule) {
 
         } else if (id == R.id.nav_speakers) {
+            fragment = SpeakersFragment.newIntance();
 
         } else if (id == R.id.nav_sponsors) {
 
         } else if (id == R.id.nav_information) {
 
-        } else if (id == R.id.nav_map){
+        } else if (id == R.id.nav_map) {
 
         }
 
-        Utils.changeFragment(this, R.id.container , fragment);
+        Utils.changeFragment(this, R.id.container, fragment);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

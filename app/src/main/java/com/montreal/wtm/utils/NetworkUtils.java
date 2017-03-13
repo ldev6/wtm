@@ -5,12 +5,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Base64;
 
-import com.montreal.wtm.R;
-
-import java.net.HttpURLConnection;
-
-import retrofit.RetrofitError;
-
 
 public class NetworkUtils {
 
@@ -43,74 +37,4 @@ public class NetworkUtils {
         String credentials = user + ":" + password;
         return Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
     }
-
-    // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // //
-    // // NETWORK ERROR
-    // //
-    // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public static boolean is401HTTPError(RetrofitError e) {
-
-        return (e.getKind() == RetrofitError.Kind.HTTP
-                && e.getResponse().getStatus() == HttpURLConnection.HTTP_UNAUTHORIZED);
-    }
-
-    public static boolean is403HTTPError(RetrofitError e) {
-        return (e.getKind() == RetrofitError.Kind.HTTP
-                && e.getResponse().getStatus() == HttpURLConnection.HTTP_FORBIDDEN);
-    }
-
-    public static boolean is404HTTPError(RetrofitError e) {
-        return (e.getKind() == RetrofitError.Kind.HTTP
-                && e.getResponse().getStatus() == HttpURLConnection.HTTP_NOT_FOUND);
-    }
-
-    public static boolean is406HTTPError(RetrofitError e) {
-        return (e.getKind() == RetrofitError.Kind.HTTP
-                & e.getResponse().getStatus() == HttpURLConnection.HTTP_NOT_ACCEPTABLE);
-    }
-
-    public static boolean is408HTTPError(RetrofitError e) {
-        return (e.getKind() == RetrofitError.Kind.HTTP
-                && e.getResponse().getStatus() == HttpURLConnection.HTTP_CLIENT_TIMEOUT);
-    }
-
-
-    public static boolean is409HTTPError(RetrofitError e) {
-        return (e.getKind() == RetrofitError.Kind.HTTP
-                && e.getResponse().getStatus() == HttpURLConnection.HTTP_CONFLICT);
-    }
-
-    public static boolean is500HttpError(RetrofitError e) {
-        return (e.getKind() == RetrofitError.Kind.HTTP
-                && e.getResponse().getStatus() == HttpURLConnection.HTTP_INTERNAL_ERROR);
-    }
-
-    public static boolean is503HttpError(RetrofitError e) {
-        return (e.getKind() == RetrofitError.Kind.HTTP
-                && e.getResponse().getStatus() == HttpURLConnection.HTTP_UNAVAILABLE);
-    }
-
-    public static boolean is422HttpError(RetrofitError e) {
-        return (e.getKind() == RetrofitError.Kind.HTTP
-                && e.getResponse().getStatus() == HttpURLConnection.HTTP_PRECON_FAILED);
-    }
-
-    public static boolean isAccessException(RetrofitError e) {
-        return e.getKind() == RetrofitError.Kind.NETWORK;
-    }
-
-
-    public static String getMessageError(Context context, RetrofitError e) {
-        if (is404HTTPError(e)) {
-            //We can change the text to put a more personalize text
-            return context.getString(R.string.error_message_serveur_prob);
-        } else if (isAccessException(e)) {
-            return context.getString(R.string.error_message_serveur_prob);
-        }
-        return context.getString(R.string.default_error_message);
-    }
-
-
 }
