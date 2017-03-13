@@ -9,7 +9,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.montreal.wtm.model.Speaker;
+import com.montreal.wtm.model.Talk;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FirebaseData {
@@ -28,14 +30,38 @@ public class FirebaseData {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
                 HashMap<String, Speaker> map = new HashMap<String, Speaker>();
                 for (DataSnapshot children : dataSnapshot.getChildren()) {
                     Speaker speaker = children.getValue(Speaker.class);
                     map.put(children.getKey(), speaker);
                 }
                 Log.v(TAG, "receive data");
+                requestListener.onDataChange(map);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+                requestListener.onCancelled(error);
+            }
+        });
+    }
+
+    public static void getSchedule(final RequestListener<HashMap<String, ArrayList<Talk>>> requestListener, int day) {
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("schedule-day-" + day);
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String, ArrayList<Talk>> map = new HashMap<String, ArrayList<Talk>>();
+                for (DataSnapshot children : dataSnapshot.getChildren()) {
+                    ArrayList<Talk> talks = new ArrayList<Talk>();
+                    for (DataSnapshot subChildren : children.getChildren()) {
+                        talks.add(subChildren.getValue(Talk.class));
+                    }
+                    map.put(children.getKey(), talks);
+                }
+
                 requestListener.onDataChange(map);
             }
 

@@ -5,9 +5,6 @@ import android.support.v4.app.Fragment;
 import com.montreal.wtm.ui.fragment.ProgramDayFragment;
 import com.montreal.wtm.ui.fragment.ProgramFragment;
 
-/**
- * Created by laurencedevillers on 16-07-23.
- */
 
 public class ProgramDayPager<T> {
 
@@ -25,6 +22,6 @@ public class ProgramDayPager<T> {
     }
 
     public Fragment getFragment() {
-        return new ProgramFragment();
+        return ProgramDayFragment.newInstance(day);
     }
 }

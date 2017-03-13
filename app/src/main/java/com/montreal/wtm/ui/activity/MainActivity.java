@@ -42,6 +42,9 @@ public class MainActivity extends BaseUtilsAppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Utils.changeFragment(this, R.id.container, ProgramFragment.newInstance());
+
     }
 
     @Override

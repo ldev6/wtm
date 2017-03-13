@@ -8,11 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseError;
 import com.montreal.wtm.R;
+import com.montreal.wtm.api.FirebaseData;
+import com.montreal.wtm.model.Talk;
 
-/**
- * Created by laurencedevillers on 16-07-23.
- */
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class ProgramDayFragment extends Fragment {
 
@@ -36,7 +39,22 @@ public class ProgramDayFragment extends Fragment {
 
         int day = getArguments().getInt(EXTRA_DAY);
         tvProgramDay = (TextView) v.findViewById(R.id.tvProgramDay);
-        tvProgramDay.setText(day);
+        tvProgramDay.setText("" + day);
+
+        FirebaseData.getSchedule(requestListener, day);
         return v;
     }
+
+
+    private FirebaseData.RequestListener<HashMap<String, ArrayList<Talk>>> requestListener = new FirebaseData.RequestListener<HashMap<String, ArrayList<Talk>>>() {
+        @Override
+        public void onDataChange(HashMap<String, ArrayList<Talk>> object) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError error) {
+
+        }
+    };
 }
