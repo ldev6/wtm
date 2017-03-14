@@ -6,11 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseError;
 import com.montreal.wtm.R;
@@ -24,9 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-
 
 public class ProgramDayFragment extends Fragment {
 
@@ -34,7 +30,6 @@ public class ProgramDayFragment extends Fragment {
 
     private ScheduleAdapter mAdapter;
     private ArrayList<Talk> mTalks;
-
 
     public static ProgramDayFragment newInstance(int day) {
 
@@ -65,7 +60,6 @@ public class ProgramDayFragment extends Fragment {
         return v;
     }
 
-
     private FirebaseData.RequestListener<ArrayList<Talk>> requestListener = new FirebaseData.RequestListener<ArrayList<Talk>>() {
         @Override
         public void onDataChange(ArrayList<Talk> object) {
@@ -73,8 +67,8 @@ public class ProgramDayFragment extends Fragment {
             mTalks.addAll(object);
             Collections.sort(mTalks, new Comparator<Talk>() {
                 public int compare(Talk v1, Talk v2) {
-                    String time1 = v1.time.split("-")[0];
-                    String time2 = v2.time.split("-")[0];
+                    String time1 = v1.getTime().split("-")[0];
+                    String time2 = v2.getTime().split("-")[0];
                     SimpleDateFormat sdf = new SimpleDateFormat("h:mm aa", Locale.CANADA);
                     try {
                         Date date1 = sdf.parse(time1);
@@ -83,7 +77,7 @@ public class ProgramDayFragment extends Fragment {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    return v1.time.toUpperCase().compareTo(v2.time.toUpperCase());
+                    return v1.getTime().toUpperCase().compareTo(v2.getTime().toUpperCase());
                 }
             });
             mAdapter.notifyDataSetChanged();
@@ -91,7 +85,13 @@ public class ProgramDayFragment extends Fragment {
 
         @Override
         public void onCancelled(DatabaseError error) {
-
+            //TODO ERROR MESSAGE
         }
     };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
+    }
 }

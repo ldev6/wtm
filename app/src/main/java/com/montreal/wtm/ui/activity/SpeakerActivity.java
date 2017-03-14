@@ -1,9 +1,7 @@
 package com.montreal.wtm.ui.activity;
 
-
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -73,8 +71,8 @@ public class SpeakerActivity extends AppCompatActivity {
         Picasso.with(this).load(stringBuilder.toString())
                 .into(avatarImageView);
 
-        ((TextView) findViewById(R.id.titleTextView)).setText(mSpeaker.title != null ? Html.fromHtml(mSpeaker.title) : null);
-        ((TextView) findViewById(R.id.descriptionTextView)).setText(mSpeaker.description != null ? Html.fromHtml(mSpeaker.description) : null);
+        ((TextView) findViewById(R.id.titleTextView)).setText(mSpeaker.getTitle() != null ? Html.fromHtml(mSpeaker.getTitle()) : null);
+        ((TextView) findViewById(R.id.descriptionTextView)).setText(mSpeaker.getDescription() != null ? Html.fromHtml(mSpeaker.getDescription()) : null);
     }
 
     @Override

@@ -20,6 +20,7 @@ import com.montreal.wtm.ui.fragment.ProgramFragment;
 import com.montreal.wtm.ui.fragment.SpeakersFragment;
 import com.montreal.wtm.utils.Utils;
 import com.montreal.wtm.utils.ui.activity.BaseUtilsAppCompatActivity;
+import com.montreal.wtm.utils.ui.fragment.EmptyFragment;
 
 public class MainActivity extends BaseUtilsAppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -76,7 +77,6 @@ public class MainActivity extends BaseUtilsAppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -90,11 +90,13 @@ public class MainActivity extends BaseUtilsAppCompatActivity
         } else if (id == R.id.nav_speakers) {
             fragment = SpeakersFragment.newIntance();
         } else if (id == R.id.nav_sponsors) {
-
+            fragment = EmptyFragment.newInstance();
         } else if (id == R.id.nav_information) {
-
+            fragment = EmptyFragment.newInstance();
         } else if (id == R.id.nav_map) {
-
+            fragment = EmptyFragment.newInstance();
+        } else {
+            fragment = EmptyFragment.newInstance();
         }
 
         Utils.changeFragment(this, R.id.container, fragment);
@@ -109,5 +111,4 @@ public class MainActivity extends BaseUtilsAppCompatActivity
         super.onPause();
         DataManager.getInstance().saveToSharePreference();
     }
-
 }

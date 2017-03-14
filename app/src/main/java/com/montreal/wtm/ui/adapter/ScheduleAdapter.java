@@ -13,6 +13,7 @@ import com.montreal.wtm.R;
 
 import com.montreal.wtm.model.DataManager;
 import com.montreal.wtm.model.Talk;
+import com.montreal.wtm.ui.activity.TalkActivity;
 
 import java.util.ArrayList;
 
@@ -51,16 +52,16 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
 
         if (holder instanceof BreakViewHolder) {
             BreakViewHolder headerHolder = (BreakViewHolder) holder;
-            if (talk.type.equals(Talk.Type.Break.toString())) {
+            if (talk.getType().equals(Talk.Type.Break.toString())) {
                 headerHolder.iconImageView.setImageResource(R.drawable.ic_access_time_black_24dp);
             } else {
                 headerHolder.iconImageView.setImageResource(R.drawable.ic_restaurant_menu_black_24dp);
             }
-            headerHolder.titleTextView.setText(talk.time);
+            headerHolder.titleTextView.setText(talk.getTime());
         } else if (holder instanceof TalkViewHolder) {
             final TalkViewHolder talkViewHolder = (TalkViewHolder) holder;
-            if (talk.speakerId != null) {
-                if (DataManager.getInstance().loveTalkContainSpeaker(talk.speakerId)) {
+            if (talk.getSpeakerId() != null) {
+                if (DataManager.getInstance().loveTalkContainSpeaker(talk.getSpeakerId())) {
                     talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
                 } else {
                     talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
@@ -68,27 +69,31 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
                 talkViewHolder.loveImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (DataManager.getInstance().loveTalkContainSpeaker(talk.speakerId)) {
-                            DataManager.getInstance().removeLoveTalks(talk.speakerId);
+                        if (DataManager.getInstance().loveTalkContainSpeaker(talk.getSpeakerId())) {
+                            DataManager.getInstance().removeLoveTalks(talk.getSpeakerId());
                             talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
                         } else {
-                            DataManager.getInstance().addLoveTalk(talk.speakerId);
+                            DataManager.getInstance().addLoveTalk(talk.getSpeakerId());
                             talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
                         }
                     }
                 });
             }
-
-            talkViewHolder.timeTextView.setText(talk.time);
-            talkViewHolder.roomTextView.setText(talk.room);
-            talkViewHolder.talkTitleTextView.setText(talk.title);
+            talkViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(TalkActivity.newIntent(mContext, talk));
+                }
+            });
+            talkViewHolder.timeTextView.setText(talk.getTime());
+            talkViewHolder.roomTextView.setText(talk.getRoom());
+            talkViewHolder.talkTitleTextView.setText(talk.getTitle());
         }
     }
 
-
     @Override
     public int getItemViewType(int position) {
-        return mTalks.get(position).type.equals(Talk.Type.Talk.toString()) ? TYPE_TALK : TYPE_BREAK;
+        return mTalks.get(position).getType().equals(Talk.Type.Talk.toString()) ? TYPE_TALK : TYPE_BREAK;
     }
 
     @Override
@@ -123,5 +128,4 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
             talkTitleTextView = (TextView) itemView.findViewById(R.id.talkTitleTextView);
         }
     }
-
 }

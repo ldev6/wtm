@@ -62,7 +62,7 @@ public class SpeakersFragment extends Fragment {
 
         @Override
         public void onCancelled(DatabaseError error) {
-
+            //TODO ERROR
         }
     };
 

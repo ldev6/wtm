@@ -3,6 +3,7 @@ package com.montreal.wtm.ui.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,6 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
         mContext = context;
     }
 
-
     @Override
     public SpeakerHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.speaker_row, parent, false);
@@ -44,7 +44,7 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
         final Map.Entry<String, Speaker> speakerHasmap = mData.get(position);
         final Speaker speaker = speakerHasmap.getValue();
         holder.nameTextView.setText(speaker.getName());
-        holder.titleTextView.setText(speaker.title != null ? Html.fromHtml(speaker.title): null);
+        holder.titleTextView.setText(speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()): null);
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(mContext.getResources().getString(R.string.speakers_url))
@@ -60,9 +60,7 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
                 mContext.startActivity(SpeakerActivity.newIntent(mContext, speaker, speakerHasmap.getKey()));
             }
         });
-
     }
-
 
     @Override
     public int getItemCount() {
@@ -76,10 +74,10 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
         Collections.sort(mData, new Comparator<Map.Entry>() {
             @Override
             public int compare(Map.Entry o1, Map.Entry o2) {
-                return ((Speaker) o1.getValue()).firstName.toUpperCase().compareTo(((Speaker) o2.getValue()).firstName.toUpperCase());
+                Log.v("test", ((Speaker)o1.getValue()).getFirstName());
+                return ((Speaker) o1.getValue()).getFirstName().toUpperCase().compareTo(((Speaker) o2.getValue()).getFirstName().toUpperCase());
             }
         });
-
 
         notifyDataSetChanged();
     }

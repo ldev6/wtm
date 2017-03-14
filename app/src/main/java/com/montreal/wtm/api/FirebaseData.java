@@ -25,6 +25,29 @@ public class FirebaseData {
         void onCancelled(DatabaseError error);
     }
 
+    public static void getSpeaker(final RequestListener<Speaker> requestListener, String speakerId) {
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("speakers/"+speakerId);
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Log.v(TAG, "" + dataSnapshot.getValue());
+                Speaker speaker = dataSnapshot.getValue(Speaker.class);
+
+                if (speaker != null) {
+                    requestListener.onDataChange(speaker);
+                } //TODO other
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+                requestListener.onCancelled(error);
+            }
+        });
+    }
+
     public static void getSpeakers(final RequestListener<HashMap<String, Speaker>> requestListener) {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("speakers");
         myRef.addValueEventListener(new ValueEventListener() {

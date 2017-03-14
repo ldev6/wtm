@@ -13,7 +13,6 @@ public class ProgramFragmentPagerAdapter extends FragmentPagerAdapter {
     private Context context;
     private ArrayList<ProgramDayPager> programDayPagers;
 
-
     public ProgramFragmentPagerAdapter(FragmentManager fm, Context context, ArrayList<ProgramDayPager> programDayPagers) {
         super(fm);
         this.context = context;
