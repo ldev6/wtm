@@ -87,11 +87,8 @@ public class MainActivity extends BaseUtilsAppCompatActivity
         Fragment fragment = null;
         if (id == R.id.nav_program) {
             fragment = ProgramFragment.newInstance();
-        } else if (id == R.id.nav_my_schedule) {
-
         } else if (id == R.id.nav_speakers) {
             fragment = SpeakersFragment.newIntance();
-
         } else if (id == R.id.nav_sponsors) {
 
         } else if (id == R.id.nav_information) {
