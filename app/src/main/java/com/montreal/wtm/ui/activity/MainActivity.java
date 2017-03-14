@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import com.montreal.wtm.BuildConfig;
 import com.montreal.wtm.R;
+import com.montreal.wtm.model.DataManager;
 import com.montreal.wtm.ui.fragment.ProgramFragment;
 import com.montreal.wtm.ui.fragment.SpeakersFragment;
 import com.montreal.wtm.utils.Utils;
@@ -105,4 +106,11 @@ public class MainActivity extends BaseUtilsAppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DataManager.getInstance().saveToSharePreference();
+    }
+
 }

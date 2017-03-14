@@ -6,6 +6,9 @@ import com.google.firebase.database.PropertyName;
 @IgnoreExtraProperties
 public class Talk {
 
+    @PropertyName("type")
+    public String type;
+
     @PropertyName("room")
     public String room;
 
@@ -20,10 +23,16 @@ public class Talk {
 
     public String description;
 
+
+    public enum Type {
+        Talk, Food, Break;
+    }
+
     public Talk() {
     }
 
-    public Talk(String room, String speakerId, String time, String title, String description) {
+    public Talk(String type, String room, String speakerId, String time, String title, String description) {
+        this.type = type;
         this.room = room;
         this.speakerId = speakerId;
         this.time = time;

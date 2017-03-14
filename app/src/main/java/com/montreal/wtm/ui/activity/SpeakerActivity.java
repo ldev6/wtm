@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 
 import com.montreal.wtm.R;
+import com.montreal.wtm.model.DataManager;
 import com.montreal.wtm.model.Speaker;
 import com.squareup.picasso.Picasso;
 
@@ -56,7 +57,8 @@ public class SpeakerActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                DataManager.getInstance().addLoveTalk(mSpeakerKey);
+                Snackbar.make(view, "The talk of this speaker is now love in the schedule ", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -72,7 +74,7 @@ public class SpeakerActivity extends AppCompatActivity {
                 .into(avatarImageView);
 
         ((TextView) findViewById(R.id.titleTextView)).setText(mSpeaker.title != null ? Html.fromHtml(mSpeaker.title) : null);
-        ((TextView) findViewById(R.id.descriptionTextView)).setText(mSpeaker.description !=null ? Html.fromHtml(mSpeaker.description): null);
+        ((TextView) findViewById(R.id.descriptionTextView)).setText(mSpeaker.description != null ? Html.fromHtml(mSpeaker.description) : null);
     }
 
     @Override
@@ -84,6 +86,5 @@ public class SpeakerActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 }

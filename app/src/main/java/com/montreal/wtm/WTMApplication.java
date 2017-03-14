@@ -12,7 +12,5 @@ public class WTMApplication extends Application {
     public static Context applicationContext;
     public WTMApplication() {
         applicationContext = this;
-
     }
-
 }

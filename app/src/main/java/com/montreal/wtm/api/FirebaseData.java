@@ -48,21 +48,16 @@ public class FirebaseData {
         });
     }
 
-    public static void getSchedule(final RequestListener<HashMap<String, ArrayList<Talk>>> requestListener, int day) {
+    public static void getSchedule(final RequestListener<ArrayList<Talk>> requestListener, int day) {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("schedule-day-" + day);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String, ArrayList<Talk>> map = new HashMap<String, ArrayList<Talk>>();
+                ArrayList<Talk> talks = new ArrayList<Talk>();
                 for (DataSnapshot children : dataSnapshot.getChildren()) {
-                    ArrayList<Talk> talks = new ArrayList<Talk>();
-                    for (DataSnapshot subChildren : children.getChildren()) {
-                        talks.add(subChildren.getValue(Talk.class));
-                    }
-                    map.put(children.getKey(), talks);
+                    talks.add(children.getValue(Talk.class));
                 }
-
-                requestListener.onDataChange(map);
+                requestListener.onDataChange(talks);
             }
 
             @Override
