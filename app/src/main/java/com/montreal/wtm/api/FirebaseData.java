@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.montreal.wtm.model.Speaker;
+import com.montreal.wtm.model.Sponsor;
 import com.montreal.wtm.model.Talk;
 
 import java.util.ArrayList;
@@ -26,14 +27,13 @@ public class FirebaseData {
     }
 
     public static void getSpeaker(final RequestListener<Speaker> requestListener, String speakerId) {
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("speakers/"+speakerId);
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("speakers/" + speakerId);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 Log.v(TAG, "" + dataSnapshot.getValue());
                 Speaker speaker = dataSnapshot.getValue(Speaker.class);
-
                 if (speaker != null) {
                     requestListener.onDataChange(speaker);
                 } //TODO other
@@ -81,6 +81,33 @@ public class FirebaseData {
                     talks.add(children.getValue(Talk.class));
                 }
                 requestListener.onDataChange(talks);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+                requestListener.onCancelled(error);
+            }
+        });
+    }
+
+    public static void getSponsors(final RequestListener<HashMap<String, ArrayList<Sponsor>>> requestListener) {
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("sponsor");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String, ArrayList<Sponsor>> map = new HashMap<String, ArrayList<Sponsor>>();
+                for (DataSnapshot children : dataSnapshot.getChildren()) {
+                    ArrayList<Sponsor> sponsors = new ArrayList<Sponsor>();
+                    for (DataSnapshot subChildren : children.getChildren()) {
+                        Sponsor sponsor = subChildren.getValue(Sponsor.class);
+                        sponsors.add(sponsor);
+                    }
+                    map.put(children.getKey(), sponsors);
+                }
+                Log.v(TAG, "receive data");
+                requestListener.onDataChange(map);
             }
 
             @Override

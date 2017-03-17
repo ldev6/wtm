@@ -30,7 +30,6 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
     public ScheduleAdapter(Context context, ArrayList<Talk> talks) {
         mTalks = talks;
         mContext = context;
-
     }
 
     @Override
@@ -93,7 +92,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return mTalks.get(position).getType().equals(Talk.Type.Talk.toString()) ? TYPE_TALK : TYPE_BREAK;
+        return (mTalks.get(position).getType().equals(Talk.Type.Break.toString()) ||
+                mTalks.get(position).getType().equals(Talk.Type.Food.toString())) ? TYPE_BREAK : TYPE_TALK;
     }
 
     @Override

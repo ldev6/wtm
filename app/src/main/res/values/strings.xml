@@ -34,4 +34,9 @@
     <string name="update_alert_message">A new version is available, do you want to download?</string>
     <string name="update_alert_ok_button">Yes</string>
     <string name="update_alert_cancel_button">No</string>
+    <string name="bio">Bio</string>
+    <string name="platinum">platinum</string>
+    <string name="gold">gold</string>
+    <string name="silver">silver</string>
+    <string name="bronze">bronze</string>
 </resources>

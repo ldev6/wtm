@@ -18,6 +18,7 @@ import com.montreal.wtm.R;
 import com.montreal.wtm.model.DataManager;
 import com.montreal.wtm.ui.fragment.ProgramFragment;
 import com.montreal.wtm.ui.fragment.SpeakersFragment;
+import com.montreal.wtm.ui.fragment.SponsorsFragment;
 import com.montreal.wtm.utils.Utils;
 import com.montreal.wtm.utils.ui.activity.BaseUtilsAppCompatActivity;
 import com.montreal.wtm.utils.ui.fragment.EmptyFragment;
@@ -90,7 +91,7 @@ public class MainActivity extends BaseUtilsAppCompatActivity
         } else if (id == R.id.nav_speakers) {
             fragment = SpeakersFragment.newIntance();
         } else if (id == R.id.nav_sponsors) {
-            fragment = EmptyFragment.newInstance();
+            fragment = SponsorsFragment.newInstance();
         } else if (id == R.id.nav_information) {
             fragment = EmptyFragment.newInstance();
         } else if (id == R.id.nav_map) {

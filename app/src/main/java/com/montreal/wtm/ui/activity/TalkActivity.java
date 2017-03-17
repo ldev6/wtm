@@ -3,11 +3,13 @@ package com.montreal.wtm.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,6 +38,7 @@ public class TalkActivity extends AppCompatActivity {
     private Toolbar mToolBar;
     private TextView mTitleTextView;
     private TextView mDescriptionTextView;
+    private CollapsingToolbarLayout mCollapsingToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +50,14 @@ public class TalkActivity extends AppCompatActivity {
 
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
 
+        if (mTalk.getType().equals(Talk.Type.General.toString())) {
+            findViewById(R.id.bioTextView).setVisibility(View.GONE);
+        }
         setSupportActionBar(mToolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FirebaseData.getSpeaker(requestListener, mTalk.getSpeakerId());
+        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -74,8 +81,8 @@ public class TalkActivity extends AppCompatActivity {
                 .into(avatarImageView);
 
         findViewById(R.id.talkInformation).setVisibility(View.VISIBLE);
-        ((TextView) findViewById(R.id.titleTalkTextView)).setText(mTalk.getTitle());
-        ((TextView) findViewById(R.id.descriptionTalkTextView)).setText(mTalk.getDescription());
+        ((TextView) findViewById(R.id.titleTalkTextView)).setText(mTalk.getTitle() != null ? Html.fromHtml(mTalk.getTitle()) : null);
+        ((TextView) findViewById(R.id.descriptionTalkTextView)).setText(mTalk.getDescription() != null ? Html.fromHtml(mTalk.getDescription()) : null);
 
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
         mDescriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
@@ -84,7 +91,8 @@ public class TalkActivity extends AppCompatActivity {
     private FirebaseData.RequestListener<Speaker> requestListener = new FirebaseData.RequestListener<Speaker>() {
         @Override
         public void onDataChange(Speaker speaker) {
-            getSupportActionBar().setTitle(speaker.getName());
+            mToolBar.setTitle(speaker.getName());
+            mCollapsingToolbar.setTitle(speaker.getName());
             mTitleTextView.setText(speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()) : null);
             mDescriptionTextView.setText(speaker.getDescription() != null ? Html.fromHtml(speaker.getDescription()) : null);
         }

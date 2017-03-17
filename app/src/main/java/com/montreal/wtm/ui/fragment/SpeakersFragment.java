@@ -19,8 +19,6 @@ import com.montreal.wtm.ui.adapter.SpeakersAdapter;
 
 import java.util.HashMap;
 
-import static com.montreal.wtm.R.id.recyclerView;
-
 
 public class SpeakersFragment extends Fragment {
 
@@ -28,24 +26,24 @@ public class SpeakersFragment extends Fragment {
         return new SpeakersFragment();
     }
 
-    private RecyclerView mRecyclerView;
+
     private HashMap<String, Speaker> mSpeakerHashMap;
     private SpeakersAdapter mAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.speakers_fragment, container, false);
+        View view = inflater.inflate(R.layout.simple_recycler_list, container, false);
 
-        mRecyclerView = (RecyclerView) view.findViewById(recyclerView);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),
                 linearLayoutManager.getOrientation());
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(linearLayoutManager);
         mSpeakerHashMap = new HashMap<String, Speaker>();
         mAdapter = new SpeakersAdapter(getActivity(), mSpeakerHashMap);
-        mRecyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(mAdapter);
         FirebaseData.getSpeakers(speakersRequestListener);
 
         return view;
