@@ -8,4 +8,9 @@
 
     <color name="transGreen">#5000BFA5</color>
 
+    <color name="platinum">#A0B8C7</color>
+    <color name="gold">#D4AF37</color>
+    <color name="silver">#A5A5A5</color>
+    <color name="bronze">#CD7F32</color>
+
 </resources>

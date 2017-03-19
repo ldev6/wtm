@@ -3,17 +3,16 @@ package com.montreal.wtm.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import com.google.firebase.database.DatabaseError;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Sponsor;
-import com.montreal.wtm.ui.adapter.SponsorsAdapter;
+import com.montreal.wtm.ui.adapter.SponsorsGridViewAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,19 +25,20 @@ public class SponsorsFragment extends Fragment {
     }
 
 
-    private SponsorsAdapter mAdapter;
-
+    private GridView mSponsorPlatinumGridView;
+    private GridView mSponsorGoldGridView;
+    private GridView mSponsorSilverGridView;
+    private GridView mSponsorBronzeGridView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.simple_recycler_list, container, false);
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new SponsorsAdapter(getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(mAdapter);
+        View v = inflater.inflate(R.layout.sponsors_fragment, container, false);
 
+        mSponsorPlatinumGridView = (GridView) v.findViewById(R.id.sponsorPlatinumGridView);
+        mSponsorGoldGridView = (GridView) v.findViewById(R.id.sponsorGoldGridView);
+        mSponsorSilverGridView = (GridView) v.findViewById(R.id.sponsorSilverGridView);
+        mSponsorBronzeGridView = (GridView) v.findViewById(R.id.sponsorBronzeGridView);
         FirebaseData.getSponsors(requestListener);
         return v;
     }
@@ -47,8 +47,12 @@ public class SponsorsFragment extends Fragment {
     private FirebaseData.RequestListener<HashMap<String, ArrayList<Sponsor>>> requestListener = new FirebaseData.RequestListener<HashMap<String, ArrayList<Sponsor>>>() {
 
         @Override
-        public void onDataChange(HashMap<String, ArrayList<Sponsor>> object) {
-            mAdapter.updateList(object);
+        public void onDataChange(HashMap<String, ArrayList<Sponsor>> hashMapSponsors) {
+            mSponsorPlatinumGridView.setAdapter(new SponsorsGridViewAdapter(getActivity(), hashMapSponsors.get(getActivity().getString(R.string.platinum)), SponsorsGridViewAdapter.SponsorCategory.PLATINUM));
+            mSponsorGoldGridView.setAdapter(new SponsorsGridViewAdapter(getActivity(), hashMapSponsors.get(getActivity().getString(R.string.gold)),SponsorsGridViewAdapter.SponsorCategory.GOLD));
+            mSponsorSilverGridView.setAdapter(new SponsorsGridViewAdapter(getActivity(), hashMapSponsors.get(getActivity().getString(R.string.silver)), SponsorsGridViewAdapter.SponsorCategory.SILVER));
+            mSponsorBronzeGridView.setAdapter(new SponsorsGridViewAdapter(getActivity(), hashMapSponsors.get(getActivity().getString(R.string.bronze)), SponsorsGridViewAdapter.SponsorCategory.BRONZE));
+            getView().invalidate();
         }
 
         @Override
@@ -56,5 +60,6 @@ public class SponsorsFragment extends Fragment {
 
         }
     };
+
 
 }
