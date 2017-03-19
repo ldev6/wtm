@@ -211,7 +211,7 @@ public class MenuDebugAdapter extends BaseAdapter {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MenuDebugAdapter.class.getSimpleName(), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(PROPERTY_LANG, langPosition);
-        editor.commit();
+        editor.apply();
 
     }
 

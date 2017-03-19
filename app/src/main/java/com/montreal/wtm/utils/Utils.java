@@ -1,7 +1,6 @@
 package com.montreal.wtm.utils;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,7 +19,6 @@ import com.montreal.wtm.utils.view.ViewUtils;
 
 import java.io.File;
 import java.util.Locale;
-
 
 
 public class Utils {
@@ -54,6 +52,7 @@ public class Utils {
         }
         return false;
     }
+
 
 
     // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,12 +113,13 @@ public class Utils {
 
     /**
      * Show a alert message to insist or force the user to update the application
+     *
      * @param context
      * @param forceUpdate
      */
-    public static void updateTheApplication(final Activity context, boolean forceUpdate){
+    public static void updateTheApplication(final Activity context, boolean forceUpdate) {
         final String appPackageName = context.getPackageName(); // getPackageName() from Context or Activity object
-        if(forceUpdate){
+        if (forceUpdate) {
             ViewUtils.showAlertMessageWithCancel(context, context.getString(R.string.update_alert_force_title), context.getString(R.string.update_alert_force_message), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -136,7 +136,7 @@ public class Utils {
                     context.finish();
                 }
             }, context.getString(R.string.update_alert_force_cancel_button), context.getString(R.string.update_alert_force_ok_button));
-        }else {
+        } else {
             ViewUtils.showAlertMessageWithCancel(context, context.getString(R.string.update_alert_title), context.getString(R.string.update_alert_message), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.montreal.wtm">
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".WTMApplication"
@@ -28,6 +29,9 @@
             android:name=".ui.activity.TalkActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="9a19618d885e2728ed4ba6cdc54f62fa5857e6ba" />
     </application>
 
 </manifest>

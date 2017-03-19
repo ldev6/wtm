@@ -1,10 +1,7 @@
 package com.montreal.wtm.ui.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +16,7 @@ import com.montreal.wtm.model.DataManager;
 import com.montreal.wtm.ui.fragment.ProgramFragment;
 import com.montreal.wtm.ui.fragment.SpeakersFragment;
 import com.montreal.wtm.ui.fragment.SponsorsFragment;
+import com.montreal.wtm.ui.fragment.TwitterFragment;
 import com.montreal.wtm.utils.Utils;
 import com.montreal.wtm.utils.ui.activity.BaseUtilsAppCompatActivity;
 import com.montreal.wtm.utils.ui.fragment.EmptyFragment;
@@ -88,14 +86,22 @@ public class MainActivity extends BaseUtilsAppCompatActivity
         Fragment fragment = null;
         if (id == R.id.nav_program) {
             fragment = ProgramFragment.newInstance();
+            setActionBarName(getString(R.string.program));
         } else if (id == R.id.nav_speakers) {
             fragment = SpeakersFragment.newIntance();
+            setActionBarName(getString(R.string.speakers));
         } else if (id == R.id.nav_sponsors) {
             fragment = SponsorsFragment.newInstance();
+            setActionBarName(getString(R.string.sponsors));
         } else if (id == R.id.nav_information) {
             fragment = EmptyFragment.newInstance();
+            setActionBarName(getString(R.string.information));
         } else if (id == R.id.nav_map) {
             fragment = EmptyFragment.newInstance();
+            setActionBarName(getString(R.string.location));
+        } else if (id == R.id.nav_twitter) {
+            fragment = TwitterFragment.newInstance();
+            setActionBarName(getString(R.string.twitter));
         } else {
             fragment = EmptyFragment.newInstance();
         }
@@ -111,5 +117,9 @@ public class MainActivity extends BaseUtilsAppCompatActivity
     protected void onPause() {
         super.onPause();
         DataManager.getInstance().saveToSharePreference();
+    }
+
+    private void setActionBarName(String name) {
+        getSupportActionBar().setTitle(name);
     }
 }

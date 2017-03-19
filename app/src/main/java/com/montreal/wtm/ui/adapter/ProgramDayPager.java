@@ -3,7 +3,6 @@ package com.montreal.wtm.ui.adapter;
 import android.support.v4.app.Fragment;
 
 import com.montreal.wtm.ui.fragment.ProgramDayFragment;
-import com.montreal.wtm.ui.fragment.ProgramFragment;
 
 
 public class ProgramDayPager<T> {

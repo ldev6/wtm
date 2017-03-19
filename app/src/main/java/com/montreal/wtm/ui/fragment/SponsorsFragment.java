@@ -49,7 +49,7 @@ public class SponsorsFragment extends Fragment {
         @Override
         public void onDataChange(HashMap<String, ArrayList<Sponsor>> hashMapSponsors) {
             mSponsorPlatinumGridView.setAdapter(new SponsorsGridViewAdapter(getActivity(), hashMapSponsors.get(getActivity().getString(R.string.platinum)), SponsorsGridViewAdapter.SponsorCategory.PLATINUM));
-            mSponsorGoldGridView.setAdapter(new SponsorsGridViewAdapter(getActivity(), hashMapSponsors.get(getActivity().getString(R.string.gold)),SponsorsGridViewAdapter.SponsorCategory.GOLD));
+            mSponsorGoldGridView.setAdapter(new SponsorsGridViewAdapter(getActivity(), hashMapSponsors.get(getActivity().getString(R.string.gold)), SponsorsGridViewAdapter.SponsorCategory.GOLD));
             mSponsorSilverGridView.setAdapter(new SponsorsGridViewAdapter(getActivity(), hashMapSponsors.get(getActivity().getString(R.string.silver)), SponsorsGridViewAdapter.SponsorCategory.SILVER));
             mSponsorBronzeGridView.setAdapter(new SponsorsGridViewAdapter(getActivity(), hashMapSponsors.get(getActivity().getString(R.string.bronze)), SponsorsGridViewAdapter.SponsorCategory.BRONZE));
             getView().invalidate();

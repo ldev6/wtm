@@ -39,4 +39,5 @@
     <string name="gold">gold</string>
     <string name="silver">silver</string>
     <string name="bronze">bronze</string>
+    <string name="no_tweets">No Tweets</string>
 </resources>

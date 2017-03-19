@@ -3,6 +3,7 @@ package com.montreal.wtm.api;
 
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,17 +33,16 @@ public class FirebaseData {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                Log.v(TAG, "" + dataSnapshot.getValue());
                 Speaker speaker = dataSnapshot.getValue(Speaker.class);
                 if (speaker != null) {
                     requestListener.onDataChange(speaker);
-                } //TODO other
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Crashlytics.log("Get Speaker failed" +error.getMessage());
                 requestListener.onCancelled(error);
             }
         });
@@ -65,7 +65,7 @@ public class FirebaseData {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Crashlytics.log("Get Speakers failed ="+error.getMessage());
                 requestListener.onCancelled(error);
             }
         });
@@ -86,7 +86,7 @@ public class FirebaseData {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Crashlytics.log("Get Schedule failed ="+error.getMessage());
                 requestListener.onCancelled(error);
             }
         });
@@ -113,7 +113,7 @@ public class FirebaseData {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Crashlytics.log("Get Sponsors failed ="+error.getMessage());
                 requestListener.onCancelled(error);
             }
         });
