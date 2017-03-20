@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import com.montreal.wtm.BuildConfig;
 import com.montreal.wtm.R;
 import com.montreal.wtm.model.DataManager;
+import com.montreal.wtm.ui.fragment.InformationFragment;
 import com.montreal.wtm.ui.fragment.LocationFragment;
 import com.montreal.wtm.ui.fragment.ProgramFragment;
 import com.montreal.wtm.ui.fragment.SpeakersFragment;
@@ -95,7 +96,7 @@ public class MainActivity extends BaseUtilsAppCompatActivity
             fragment = SponsorsFragment.newInstance();
             setActionBarName(getString(R.string.sponsors));
         } else if (id == R.id.nav_information) {
-            fragment = EmptyFragment.newInstance();
+            fragment = InformationFragment.newInstance();
             setActionBarName(getString(R.string.information));
         } else if (id == R.id.nav_map) {
             fragment = LocationFragment.newInstance();
