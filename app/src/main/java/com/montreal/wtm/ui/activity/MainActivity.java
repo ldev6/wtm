@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import com.montreal.wtm.BuildConfig;
 import com.montreal.wtm.R;
 import com.montreal.wtm.model.DataManager;
+import com.montreal.wtm.ui.fragment.LocationFragment;
 import com.montreal.wtm.ui.fragment.ProgramFragment;
 import com.montreal.wtm.ui.fragment.SpeakersFragment;
 import com.montreal.wtm.ui.fragment.SponsorsFragment;
@@ -97,7 +98,7 @@ public class MainActivity extends BaseUtilsAppCompatActivity
             fragment = EmptyFragment.newInstance();
             setActionBarName(getString(R.string.information));
         } else if (id == R.id.nav_map) {
-            fragment = EmptyFragment.newInstance();
+            fragment = LocationFragment.newInstance();
             setActionBarName(getString(R.string.location));
         } else if (id == R.id.nav_twitter) {
             fragment = TwitterFragment.newInstance();

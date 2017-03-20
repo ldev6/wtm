@@ -27,4 +27,7 @@
     <dimen name="gold_size">175dp</dimen>
     <dimen name="silver_size">150dp</dimen>
     <dimen name="bronze_size">125dp</dimen>
+
+    <dimen name="map_size">200dp</dimen>
+    <dimen name="map_size_padding">170dp</dimen>
 </resources>

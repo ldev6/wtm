@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.montreal.wtm.model.Location;
 import com.montreal.wtm.model.Speaker;
 import com.montreal.wtm.model.Sponsor;
 import com.montreal.wtm.model.Talk;
@@ -42,7 +43,7 @@ public class FirebaseData {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Crashlytics.log("Get Speaker failed" +error.getMessage());
+                Crashlytics.log("Get Speaker failed" + error.getMessage());
                 requestListener.onCancelled(error);
             }
         });
@@ -65,7 +66,7 @@ public class FirebaseData {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Crashlytics.log("Get Speakers failed ="+error.getMessage());
+                Crashlytics.log("Get Speakers failed =" + error.getMessage());
                 requestListener.onCancelled(error);
             }
         });
@@ -86,7 +87,7 @@ public class FirebaseData {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Crashlytics.log("Get Schedule failed ="+error.getMessage());
+                Crashlytics.log("Get Schedule failed =" + error.getMessage());
                 requestListener.onCancelled(error);
             }
         });
@@ -113,7 +114,27 @@ public class FirebaseData {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Crashlytics.log("Get Sponsors failed ="+error.getMessage());
+                Crashlytics.log("Get Sponsors failed =" + error.getMessage());
+                requestListener.onCancelled(error);
+            }
+        });
+    }
+
+    public static void getLocation(final RequestListener<Location> requestListener) {
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("location");
+        myRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Location location = dataSnapshot.getValue(Location.class);
+                if (location != null) {
+                    requestListener.onDataChange(location);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Crashlytics.log("Get Location failed =" + error.getMessage());
                 requestListener.onCancelled(error);
             }
         });
