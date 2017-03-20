@@ -11,16 +11,16 @@ import com.google.firebase.database.PropertyName;
 public class Speaker implements Parcelable {
 
     @PropertyName("description")
-    protected String description;
+    public String description;
 
     @PropertyName("first_name")
-    protected String firstName;
+    public String firstName;
 
     @PropertyName("last_name")
-    protected String lastName;
+    public String lastName;
 
     @PropertyName("title")
-    protected String title;
+    public String title;
 
     public Speaker() {
     }

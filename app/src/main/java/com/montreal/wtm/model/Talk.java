@@ -10,22 +10,22 @@ import com.google.firebase.database.PropertyName;
 public class Talk implements Parcelable {
 
     @PropertyName("type")
-    protected String type;
+    public String type;
 
     @PropertyName("room")
-    protected String room;
+    public String room;
 
     @PropertyName("speaker")
-    protected String speakerId;
+    public String speakerId;
 
     @PropertyName("time")
-    protected String time;
+    public String time;
 
     @PropertyName("title")
-    protected String title;
+    public String title;
 
     @PropertyName("description")
-    protected String description;
+    public String description;
 
     protected Talk(Parcel in) {
         type = in.readString();

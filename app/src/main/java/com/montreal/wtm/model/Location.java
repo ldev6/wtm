@@ -7,19 +7,19 @@ import com.google.firebase.database.PropertyName;
 public class Location {
 
     @PropertyName("name")
-    protected String name;
+    public String name;
 
     @PropertyName("address")
     protected String address;
 
     @PropertyName("metro")
-    protected String metro;
+    public String metro;
 
     @PropertyName("parking")
-    protected String parking;
+    public String parking;
 
     @PropertyName("parking_url")
-    protected String imageParkingUrl;
+    public String imageParkingUrl;
 
     public Location() {
     }

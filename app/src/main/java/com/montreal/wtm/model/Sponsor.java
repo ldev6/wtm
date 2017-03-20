@@ -7,13 +7,13 @@ import com.google.firebase.database.PropertyName;
 public class Sponsor {
 
     @PropertyName("image")
-    protected String imageKey;
+    public String imageKey;
 
     @PropertyName("name")
-    protected String name;
+    public String name;
 
     @PropertyName("website")
-    protected String urlWebsite;
+    public String urlWebsite;
 
     public Sponsor() {
     }

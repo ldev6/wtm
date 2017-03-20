@@ -44,7 +44,7 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
         final Map.Entry<String, Speaker> speakerHasmap = mData.get(position);
         final Speaker speaker = speakerHasmap.getValue();
         holder.nameTextView.setText(speaker.getName());
-        holder.titleTextView.setText(speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()): null);
+        holder.titleTextView.setText(speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()) : null);
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(mContext.getResources().getString(R.string.speakers_url))
@@ -71,12 +71,22 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
         mData.clear();
         mData.addAll(speakerHashMap.entrySet());
 
+
         Collections.sort(mData, new Comparator<Map.Entry>() {
             @Override
             public int compare(Map.Entry o1, Map.Entry o2) {
-                return ((Speaker) o1.getValue()).getFirstName().toUpperCase().compareTo(((Speaker) o2.getValue()).getFirstName().toUpperCase());
+                Speaker speaker1 = (Speaker) o1.getValue();
+                Speaker speaker2 = (Speaker) o2.getValue();
+                String firstName1 = speaker1.getFirstName() != null ? speaker1.getFirstName().toUpperCase() : speaker1.getFirstName();
+                String firstName2 = speaker2.getFirstName() != null ? speaker2.getFirstName().toUpperCase() : speaker2.getFirstName();
+                if (firstName1 != null && firstName2 != null) {
+                    return firstName1.compareTo(firstName2);
+                } else {
+                    return 1;
+                }
             }
         });
+
 
         notifyDataSetChanged();
     }
