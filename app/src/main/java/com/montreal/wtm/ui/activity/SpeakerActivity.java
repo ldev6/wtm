@@ -50,14 +50,28 @@ public class SpeakerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (DataManager.getInstance().loveTalkContainSpeaker(mSpeakerKey)) {
+            fab.setImageResource(R.drawable.ic_favorite_black_24px);
+        } else {
+            fab.setImageResource(R.drawable.ic_favorite_white_24px);
+        }
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataManager.getInstance().addLoveTalk(mSpeakerKey);
-                Snackbar.make(view, "The talk of this speaker is now love in the schedule ", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (DataManager.getInstance().loveTalkContainSpeaker(mSpeakerKey)) {
+                    DataManager.getInstance().removeLoveTalks(mSpeakerKey);
+                    fab.setImageResource(R.drawable.ic_favorite_white_24px);
+                    Snackbar.make(view, R.string.talk_removed, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    DataManager.getInstance().addLoveTalk(mSpeakerKey);
+                    fab.setImageResource(R.drawable.ic_favorite_black_24px);
+                    Snackbar.make(view, R.string.talk_added, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
 

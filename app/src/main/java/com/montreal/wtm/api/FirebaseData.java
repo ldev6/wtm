@@ -59,7 +59,6 @@ public class FirebaseData {
                     Speaker speaker = children.getValue(Speaker.class);
                     map.put(children.getKey(), speaker);
                 }
-                Log.v(TAG, "receive data");
                 requestListener.onDataChange(map);
             }
 
@@ -107,7 +106,6 @@ public class FirebaseData {
                     }
                     map.put(children.getKey(), sponsors);
                 }
-                Log.v(TAG, "receive data");
                 requestListener.onDataChange(map);
             }
 

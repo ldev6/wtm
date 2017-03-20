@@ -58,14 +58,26 @@ public class TalkActivity extends AppCompatActivity {
         FirebaseData.getSpeaker(requestListener, mTalk.getSpeakerId());
         mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (DataManager.getInstance().loveTalkContainSpeaker(mTalk.getSpeakerId())) {
+            fab.setImageResource(R.drawable.ic_favorite_black_24px);
+        } else {
+            fab.setImageResource(R.drawable.ic_favorite_white_24px);
+        }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataManager.getInstance().addLoveTalk(mTalk.getSpeakerId());
-                //TODO CHANGE
-                Snackbar.make(view, "The talk of this speaker is now love in the schedule ", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (DataManager.getInstance().loveTalkContainSpeaker(mTalk.getSpeakerId())) {
+                    DataManager.getInstance().removeLoveTalks(mTalk.getSpeakerId());
+                    fab.setImageResource(R.drawable.ic_favorite_white_24px);
+                    Snackbar.make(view, R.string.talk_removed, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    DataManager.getInstance().addLoveTalk(mTalk.getSpeakerId());
+                    fab.setImageResource(R.drawable.ic_favorite_black_24px);
+                    Snackbar.make(view, R.string.talk_added, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
 

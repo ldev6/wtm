@@ -40,4 +40,6 @@
     <string name="silver">silver</string>
     <string name="bronze">bronze</string>
     <string name="no_tweets">No Tweets</string>
+    <string name="talk_added">This talk has been added to your schedule</string>
+    <string name="talk_removed">This talk has been removed from the schedule</string>
 </resources>

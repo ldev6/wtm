@@ -74,7 +74,6 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
         Collections.sort(mData, new Comparator<Map.Entry>() {
             @Override
             public int compare(Map.Entry o1, Map.Entry o2) {
-                Log.v("test", ((Speaker)o1.getValue()).getFirstName());
                 return ((Speaker) o1.getValue()).getFirstName().toUpperCase().compareTo(((Speaker) o2.getValue()).getFirstName().toUpperCase());
             }
         });
