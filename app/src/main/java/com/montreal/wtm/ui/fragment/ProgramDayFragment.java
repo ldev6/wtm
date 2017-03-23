@@ -101,7 +101,7 @@ public class ProgramDayFragment extends BaseFragment {
     }
 
     @Override
-    public void retryFirebase() {
+    public void retryOnProblem() {
         FirebaseData.getSchedule(requestListener, mDay);
     }
 }

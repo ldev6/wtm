@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.montreal.wtm.BuildConfig;
 import com.montreal.wtm.R;
 import com.montreal.wtm.model.DataManager;
 import com.montreal.wtm.ui.fragment.InformationFragment;
@@ -21,7 +20,6 @@ import com.montreal.wtm.ui.fragment.SpeakersFragment;
 import com.montreal.wtm.ui.fragment.SponsorsFragment;
 import com.montreal.wtm.ui.fragment.TwitterFragment;
 import com.montreal.wtm.utils.Utils;
-import com.montreal.wtm.utils.ui.activity.BaseUtilsAppCompatActivity;
 import com.montreal.wtm.utils.ui.fragment.EmptyFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -56,27 +54,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

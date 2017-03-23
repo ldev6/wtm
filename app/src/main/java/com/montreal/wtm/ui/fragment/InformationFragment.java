@@ -31,7 +31,7 @@ public class InformationFragment extends BaseFragment {
     }
 
     @Override
-    public void retryFirebase() {
+    public void retryOnProblem() {
 
     }
 }

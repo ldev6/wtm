@@ -69,7 +69,7 @@ public class SponsorsFragment extends BaseFragment {
 
 
     @Override
-    public void retryFirebase() {
+    public void retryOnProblem() {
         FirebaseData.getSponsors(requestListener);
     }
 }

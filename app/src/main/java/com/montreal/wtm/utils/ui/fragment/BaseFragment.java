@@ -54,8 +54,8 @@ public abstract class BaseFragment extends Fragment implements MessageView.Messa
     @Override
     public void retry() {
         showProgressBar();
-        retryFirebase();
+        retryOnProblem();
     }
 
-    public abstract void retryFirebase();
+    public abstract void retryOnProblem();
 }

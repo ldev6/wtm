@@ -69,7 +69,7 @@ public class SpeakersFragment extends BaseFragment {
     };
 
     @Override
-    public void retryFirebase() {
+    public void retryOnProblem() {
         FirebaseData.getSpeakers(speakersRequestListener);
     }
 }

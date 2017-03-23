@@ -108,7 +108,7 @@ public class LocationFragment extends BaseFragment {
     };
 
     @Override
-    public void retryFirebase() {
+    public void retryOnProblem() {
         FirebaseData.getLocation(requestListener);
     }
 }

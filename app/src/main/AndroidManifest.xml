@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.montreal.wtm">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -13,6 +14,7 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,10 +25,12 @@
 
         <activity
             android:name=".ui.activity.SpeakerActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".ui.activity.TalkActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
