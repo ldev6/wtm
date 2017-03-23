@@ -2,7 +2,6 @@ package com.montreal.wtm.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,11 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.DatabaseError;
+
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Talk;
 import com.montreal.wtm.ui.adapter.ScheduleAdapter;
+import com.montreal.wtm.utils.ui.fragment.BaseFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,12 +24,13 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
-public class ProgramDayFragment extends Fragment {
+public class ProgramDayFragment extends BaseFragment {
 
     private static String EXTRA_DAY = "EXTRA_DAY";
 
     private ScheduleAdapter mAdapter;
     private ArrayList<Talk> mTalks;
+    private int mDay;
 
     public static ProgramDayFragment newInstance(int day) {
 
@@ -44,7 +45,6 @@ public class ProgramDayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.program_day_fragment, container, false);
-
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),
@@ -54,9 +54,11 @@ public class ProgramDayFragment extends Fragment {
         mTalks = new ArrayList<>();
         mAdapter = new ScheduleAdapter(getActivity(), mTalks);
         recyclerView.setAdapter(mAdapter);
+        setMessageViewInterface(this);
+        showProgressBar();
 
-        int day = getArguments().getInt(EXTRA_DAY);
-        FirebaseData.getSchedule(requestListener, day);
+        mDay = getArguments().getInt(EXTRA_DAY);
+        FirebaseData.getSchedule(requestListener, mDay);
         return v;
     }
 
@@ -81,11 +83,14 @@ public class ProgramDayFragment extends Fragment {
                 }
             });
             mAdapter.notifyDataSetChanged();
+            hideMessageView();
+
         }
 
         @Override
-        public void onCancelled(DatabaseError error) {
-            //TODO ERROR MESSAGE
+        public void onCancelled(FirebaseData.ErrorFirebase errorType) {
+            String message = errorType == FirebaseData.ErrorFirebase.network ? getString(R.string.default_error_message) : getString(R.string.error_message_serveur_prob);
+            setMessageError(message);
         }
     };
 
@@ -93,5 +98,10 @@ public class ProgramDayFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void retryFirebase() {
+        FirebaseData.getSchedule(requestListener, mDay);
     }
 }

@@ -22,4 +22,10 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
+
+    <com.montreal.wtm.utils.view.MessageView
+        android:id="@+id/messageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </android.support.design.widget.CoordinatorLayout>

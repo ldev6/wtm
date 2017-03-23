@@ -21,13 +21,20 @@ public class MessageView extends RelativeLayout {
     private TextView textViewErrorMessage;
     private TextView textViewInformation;
     private Button btRetry;
-    private RelativeLayout blueBox;
 
 
-    private @ColorRes int infoBoxColor;
-    private @ColorRes int backgroundColor;
-    private @ColorRes int textColor;
-    private @ColorRes int textErrorColor;
+    private
+    @ColorRes
+    int infoBoxColor;
+    private
+    @ColorRes
+    int backgroundColor;
+    private
+    @ColorRes
+    int textColor;
+    private
+    @ColorRes
+    int textErrorColor;
 
     public interface MessageViewInterface {
         public void retry();
@@ -54,17 +61,18 @@ public class MessageView extends RelativeLayout {
         textViewErrorMessage = (TextView) findViewById(R.id.tvError);
         btRetry = (Button) findViewById(R.id.btRetry);
         textViewErrorMessage.setVisibility(View.GONE);
-        blueBox = (RelativeLayout) findViewById(R.id.blueBox);
         textViewInformation = (TextView) findViewById(R.id.tvInformation);
 
-        infoBoxColor = R.color.colorPrimaryDark;
-        backgroundColor = R.color.transGreen;
+        infoBoxColor = R.color.colorPrimary;
+        backgroundColor = R.color.transGrey;
         textColor = android.R.color.white;
         textErrorColor = android.R.color.white;
 
+        btRetry.setBackgroundColor(getResources().getColor(infoBoxColor));
+        this.setBackgroundColor(getResources().getColor(R.color.transGrey));
     }
 
-    public void setProperties( @ColorRes int infoBoxColor, @ColorRes int backgroundColor, @ColorRes int textColor, @ColorRes int textErrorColor){
+    public void setProperties(@ColorRes int infoBoxColor, @ColorRes int backgroundColor, @ColorRes int textColor, @ColorRes int textErrorColor) {
         this.infoBoxColor = infoBoxColor;
         this.backgroundColor = backgroundColor;
         this.textColor = textColor;
@@ -73,12 +81,12 @@ public class MessageView extends RelativeLayout {
         textViewInformation.setTextColor(getResources().getColor(textColor));
         textViewErrorMessage.setTextColor(getResources().getColor(textErrorColor));
         setBackgroundColor(getResources().getColor(backgroundColor));
-        blueBox.setBackgroundColor(getResources().getColor(infoBoxColor));
+        btRetry.setBackgroundColor(getResources().getColor(infoBoxColor));
     }
 
     public void setMessageViewInterface(final MessageViewInterface messageViewInterface) {
         this.messageViewInterface = messageViewInterface;
-        btRetry.setOnClickListener( new OnClickListener() {
+        btRetry.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 messageViewInterface.retry();
@@ -86,10 +94,8 @@ public class MessageView extends RelativeLayout {
         });
     }
 
-    public void setMessageInformation(String text){
+    public void setMessageInformation(String text) {
         this.setVisibility(View.VISIBLE);
-        this.setBackgroundColor(getResources().getColor(backgroundColor));
-        blueBox.setBackgroundColor(getResources().getColor(infoBoxColor));
         textViewInformation.setVisibility(View.VISIBLE);
         textViewInformation.setText(text);
     }
@@ -98,16 +104,14 @@ public class MessageView extends RelativeLayout {
         this.setVisibility(View.VISIBLE);
         hideProgessBar();
         this.textViewInformation.setVisibility(View.GONE);
-        this.setBackgroundColor(getResources().getColor(R.color.transGreen));
-        blueBox.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         textViewErrorMessage.setVisibility(View.VISIBLE);
         textViewErrorMessage.setText(text);
-        if(messageViewInterface!=null) {
+        if (messageViewInterface != null) {
             btRetry.setVisibility(View.VISIBLE);
         }
     }
 
-    public void showProgressBar(){
+    public void showProgressBar() {
         hideMessageError();
         progressBar.setVisibility(View.VISIBLE);
         progressBar.animate();

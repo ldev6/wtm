@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,16 +24,13 @@ import com.montreal.wtm.utils.Utils;
 import com.montreal.wtm.utils.ui.activity.BaseUtilsAppCompatActivity;
 import com.montreal.wtm.utils.ui.fragment.EmptyFragment;
 
-public class MainActivity extends BaseUtilsAppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        layoutId = R.layout.activity_main;
-        if (BuildConfig.DEBUG) {
-            enableDebugView = true;
-        }
+        setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);

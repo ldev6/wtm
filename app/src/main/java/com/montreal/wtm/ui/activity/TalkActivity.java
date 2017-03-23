@@ -109,7 +109,7 @@ public class TalkActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onCancelled(DatabaseError error) {
+        public void onCancelled(FirebaseData.ErrorFirebase errorType) {
 
         }
     };

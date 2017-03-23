@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.database.FirebaseDatabase;
+import com.montreal.wtm.api.FirebaseData;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
@@ -23,7 +25,6 @@ public class WTMApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         String twitterKey = getResources().getString(R.string.clientKey);
         String twitterSecret = getResources().getString(R.string.clientSecret);
 

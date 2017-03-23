@@ -20,7 +20,7 @@
     <string name="error_field_required">Require field</string>
 
     <string name="default_error_message">No internet connection</string>
-    <string name="error_message_serveur_prob">The server is unavailable</string>
+    <string name="error_message_serveur_prob">Oops! A Server Error Has Occurred</string>
     <string name="retry_connection">Retry</string>
 
 

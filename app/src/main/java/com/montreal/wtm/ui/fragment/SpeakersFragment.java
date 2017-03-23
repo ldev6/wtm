@@ -15,12 +15,15 @@ import com.google.firebase.database.DatabaseError;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Speaker;
+import com.montreal.wtm.ui.activity.MainActivity;
 import com.montreal.wtm.ui.adapter.SpeakersAdapter;
+import com.montreal.wtm.utils.ui.fragment.BaseFragment;
+import com.montreal.wtm.utils.view.MessageView;
 
 import java.util.HashMap;
 
 
-public class SpeakersFragment extends Fragment {
+public class SpeakersFragment extends BaseFragment {
 
     public static Fragment newIntance() {
         return new SpeakersFragment();
@@ -34,7 +37,6 @@ public class SpeakersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.simple_recycler_list, container, false);
-
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),
@@ -44,8 +46,8 @@ public class SpeakersFragment extends Fragment {
         mSpeakerHashMap = new HashMap<String, Speaker>();
         mAdapter = new SpeakersAdapter(getActivity(), mSpeakerHashMap);
         recyclerView.setAdapter(mAdapter);
+        showProgressBar();
         FirebaseData.getSpeakers(speakersRequestListener);
-
         return view;
     }
 
@@ -56,12 +58,18 @@ public class SpeakersFragment extends Fragment {
         public void onDataChange(HashMap<String, Speaker> object) {
             mSpeakerHashMap = object;
             mAdapter.dataChange(object);
+            hideMessageView();
         }
 
         @Override
-        public void onCancelled(DatabaseError error) {
-            //TODO ERROR
+        public void onCancelled(FirebaseData.ErrorFirebase errorType) {
+            String message = errorType == FirebaseData.ErrorFirebase.network ? getString(R.string.default_error_message) : getString(R.string.error_message_serveur_prob);
+            setMessageError(message);
         }
     };
 
+    @Override
+    public void retryFirebase() {
+        FirebaseData.getSpeakers(speakersRequestListener);
+    }
 }

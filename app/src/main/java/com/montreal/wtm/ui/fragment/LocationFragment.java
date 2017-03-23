@@ -18,9 +18,11 @@ import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Location;
 import com.montreal.wtm.utils.MapUtils;
+import com.montreal.wtm.utils.ui.fragment.BaseFragment;
+import com.montreal.wtm.utils.view.MessageView;
 import com.squareup.picasso.Picasso;
 
-public class LocationFragment extends Fragment {
+public class LocationFragment extends BaseFragment {
 
     public static LocationFragment newInstance() {
         return new LocationFragment();
@@ -38,7 +40,6 @@ public class LocationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.location_fragment, container, false);
-
         mImageView = (ImageView) view.findViewById(R.id.mapImageView);
         mPlaceNameTextView = (TextView) view.findViewById(R.id.placeNameTextView);
         mAddressTextView = (TextView) view.findViewById(R.id.addressTextView);
@@ -47,7 +48,7 @@ public class LocationFragment extends Fragment {
         mParkingImageView = (ImageView) view.findViewById(R.id.parkingImageView);
 
         mFloatingAction = (FloatingActionButton) view.findViewById(R.id.fab);
-
+        showProgressBar();
         FirebaseData.getLocation(requestListener);
         return view;
     }
@@ -95,12 +96,19 @@ public class LocationFragment extends Fragment {
     private FirebaseData.RequestListener<Location> requestListener = new FirebaseData.RequestListener<Location>() {
         @Override
         public void onDataChange(Location location) {
+            hideMessageView();
             updateView(location);
         }
 
         @Override
-        public void onCancelled(DatabaseError error) {
-
+        public void onCancelled(FirebaseData.ErrorFirebase errorType) {
+            String message = errorType == FirebaseData.ErrorFirebase.network ? getString(R.string.default_error_message) : getString(R.string.error_message_serveur_prob);
+            setMessageError(message);
         }
     };
+
+    @Override
+    public void retryFirebase() {
+        FirebaseData.getLocation(requestListener);
+    }
 }
