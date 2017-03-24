@@ -20,9 +20,11 @@ import com.montreal.wtm.model.Sponsor;
 import com.montreal.wtm.model.Talk;
 import com.montreal.wtm.utils.NetworkUtils;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -235,10 +237,13 @@ public class FirebaseData {
         Gson gson = new Gson();
 
         try {
+
             FileInputStream fis = WTMApplication.applicationContext.openFileInput(nameFile);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
+
             int charByte;
             String fileString = "";
-            while ((charByte = fis.read()) != -1) {
+            while ((charByte = reader.read()) != -1) {
                 fileString = fileString + Character.toString((char) charByte);
             }
             fis.close();

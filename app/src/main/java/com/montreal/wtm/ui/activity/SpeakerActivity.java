@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.montreal.wtm.R;
 import com.montreal.wtm.model.DataManager;
 import com.montreal.wtm.model.Speaker;
+import com.montreal.wtm.utils.Utils;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -83,9 +84,7 @@ public class SpeakerActivity extends AppCompatActivity {
                 .append("%2F")
                 .append(getResources().getString(R.string.speakers_url_end, mSpeakerKey));
 
-        Picasso.with(this).load(stringBuilder.toString())
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(avatarImageView);
+        Utils.downloadImage(stringBuilder.toString(), avatarImageView);
 
         ((TextView) findViewById(R.id.titleTextView)).setText(mSpeaker.getTitle() != null ? Html.fromHtml(mSpeaker.getTitle()) : null);
         ((TextView) findViewById(R.id.descriptionTextView)).setText(mSpeaker.getDescription() != null ? Html.fromHtml(mSpeaker.getDescription()) : null);

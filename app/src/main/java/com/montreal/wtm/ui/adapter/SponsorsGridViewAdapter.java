@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.montreal.wtm.R;
 import com.montreal.wtm.model.Sponsor;
+import com.montreal.wtm.utils.Utils;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -68,17 +69,17 @@ public class SponsorsGridViewAdapter extends BaseAdapter {
                     imageView.setLayoutParams(layoutParamsPlatinum);
                     break;
                 case GOLD:
-                    int sizeGold= mContext.getResources().getDimensionPixelSize(R.dimen.gold_size);
+                    int sizeGold = mContext.getResources().getDimensionPixelSize(R.dimen.gold_size);
                     LinearLayout.LayoutParams layoutParamsGold = new LinearLayout.LayoutParams(sizeGold, sizeGold);
                     imageView.setLayoutParams(layoutParamsGold);
                     break;
                 case SILVER:
-                    int sizeSilver= mContext.getResources().getDimensionPixelSize(R.dimen.silver_size);
+                    int sizeSilver = mContext.getResources().getDimensionPixelSize(R.dimen.silver_size);
                     LinearLayout.LayoutParams layoutParamsSilver = new LinearLayout.LayoutParams(sizeSilver, sizeSilver);
                     imageView.setLayoutParams(layoutParamsSilver);
                     break;
                 case BRONZE:
-                    int sizeBronze= mContext.getResources().getDimensionPixelSize(R.dimen.bronze_size);
+                    int sizeBronze = mContext.getResources().getDimensionPixelSize(R.dimen.bronze_size);
                     LinearLayout.LayoutParams layoutParamsBronze = new LinearLayout.LayoutParams(sizeBronze, sizeBronze);
                     imageView.setLayoutParams(layoutParamsBronze);
                     break;
@@ -87,10 +88,7 @@ public class SponsorsGridViewAdapter extends BaseAdapter {
                     .append("%2F")
                     .append(mContext.getResources().getString(R.string.sponsors_url_end, sponsor.getImageKey()));
 
-            Picasso.with(mContext).load(stringBuilder.toString())
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(imageView);
-
+            Utils.downloadImage(stringBuilder.toString(), imageView);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

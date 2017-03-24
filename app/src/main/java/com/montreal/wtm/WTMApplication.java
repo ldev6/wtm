@@ -6,9 +6,16 @@ import android.content.Context;
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.database.FirebaseDatabase;
 import com.montreal.wtm.api.FirebaseData;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+
+import java.io.File;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -30,5 +37,20 @@ public class WTMApplication extends Application {
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(twitterKey, twitterSecret);
         Fabric.with(this, new Twitter(authConfig), new Crashlytics(), new TweetComposer());
+
+        File cacheDir = StorageUtils.getCacheDirectory(applicationContext);
+
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(applicationContext)
+                .defaultDisplayImageOptions(defaultOptions)
+                .diskCache(new UnlimitedDiskCache(cacheDir))
+                .build();
+        ImageLoader.getInstance().init(config);
+
+
     }
 }

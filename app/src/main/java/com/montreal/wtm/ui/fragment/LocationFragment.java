@@ -18,6 +18,7 @@ import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Location;
 import com.montreal.wtm.utils.MapUtils;
+import com.montreal.wtm.utils.Utils;
 import com.montreal.wtm.utils.ui.fragment.BaseFragment;
 import com.montreal.wtm.utils.view.MessageView;
 import com.squareup.picasso.Picasso;
@@ -87,8 +88,7 @@ public class LocationFragment extends BaseFragment {
         }
 
         if (location.getImageParkingUrl() != null) {
-            Picasso.with(getActivity()).load(location.getImageParkingUrl())
-                    .into(mParkingImageView);
+            Utils.downloadImage(location.getImageParkingUrl(), mParkingImageView);
         }
 
     }

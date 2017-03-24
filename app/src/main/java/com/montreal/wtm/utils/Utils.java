@@ -6,19 +6,29 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.net.Uri;
 
+import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
+import com.montreal.wtm.BuildConfig;
 import com.montreal.wtm.R;
 import com.montreal.wtm.utils.view.ViewUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
 
 import java.io.File;
 import java.util.Locale;
+import java.util.logging.Handler;
 
 
 public class Utils {
@@ -54,7 +64,6 @@ public class Utils {
     }
 
 
-
     // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // //
     // // JAIL BREAK
@@ -82,7 +91,6 @@ public class Utils {
         }
         return found;
     }
-
 
 
     /**
@@ -151,5 +159,73 @@ public class Utils {
             }, null, context.getString(R.string.update_alert_cancel_button), context.getString(R.string.update_alert_ok_button));
         }
     }
+
+    // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // //
+    // // DOWNLOAD IMAGE
+    // //
+    // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void downloadImage(String url, final ImageView imageView) {
+        downloadImage(url, imageView, 0, false);
+    }
+
+    public static void downloadImage(String url, final ImageView imageView, boolean notUseCache) {
+        downloadImage(url, imageView, 0, notUseCache);
+    }
+
+    public static void downloadImage(String url, final ImageView imageView, int defaultImage) {
+        downloadImage(url, imageView, defaultImage, false);
+    }
+
+    public static void downloadImage(final String url, final ImageView imageView, final int placeHolderRes, boolean notUseCache, final boolean enableLog) {
+        if (url != null && url.length() > 0) {
+
+            if (enableLog) {
+                LogU.v("DOWNLOADIDMAGE", "DOWNLOAD IMAGE:" + url);
+            }
+
+
+            if (notUseCache) {
+                clearCacheUrl(url);
+            }
+
+            ImageLoader.getInstance().displayImage(url, imageView, new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    super.onLoadingComplete(imageUri, view, loadedImage);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+                    super.onLoadingCancelled(imageUri, view);
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                    super.onLoadingFailed(imageUri, view, failReason);
+                    imageView.setImageResource(placeHolderRes);
+                }
+            });
+
+        } else {
+            imageView.setImageResource(placeHolderRes);
+        }
+    }
+
+    public static void downloadImage(final String url, final ImageView imageView, final int placeHolderRes, boolean notUseCache) {
+        downloadImage(url, imageView, placeHolderRes, notUseCache, false);
+    }
+
+
+    /**
+     * Parse the url to remove image from all format from the cache
+     *
+     * @param url
+     */
+    public static void clearCacheUrl(String url) {
+        MemoryCacheUtils.removeFromCache(url, ImageLoader.getInstance().getMemoryCache());
+    }
+
 
 }
