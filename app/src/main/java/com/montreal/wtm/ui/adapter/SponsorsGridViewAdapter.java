@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.montreal.wtm.R;
 import com.montreal.wtm.model.Sponsor;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -87,6 +88,7 @@ public class SponsorsGridViewAdapter extends BaseAdapter {
                     .append(mContext.getResources().getString(R.string.sponsors_url_end, sponsor.getImageKey()));
 
             Picasso.with(mContext).load(stringBuilder.toString())
+                    .networkPolicy(NetworkPolicy.OFFLINE)
                     .into(imageView);
 
             view.setOnClickListener(new View.OnClickListener() {

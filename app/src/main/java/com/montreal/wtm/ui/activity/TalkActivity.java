@@ -20,6 +20,7 @@ import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.DataManager;
 import com.montreal.wtm.model.Speaker;
 import com.montreal.wtm.model.Talk;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 
@@ -89,6 +90,7 @@ public class TalkActivity extends AppCompatActivity {
                 .append(getResources().getString(R.string.speakers_url_end, mTalk.getSpeakerId()));
 
         Picasso.with(this).load(stringBuilder.toString())
+                .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(avatarImageView);
 
         findViewById(R.id.talkInformation).setVisibility(View.VISIBLE);

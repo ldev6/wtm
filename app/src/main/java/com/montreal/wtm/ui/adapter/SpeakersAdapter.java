@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.montreal.wtm.R;
 import com.montreal.wtm.model.Speaker;
 import com.montreal.wtm.ui.activity.SpeakerActivity;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -51,7 +53,9 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
                 .append("%2F")
                 .append(mContext.getResources().getString(R.string.speakers_url_end, speakerHasmap.getKey()));
 
-        Picasso.with(mContext).load(stringBuilder.toString())
+        Picasso.with(mContext)
+                .load(stringBuilder.toString())
+                .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(holder.avatarImageView);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
