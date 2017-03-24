@@ -57,7 +57,7 @@ public class TalkActivity extends AppCompatActivity {
         setSupportActionBar(mToolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FirebaseData.getSpeaker(requestListener, mTalk.getSpeakerId());
+        FirebaseData.getSpeaker(this, requestListener, mTalk.getSpeakerId());
         mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

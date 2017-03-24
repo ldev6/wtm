@@ -47,7 +47,7 @@ public class SpeakersFragment extends BaseFragment {
         mAdapter = new SpeakersAdapter(getActivity(), mSpeakerHashMap);
         recyclerView.setAdapter(mAdapter);
         showProgressBar();
-        FirebaseData.getSpeakers(speakersRequestListener);
+        FirebaseData.getSpeakers(getActivity(), speakersRequestListener);
         return view;
     }
 
@@ -70,6 +70,9 @@ public class SpeakersFragment extends BaseFragment {
 
     @Override
     public void retryOnProblem() {
-        FirebaseData.getSpeakers(speakersRequestListener);
+        if (!isAdded()) {
+            return;
+        }
+        FirebaseData.getSpeakers(getActivity(), speakersRequestListener);
     }
 }

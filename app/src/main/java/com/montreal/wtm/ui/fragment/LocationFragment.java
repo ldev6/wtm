@@ -50,7 +50,7 @@ public class LocationFragment extends BaseFragment {
 
         mFloatingAction = (FloatingActionButton) view.findViewById(R.id.fab);
         showProgressBar();
-        FirebaseData.getLocation(requestListener);
+        FirebaseData.getLocation(getActivity(), requestListener);
         return view;
     }
 
@@ -109,6 +109,9 @@ public class LocationFragment extends BaseFragment {
 
     @Override
     public void retryOnProblem() {
-        FirebaseData.getLocation(requestListener);
+        if (!isAdded()) {
+            return;
+        }
+        FirebaseData.getLocation(getActivity(), requestListener);
     }
 }

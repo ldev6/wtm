@@ -120,7 +120,6 @@ public class Utils {
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE && context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
-
     /**
      * Show a alert message to insist or force the user to update the application
      *

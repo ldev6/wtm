@@ -82,11 +82,10 @@ public class MainActivity extends AppCompatActivity
         } else {
             fragment = EmptyFragment.newInstance();
         }
-
-        Utils.changeFragment(this, R.id.container, fragment);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
+        Utils.changeFragment(this, R.id.container, fragment);
         return true;
     }
 

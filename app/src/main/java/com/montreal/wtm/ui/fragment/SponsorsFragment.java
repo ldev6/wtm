@@ -39,7 +39,7 @@ public class SponsorsFragment extends BaseFragment {
         mSponsorGoldGridView = (GridView) v.findViewById(R.id.sponsorGoldGridView);
         mSponsorSilverGridView = (GridView) v.findViewById(R.id.sponsorSilverGridView);
         mSponsorBronzeGridView = (GridView) v.findViewById(R.id.sponsorBronzeGridView);
-        FirebaseData.getSponsors(requestListener);
+        FirebaseData.getSponsors(getActivity(), requestListener);
         showProgressBar();
         return v;
     }
@@ -70,6 +70,9 @@ public class SponsorsFragment extends BaseFragment {
 
     @Override
     public void retryOnProblem() {
-        FirebaseData.getSponsors(requestListener);
+        if (!isAdded()) {
+            return;
+        }
+        FirebaseData.getSponsors(getActivity(), requestListener);
     }
 }

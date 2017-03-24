@@ -58,7 +58,7 @@ public class ProgramDayFragment extends BaseFragment {
         showProgressBar();
 
         mDay = getArguments().getInt(EXTRA_DAY);
-        FirebaseData.getSchedule(requestListener, mDay);
+        FirebaseData.getSchedule(getActivity(), requestListener, mDay);
         return v;
     }
 
@@ -84,7 +84,6 @@ public class ProgramDayFragment extends BaseFragment {
             });
             mAdapter.notifyDataSetChanged();
             hideMessageView();
-
         }
 
         @Override
@@ -102,6 +101,9 @@ public class ProgramDayFragment extends BaseFragment {
 
     @Override
     public void retryOnProblem() {
-        FirebaseData.getSchedule(requestListener, mDay);
+        if (!isAdded()) {
+            return;
+        }
+        FirebaseData.getSchedule(getActivity(), requestListener, mDay);
     }
 }
