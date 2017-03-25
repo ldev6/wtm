@@ -89,8 +89,16 @@ public class LocationFragment extends BaseFragment {
 
         if (location.getImageParkingUrl() != null) {
             Utils.downloadImage(location.getImageParkingUrl(), mParkingImageView);
+            mParkingImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = location.getImageParkingUrl();
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
         }
-
     }
 
     private FirebaseData.RequestListener<Location> requestListener = new FirebaseData.RequestListener<Location>() {

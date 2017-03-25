@@ -1,5 +1,6 @@
 package com.montreal.wtm.ui.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
