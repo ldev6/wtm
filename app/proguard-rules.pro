@@ -22,6 +22,28 @@
 # This rule will properly ProGuard all the model classes in
 # the package com.yourcompany.models. Modify to fit the structure
 # of your app.
--keepclassmembers class com.yourcompany.models.** {
+-keepclassmembers class com.montreal.wtm.model.** {
   *;
+}
+
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-printmapping mapping.txt
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
+
+# Configuration for Fabric Twitter Kit
+# See: https://dev.twitter.com/twitter-kit/android/integrate
+
+-dontwarn com.squareup.okhttp.**
+-dontwarn com.google.appengine.api.urlfetch.**
+-dontwarn rx.**
+-dontwarn retrofit.**
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit.http.* *;
 }
