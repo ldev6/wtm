@@ -211,7 +211,6 @@ public class FirebaseData {
         new SaveFile().execute(nameFile, json);
     }
 
-
     private static class ReadFile extends AsyncTask<String, Void, Void> {
 
         private RequestListener mRequestListener;
