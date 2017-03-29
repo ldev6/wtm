@@ -14,15 +14,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseError;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.DataManager;
 import com.montreal.wtm.model.Speaker;
 import com.montreal.wtm.model.Talk;
 import com.montreal.wtm.utils.Utils;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
+
 
 
 public class TalkActivity extends AppCompatActivity {

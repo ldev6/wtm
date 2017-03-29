@@ -11,14 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.DatabaseError;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Speaker;
-import com.montreal.wtm.ui.activity.MainActivity;
 import com.montreal.wtm.ui.adapter.SpeakersAdapter;
 import com.montreal.wtm.utils.ui.fragment.BaseFragment;
-import com.montreal.wtm.utils.view.MessageView;
 
 import java.util.HashMap;
 

@@ -13,8 +13,7 @@ import android.widget.LinearLayout;
 import com.montreal.wtm.R;
 import com.montreal.wtm.model.Sponsor;
 import com.montreal.wtm.utils.Utils;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
+
 
 import java.util.ArrayList;
 

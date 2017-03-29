@@ -19,8 +19,7 @@ import com.montreal.wtm.R;
 import com.montreal.wtm.model.DataManager;
 import com.montreal.wtm.model.Speaker;
 import com.montreal.wtm.utils.Utils;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
+
 
 public class SpeakerActivity extends AppCompatActivity {
 

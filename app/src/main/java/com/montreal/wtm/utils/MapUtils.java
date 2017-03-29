@@ -1,9 +1,7 @@
 package com.montreal.wtm.utils;
 
 
-import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.montreal.wtm.R;
 import com.montreal.wtm.WTMApplication;
