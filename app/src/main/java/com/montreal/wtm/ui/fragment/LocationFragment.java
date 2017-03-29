@@ -56,9 +56,8 @@ public class LocationFragment extends BaseFragment {
 
     private void updateView(final Location location) {
         String staticMapUrl = MapUtils.urlForLocation(location.getAddress());
-        Picasso.with(getActivity()).load(staticMapUrl)
-                .placeholder(R.drawable.placeholder_map)
-                .into(mImageView);
+        Utils.downloadImage(staticMapUrl, mImageView, R.drawable.placeholder_map);
+
 
         mPlaceNameTextView.setText(location.getName());
         mAddressTextView.setText(location.getAddress());
