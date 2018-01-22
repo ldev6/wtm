@@ -8,7 +8,6 @@ public class Talk {
     public String room;
 
     public Talk(Session session, String time, String room) {
-        this.type = type;
         this.session = session;
         this.time = time;
         this.room = room;

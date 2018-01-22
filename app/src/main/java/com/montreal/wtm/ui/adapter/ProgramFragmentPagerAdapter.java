@@ -1,36 +1,34 @@
 package com.montreal.wtm.ui.adapter;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
+import com.montreal.wtm.model.Day;
+import com.montreal.wtm.ui.fragment.ProgramDayFragment;
 import java.util.ArrayList;
-
 
 public class ProgramFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private Context context;
-    private ArrayList<ProgramDayPager> programDayPagers;
+    private ArrayList<Day> days;
 
-    public ProgramFragmentPagerAdapter(FragmentManager fm, Context context, ArrayList<ProgramDayPager> programDayPagers) {
+    public ProgramFragmentPagerAdapter(FragmentManager fm, ArrayList<Day> days) {
         super(fm);
-        this.context = context;
-        this.programDayPagers = programDayPagers;
+        this.days = days;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return programDayPagers.get(position).getFragment();
+        Day day = days.get(position);
+        return ProgramDayFragment.newInstance(day);
     }
 
     @Override
     public int getCount() {
-        return programDayPagers.size();
+        return days.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return programDayPagers.get(position).getTitle();
+        return days.get(position).dateReadable;
     }
 }

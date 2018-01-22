@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.PropertyName;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 @IgnoreExtraProperties
 public class PartnerCategory implements Parcelable {

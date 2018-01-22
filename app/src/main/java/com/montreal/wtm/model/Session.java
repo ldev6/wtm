@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.PropertyName;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 @IgnoreExtraProperties
 public class Session implements Parcelable {
@@ -25,13 +25,13 @@ public class Session implements Parcelable {
     public String language;
 
     @PropertyName("speakers")
-    public  HashMap<Integer, Integer> speakersId;
+    public ArrayList<Integer> speakersId;
 
     @PropertyName("tags")
-    public HashMap<Integer,String> tags;
+    public ArrayList<String> tags;
 
     public Session(int id, String complexity, String title, String description, String language,
-        HashMap<Integer, Integer> speakersId, HashMap<Integer, String> tags) {
+        ArrayList<Integer> speakersId, ArrayList<String> tags) {
         this.id = id;
         this.complexity = complexity;
         this.title = title;
@@ -61,11 +61,11 @@ public class Session implements Parcelable {
         return language;
     }
 
-    public HashMap<Integer, Integer> getSpeakersId() {
+    public ArrayList<Integer> getSpeakersId() {
         return speakersId;
     }
 
-    public HashMap<Integer, String> getTags() {
+    public ArrayList<String> getTags() {
         return tags;
     }
 
@@ -94,8 +94,8 @@ public class Session implements Parcelable {
         this.title = in.readString();
         this.description = in.readString();
         this.language = in.readString();
-        this.speakersId = (HashMap<Integer, Integer>) in.readSerializable();
-        this.tags = (HashMap<Integer, String>) in.readSerializable();
+        this.speakersId = (ArrayList<Integer>) in.readSerializable();
+        this.tags = (ArrayList<String>) in.readSerializable();
     }
 
     public static final Creator<Session> CREATOR = new Creator<Session>() {

@@ -2,15 +2,12 @@ package com.montreal.wtm.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.PropertyName;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 @IgnoreExtraProperties
 public class Timeslot implements Parcelable {
-    
-  
 
     @PropertyName("startTime")
     public String startTime;
@@ -19,36 +16,24 @@ public class Timeslot implements Parcelable {
     public String endTime;
 
     @PropertyName("sessions")
-    public HashMap<Integer,HashMap<Integer,Integer>> sessionsId;
+    public ArrayList<ArrayList<Integer>> sessionsId;
 
-    public Timeslot(String startTime, String endTime,
-        HashMap<Integer, HashMap<Integer, Integer>> sessionsId) {
-        
+    public Timeslot() {
+    }
+
+    public Timeslot(String startTime, String endTime, ArrayList<ArrayList<Integer>> sessionsId) {
+
         this.startTime = startTime;
         this.endTime = endTime;
         this.sessionsId = sessionsId;
     }
 
     public String getTime() {
-        return startTime +" - " + endTime;
+        return startTime + " - " + endTime;
     }
 
-
-    
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public HashMap<Integer, HashMap<Integer, Integer>> getSessionsId() {
+    public ArrayList<ArrayList<Integer>> getSessionsId() {
         return sessionsId;
-    }
-
-    public Timeslot() {
     }
 
     @Override
@@ -66,7 +51,7 @@ public class Timeslot implements Parcelable {
     protected Timeslot(Parcel in) {
         this.startTime = in.readString();
         this.endTime = in.readString();
-        this.sessionsId = (HashMap<Integer, HashMap<Integer, Integer>>) in.readSerializable();
+        this.sessionsId = (ArrayList<ArrayList<Integer>>) in.readSerializable();
     }
 
     public static final Parcelable.Creator<Timeslot> CREATOR = new Parcelable.Creator<Timeslot>() {

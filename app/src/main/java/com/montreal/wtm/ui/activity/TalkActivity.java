@@ -43,15 +43,16 @@ public class TalkActivity extends AppCompatActivity {
 
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
 
-        if (session.getSpeakersId() == null) {
-            findViewById(R.id.bioTextView).setVisibility(View.GONE);
-        }
         setSupportActionBar(mToolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //TODO CHANGE THE VIEW FOR MORE THAN ONE SPEAKER
-        for (int speakerId : session.getSpeakersId().keySet() ) {
-            FirebaseData.INSTANCE.getSpeaker(this, requestListener, speakerId);
+        if (session.getSpeakersId() == null) {
+            findViewById(R.id.bioTextView).setVisibility(View.GONE);
+        } else {
+            for (int speakerId : session.getSpeakersId()) {
+                FirebaseData.INSTANCE.getSpeaker(this, requestListener, speakerId);
+            }
         }
         mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 

@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     super.onCreate(savedInstanceState)
     setContentView(layout.activity_main)
 
-    //TODO CHECK 
     val toolbar = findViewById<View>(id.main_toolbar) as Toolbar
     toolbar.setTitleTextColor(Color.WHITE)
     setSupportActionBar(toolbar)

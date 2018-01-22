@@ -12,8 +12,10 @@ import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
+import com.montreal.wtm.model.Day
 import com.montreal.wtm.model.Location
 import com.montreal.wtm.model.PartnerCategory
+import com.montreal.wtm.model.Session
 import com.montreal.wtm.model.Speaker
 import com.montreal.wtm.model.Sponsor
 import com.montreal.wtm.model.Timeslot
@@ -48,7 +50,8 @@ object FirebaseData {
       speakerId: Int) {
     val fileName = "Speaker_$speakerId.json"
     firebaseConnected(activity, requestListener, fileName, Speaker::class.java)
-    val myRef = FirebaseDatabase.getInstance().getReference(Utils.getLanguage()+"/speakers/" + speakerId)
+    val myRef = FirebaseDatabase.getInstance().getReference(
+        Utils.getLanguage() + "/speakers/" + speakerId)
     myRef.addValueEventListener(object : ValueEventListener {
       override fun onDataChange(dataSnapshot: DataSnapshot) {
         val speaker = dataSnapshot.getValue(Speaker::class.java)
@@ -79,7 +82,7 @@ object FirebaseData {
 
         }.type)
 
-    val myRef = FirebaseDatabase.getInstance().getReference(Utils.getLanguage()+"/speakers")
+    val myRef = FirebaseDatabase.getInstance().getReference(Utils.getLanguage() + "/speakers")
 
     myRef.addValueEventListener(object : ValueEventListener {
       override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -100,24 +103,23 @@ object FirebaseData {
     })
   }
 
-  fun getSchedule(activity: Activity, requestListener: RequestListener<ArrayList<Timeslot>>,
-      day: Int) {
-    val fileName = "Schedule$day.json"
+  fun getSchedule(activity: Activity, requestListener: RequestListener<ArrayList<Day>>) {
+    val fileName = "Schedule.json"
     firebaseConnected(activity, requestListener, fileName,
         object : TypeToken<ArrayList<Timeslot>>() {
 
         }.type)
 
-    val myRef = FirebaseDatabase.getInstance().getReference("schedule-day-" + day)
+    val myRef = FirebaseDatabase.getInstance().getReference(Utils.getLanguage() + "/schedule")
     myRef.addValueEventListener(object : ValueEventListener {
       override fun onDataChange(dataSnapshot: DataSnapshot) {
         if (dataSnapshot.children != null) {
-          val talks = ArrayList<Timeslot>()
+          val days = ArrayList<Day>()
           for (children in dataSnapshot.children) {
-            talks.add(children.getValue(Timeslot::class.java)!!)
+            days.add(children.getValue(Day::class.java)!!)
           }
-          saveInFile(activity, fileName, talks)
-          requestListener.onDataChange(talks)
+          saveInFile(activity, fileName, days)
+          requestListener.onDataChange(days)
         }
       }
 
@@ -128,6 +130,36 @@ object FirebaseData {
       }
     })
   }
+  
+  fun getSessions(activity: Activity, requestListener: RequestListener<HashMap<String,Session>>) {
+    val fileName = "Sessions.json"
+
+    firebaseConnected(activity, requestListener, fileName,
+        object : TypeToken<ArrayList<Timeslot>>() {
+
+        }.type)
+
+    val myRef = FirebaseDatabase.getInstance().getReference(Utils.getLanguage() + "/sessions")
+    myRef.addValueEventListener(object : ValueEventListener {
+      override fun onDataChange(dataSnapshot: DataSnapshot) {
+        if (dataSnapshot.children != null) {
+          val sessions = HashMap<String,Session>()
+          for (children in dataSnapshot.children) {
+            sessions.put(children.key, children.getValue(Session::class.java)!!)
+          }
+          saveInFile(activity, fileName, sessions)
+          requestListener.onDataChange(sessions)
+        }
+      }
+
+      override fun onCancelled(error: DatabaseError) {
+        // Failed to read value
+        Crashlytics.log("Get Session failed =" + error.message)
+        requestListener.onCancelled(ErrorFirebase.firebase)
+      }
+    })
+
+  }
 
   fun getSponsors(activity: Activity,
       requestListener: RequestListener<HashMap<Integer, PartnerCategory?>>) {
@@ -136,12 +168,12 @@ object FirebaseData {
         object : TypeToken<HashMap<String, ArrayList<Sponsor>>>() {
 
         }.type)
-    val myRef = FirebaseDatabase.getInstance().getReference(Utils.getLanguage()+"/partners")
+    val myRef = FirebaseDatabase.getInstance().getReference(Utils.getLanguage() + "/partners")
     myRef.addValueEventListener(object : ValueEventListener {
       override fun onDataChange(dataSnapshot: DataSnapshot) {
         val map = HashMap<Integer, PartnerCategory?>()
         for (children in dataSnapshot.children) {
-            val partnerCategory = children.getValue(PartnerCategory::class.java)
+          val partnerCategory = children.getValue(PartnerCategory::class.java)
           map[Integer(children.key)] = partnerCategory
         }
         saveInFile(activity, fileName, map)
@@ -256,5 +288,5 @@ object FirebaseData {
       }
     }).subscribeOn(Schedulers.io())
   }
-  
+
 }
