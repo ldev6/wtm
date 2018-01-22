@@ -1,4 +1,4 @@
-package com.montreal.wtm.utils.view;
+package com.montreal.wtm.utils;
 
 import android.Manifest;
 import android.app.Activity;

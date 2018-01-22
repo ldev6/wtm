@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <ImageView
+        android:id="@+id/loveImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_vertical_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_favorite_black_empty_24px"
+        />
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/loveImageView"
+        app:layout_constraintLeft_toLeftOf="@+id/loveImageView"
+        app:layout_constraintStart_toEndOf="@+id/loveImageView"
+        app:layout_constraintTop_toTopOf="@id/loveImageView"
+        tools:text="9:00 AM - 10:00PM"
+        />
+
+
+    <TextView
+        android:id="@+id/roomTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:textAlignment="textEnd"
+        app:layout_constraintBottom_toBottomOf="@id/loveImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/timeTextView"
+        app:layout_constraintTop_toTopOf="@id/loveImageView"
+        tools:text="Room(A-1600)"
+        android:gravity="end"
+        android:layout_marginLeft="8dp"
+        />
+
+    
+    
+    <TextView
+        android:id="@+id/talkTitleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/material_base_margin"
+        android:paddingBottom="@dimen/material_base_margin"
+        android:paddingRight="@dimen/material_base_margin"
+        tools:text="Super conference yahoo"
+        app:layout_constraintTop_toBottomOf="@id/timeTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/timeTextView"
+
+        />
+    
+</android.support.constraint.ConstraintLayout>

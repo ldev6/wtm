@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <TextView
+        android:id="@+id/partnerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/material_base_margin"
+        android:layout_marginTop="@dimen/material_base_margin"
+        android:text="@string/platinum"
+        android:textAllCaps="true"
+        android:textColor="@color/platinum"
+        android:textSize="@dimen/title"
+        />
+
+    <GridView
+        android:id="@+id/sponsorGridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="2"
+        />
+
+</LinearLayout>

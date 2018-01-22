@@ -37,7 +37,7 @@ public class TwitterFragment extends ListFragment {
         View view = inflater.inflate(R.layout.twitter_fragment, container, false);
 
         final SearchTimeline searchTimeline = new SearchTimeline.Builder()
-                .query("#WomenTechmakers OR #IWD17 OR #WTM17 OR #WTMMontreal")
+                .query("#WomenTechmakers OR #IWD18 OR #WTM18 OR #WTMMontreal")
                 .build();
         final UserTimeline userTimeline = new UserTimeline.Builder()
                 .screenName("WTM_Montreal")

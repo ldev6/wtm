@@ -29,6 +29,12 @@ import java.util.Locale;
 
 
 public class Utils {
+    
+    
+    
+    public static String getLanguage() {
+       return Locale.getDefault().getLanguage();
+    }
 
     /**
      * To change fragment

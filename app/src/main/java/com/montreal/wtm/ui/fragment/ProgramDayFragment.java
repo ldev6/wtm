@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Talk;
+import com.montreal.wtm.model.Timeslot;
 import com.montreal.wtm.ui.adapter.ScheduleAdapter;
 import com.montreal.wtm.utils.ui.fragment.BaseFragment;
 
@@ -29,7 +30,7 @@ public class ProgramDayFragment extends BaseFragment {
     private static String EXTRA_DAY = "EXTRA_DAY";
 
     private ScheduleAdapter mAdapter;
-    private ArrayList<Talk> mTalks;
+    private ArrayList<Talk> talks;
     private int mDay;
 
     public static ProgramDayFragment newInstance(int day) {
@@ -51,45 +52,47 @@ public class ProgramDayFragment extends BaseFragment {
                 linearLayoutManager.getOrientation());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
-        mTalks = new ArrayList<>();
-        mAdapter = new ScheduleAdapter(getActivity(), mTalks);
+        talks = new ArrayList<>();
+        mAdapter = new ScheduleAdapter(getActivity(), talks);
         recyclerView.setAdapter(mAdapter);
         setMessageViewInterface(this);
         showProgressBar();
 
         mDay = getArguments().getInt(EXTRA_DAY);
-        FirebaseData.getSchedule(getActivity(), requestListener, mDay);
+        FirebaseData.INSTANCE.getSchedule(getActivity(), requestListener, mDay);
         return v;
     }
 
-    private FirebaseData.RequestListener<ArrayList<Talk>> requestListener = new FirebaseData.RequestListener<ArrayList<Talk>>() {
+    private FirebaseData.RequestListener<ArrayList<Timeslot>> requestListener = new FirebaseData.RequestListener<ArrayList<Timeslot>>() {
         @Override
-        public void onDataChange(ArrayList<Talk> object) {
-            mTalks.clear();
-            mTalks.addAll(object);
-            Collections.sort(mTalks, new Comparator<Talk>() {
-                public int compare(Talk v1, Talk v2) {
-                    String time1 = v1.getTime().split("-")[0];
-                    String time2 = v2.getTime().split("-")[0];
-                    SimpleDateFormat sdf = new SimpleDateFormat("h:mm aa", Locale.CANADA);
-                    try {
-                        Date date1 = sdf.parse(time1);
-                        Date date2 = sdf.parse(time2);
-                        return date1.compareTo(date2);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    return v1.getTime().toUpperCase().compareTo(v2.getTime().toUpperCase());
-                }
-            });
+        public void onDataChange(ArrayList<Timeslot> object) {
+            
+            talks.clear();
+            //talks.addAll(object);
+            //Collections.sort(talks, new Comparator<Talk>() {
+            //    public int compare(Talk v1, Talk v2) {
+            //        String time1 = v1.getTime().split("-")[0];
+            //        String time2 = v2.getTime().split("-")[0];
+            //        SimpleDateFormat sdf = new SimpleDateFormat("h:mm aa", Locale.CANADA);
+            //        try {
+            //            Date date1 = sdf.parse(time1);
+            //            Date date2 = sdf.parse(time2);
+            //            return date1.compareTo(date2);
+            //        } catch (ParseException e) {
+            //            e.printStackTrace();
+            //        }
+            //        return v1.getTime().toUpperCase().compareTo(v2.getTime().toUpperCase());
+            //    }
+            //});
             mAdapter.notifyDataSetChanged();
             hideMessageView();
         }
 
         @Override
         public void onCancelled(FirebaseData.ErrorFirebase errorType) {
-            String message = errorType == FirebaseData.ErrorFirebase.network ? getString(R.string.default_error_message) : getString(R.string.error_message_serveur_prob);
-            setMessageError(message);
+            //TODO
+            //String message = errorType == FirebaseData.INSTANCE.ErrorFirebase.network ? getString(R.string.default_error_message) : getString(R.string.error_message_serveur_prob);
+            //setMessageError(message);
         }
     };
 
@@ -104,6 +107,6 @@ public class ProgramDayFragment extends BaseFragment {
         if (!isAdded()) {
             return;
         }
-        FirebaseData.getSchedule(getActivity(), requestListener, mDay);
+        FirebaseData.INSTANCE.getSchedule(getActivity(), requestListener, mDay);
     }
 }

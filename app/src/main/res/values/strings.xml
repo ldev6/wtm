@@ -1,17 +1,16 @@
 <resources>
-    <string name="app_name">WTM Montreal 2017</string>
+    <string name="app_name">WTM Montreal 2018</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="women_techmakers_montreal">Women Techmakers | Montreal 2017</string>
+    <string name="women_techmakers_montreal">Women Techmakers | Montreal 2018</string>
     <string name="powered_by">powered by GDG Montreal Android</string>
     <string name="speakers">Speakers</string>
     <string name="sponsors">Sponsors</string>
     <string name="my_schedule">My Schedule</string>
     <string name="program">Program</string>
-    <string name="women_techmakers_montreal_2017">Women Techmakers Montreal 2017</string>
     <string name="information">Information</string>
     <string name="location">Location</string>
     <string name="twitter">Twitter</string>
@@ -44,9 +43,9 @@
     <string name="talk_removed">This talk has been removed from the schedule</string>
 
 
-    <string name="wtm_description"><![CDATA[<b>Women Techmakers</b> is a program created by Google to celebrate International Women\'s Day and to highlight the talent of women in technology. In 2017, we decided to organize the second edition in Montreal as part of the special event \"<b>The Women Techmakers Global Event Series Celebrating International Women\’s Day</b>\" (WTM IWD). This program has been in over 200 global events and seen across 52 countries. The main focus of this community-building initiative is to promote talented and passionate women, increase the visibility of the Montreal technology community and honour women in technology.]]></string>
+    <string name="wtm_description"><![CDATA[<b>Women Techmakers</b> is a program created by Google to celebrate International Women\'s Day and to highlight the talent of women in technology. In 2018, we\'re organizing the third edition in Montreal as part of the special event  \"<b>The Women Techmakers Global Event Series Celebrating International Women\’s Day</b>\" (WTM IWD). This program has been in over 200 global events and seen across 52 countries. The main focus of this community-building initiative is to promote talented and passionate women, increase the visibility of the Montreal technology community and honour women in technology.]]></string>
     <string name="wtm_montreal_website"><![CDATA[Montreal website: <a href=\"http://www.wtmmontrea.com\">www.wtmmontreal.com</a>]]></string>
-    <string name="wtm_global_website"><![CDATA[Global website: <a href=\"http://www.womentechmakers.com/iwd17\">www.womentechmakers.com/iwd17</a>]]></string>
+    <string name="wtm_global_website"><![CDATA[Global website: <a href=\"http://www.womentechmakers.com/iwd18\">www.womentechmakers.com/iwd18</a>]]></string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="subject">Subject</string>

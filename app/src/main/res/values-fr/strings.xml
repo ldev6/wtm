@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">WTM Montreal 2018</string>
+
+    <string name="navigation_drawer_open">Ouvrir la navigation</string>
+    <string name="navigation_drawer_close">Fermer la navigation</string>
+
+    <string name="action_settings">Paramètres</string>
+    <string name="women_techmakers_montreal">Women Techmakers | Montréal 2018</string>
+    <string name="powered_by">propulsé par GDG Montreal Android</string>
+    <string name="speakers">Conférencières</string>
+    <string name="sponsors">Commanditaires</string>
+    <string name="my_schedule">Mon horaire</string>
+    <string name="program">Programme</string>
+    
+    <string name="information">Information</string>
+    <string name="location">Lieu</string>
+    <string name="twitter">Twitter</string>
+
+
+    <string name="error_field_required">Champ obligatoire</string>
+
+    <string name="default_error_message">Pas de connexion Internet</string>
+    <string name="error_message_serveur_prob">Oops! Une erreur de serveur s\'est produite</string>
+    <string name="retry_connection">Recommencez</string>
+
+
+    <!-- Utils -->
+    <!-- Update alert -->
+    <string name="update_alert_force_title">Mise à jour</string>
+    <string name="update_alert_force_message">Votre application est trop ancienne, vous devez la mettre à jour pour continuer</string>
+    <string name="update_alert_force_ok_button">Télécharger</string>
+    <string name="update_alert_force_cancel_button">Annuler</string>
+    <string name="update_alert_title">Mise à jour</string>
+    <string name="update_alert_message">Une nouvelle version est disponible, voulez-vous télécharger?</string>
+    <string name="update_alert_ok_button">Oui</string>
+    <string name="update_alert_cancel_button">Non</string>
+    <string name="bio">Bio</string>
+    <string name="platinum">platine</string>
+    <string name="gold">or</string>
+    <string name="silver">argent</string>
+    <string name="bronze">bronze</string>
+    <string name="no_tweets">Pas de tweets</string>
+    <string name="talk_added">Cette conférence a été ajoutée à votre horaire</string>
+    <string name="talk_removed">Cette conférence a été enlevée de votre horaire</string>
+
+
+    <string name="wtm_description"><![CDATA[<b>Women Techmakers</b> est un programme créé par Google afin de souligner le talent des femmes dans le milieu de l\'informatique. En 2018,  nous organisons la troisième édition à Montréal de l\'événement spécial "<b>The Women Techmakers Global Event Series Celebrating International Women\'s Day</b>\" (WTM IWD). Ce programme se déroule chaque année dans 52 pays et connait plus de 200 événements mondiaux. Cette initiative communautaire vise à promouvoir le talent et la passion, à accroître la visibilité de la communauté technologique montréalaise et à honorer et à donner du pouvoir aux femmes dans l\'industrie technologique.]]></string>
+    <string name="wtm_montreal_website"><![CDATA[Montreal website: <a href=\"http://www.wtmmontrea.com\">www.wtmmontreal.com</a>]]></string>
+    <string name="wtm_global_website"><![CDATA[Global website: <a href=\"http://www.womentechmakers.com/iwd18\">www.womentechmakers.com/iwd18</a>]]></string>
+    <string name="name">Nom</string>
+    <string name="email">courriel</string>
+    <string name="subject">Suject</string>
+    <string name="write_your_message_here">Écrivez un message ici</string>
+    <string name="send">envoyer</string>
+</resources>

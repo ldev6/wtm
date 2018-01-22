@@ -24,13 +24,13 @@ import java.util.Map;
 
 public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.SpeakerHolder> {
 
-    private Context mContext;
-    private ArrayList<Map.Entry> mData;
+    private Context context;
+    private ArrayList<Map.Entry> data;
 
     public SpeakersAdapter(Context context, HashMap<String, Speaker> speakerHashMap) {
-        mData = new ArrayList<Map.Entry>();
-        mData.addAll(speakerHashMap.entrySet());
-        mContext = context;
+        data = new ArrayList<Map.Entry>();
+        data.addAll(speakerHashMap.entrySet());
+        this.context = context;
     }
 
     @Override
@@ -41,42 +41,41 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
 
     @Override
     public void onBindViewHolder(SpeakerHolder holder, int position) {
-        final Map.Entry<String, Speaker> speakerHasmap = mData.get(position);
+        final Map.Entry<String, Speaker> speakerHasmap = data.get(position);
         final Speaker speaker = speakerHasmap.getValue();
         holder.nameTextView.setText(speaker.getName());
         holder.titleTextView.setText(speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()) : null);
-
+        
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(mContext.getResources().getString(R.string.speakers_url))
-                .append("%2F")
-                .append(mContext.getResources().getString(R.string.speakers_url_end, speakerHasmap.getKey()));
+        stringBuilder.append(context.getResources().getString(R.string.storage_url))
+                .append(speaker.getPhotoUrl());
 
         Utils.downloadImage(stringBuilder.toString(), holder.avatarImageView);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mContext.startActivity(SpeakerActivity.newIntent(mContext, speaker, speakerHasmap.getKey()));
+                context.startActivity(SpeakerActivity.newIntent(context, speaker));
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return data.size();
     }
 
     public void dataChange(HashMap<String, Speaker> speakerHashMap) {
-        mData.clear();
-        mData.addAll(speakerHashMap.entrySet());
+        data.clear();
+        data.addAll(speakerHashMap.entrySet());
 
 
-        Collections.sort(mData, new Comparator<Map.Entry>() {
+        Collections.sort(data, new Comparator<Map.Entry>() {
             @Override
             public int compare(Map.Entry o1, Map.Entry o2) {
                 Speaker speaker1 = (Speaker) o1.getValue();
                 Speaker speaker2 = (Speaker) o2.getValue();
-                String firstName1 = speaker1.getFirstName() != null ? speaker1.getFirstName().toUpperCase() : speaker1.getFirstName();
-                String firstName2 = speaker2.getFirstName() != null ? speaker2.getFirstName().toUpperCase() : speaker2.getFirstName();
+                String firstName1 = speaker1.getName() != null ? speaker1.getName().toUpperCase() : speaker1.getName();
+                String firstName2 = speaker2.getName() != null ? speaker2.getName().toUpperCase() : speaker2.getName();
                 if (firstName1 != null && firstName2 != null) {
                     return firstName1.compareTo(firstName2);
                 } else {

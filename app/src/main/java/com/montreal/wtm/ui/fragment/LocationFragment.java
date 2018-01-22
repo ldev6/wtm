@@ -47,12 +47,12 @@ public class LocationFragment extends BaseFragment {
 
         mFloatingAction = (FloatingActionButton) view.findViewById(R.id.fab);
         showProgressBar();
-        FirebaseData.getLocation(getActivity(), requestListener);
+        FirebaseData.INSTANCE.getLocation(getActivity(), requestListener);
         return view;
     }
 
     private void updateView(final Location location) {
-        String staticMapUrl = MapUtils.urlForLocation(location.getAddress());
+        String staticMapUrl = MapUtils.INSTANCE.urlForLocation(location.getAddress());
         Utils.downloadImage(staticMapUrl, mImageView, R.drawable.placeholder_map);
 
 
@@ -106,8 +106,9 @@ public class LocationFragment extends BaseFragment {
 
         @Override
         public void onCancelled(FirebaseData.ErrorFirebase errorType) {
-            String message = errorType == FirebaseData.ErrorFirebase.network ? getString(R.string.default_error_message) : getString(R.string.error_message_serveur_prob);
-            setMessageError(message);
+            //TODO 
+            //String message = errorType == FirebaseData.INSTANCE.ErrorFirebase.network ? getString(R.string.default_error_message) : getString(R.string.error_message_serveur_prob);
+            //setMessageError(message);
         }
     };
 
@@ -116,6 +117,6 @@ public class LocationFragment extends BaseFragment {
         if (!isAdded()) {
             return;
         }
-        FirebaseData.getLocation(getActivity(), requestListener);
+        FirebaseData.INSTANCE.getLocation(getActivity(), requestListener);
     }
 }

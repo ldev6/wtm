@@ -10,46 +10,52 @@ import com.google.firebase.database.PropertyName;
 @IgnoreExtraProperties
 public class Speaker implements Parcelable {
 
-    @PropertyName("description")
-    public String description;
-
-    @PropertyName("first_name")
-    public String firstName;
-
-    @PropertyName("last_name")
-    public String lastName;
+    @PropertyName("name")
+    public String name;
 
     @PropertyName("title")
     public String title;
+    
+    @PropertyName("shortBio")
+    public String shortBio;
+    
+    @PropertyName("bio")
+    public String bio;
+    
+    @PropertyName("photoUrl")
+    public String photoUrl;
 
+    
     public Speaker() {
     }
 
-    public Speaker(String description, String firstName, String lastName, String title) {
-        this.description = description;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Speaker(String name, String title, String shortBio, String bio, String photoUrl) {
+        this.name = name;
         this.title = title;
+        this.shortBio = shortBio;
+        this.bio = bio;
+        this.photoUrl = photoUrl;
     }
 
-    protected Speaker(Parcel in) {
-        description = in.readString();
-        firstName = in.readString();
-        lastName = in.readString();
-        title = in.readString();
+    public String getName() {
+        return name;
     }
 
-    public static final Creator<Speaker> CREATOR = new Creator<Speaker>() {
-        @Override
-        public Speaker createFromParcel(Parcel in) {
-            return new Speaker(in);
-        }
+    public String getShortBio() {
+        return shortBio;
+    }
 
-        @Override
-        public Speaker[] newArray(int size) {
-            return new Speaker[size];
-        }
-    };
+    public String getBio() {
+        return bio;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 
     @Override
     public int describeContents() {
@@ -58,30 +64,30 @@ public class Speaker implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(description);
-        dest.writeString(firstName);
-        dest.writeString(lastName);
-        dest.writeString(title);
+        dest.writeString(this.name);
+        dest.writeString(this.title);
+        dest.writeString(this.shortBio);
+        dest.writeString(this.bio);
+        dest.writeString(this.photoUrl);
     }
 
-    public String getName() {
-        return firstName + " " + lastName;
+    protected Speaker(Parcel in) {
+        this.name = in.readString();
+        this.title = in.readString();
+        this.shortBio = in.readString();
+        this.bio = in.readString();
+        this.photoUrl = in.readString();
     }
 
+    public static final Creator<Speaker> CREATOR = new Creator<Speaker>() {
+        @Override
+        public Speaker createFromParcel(Parcel source) {
+            return new Speaker(source);
+        }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getTitle() {
-        return title;
-    }
+        @Override
+        public Speaker[] newArray(int size) {
+            return new Speaker[size];
+        }
+    };
 }

@@ -44,7 +44,7 @@ public class SpeakersFragment extends BaseFragment {
         mAdapter = new SpeakersAdapter(getActivity(), mSpeakerHashMap);
         recyclerView.setAdapter(mAdapter);
         showProgressBar();
-        FirebaseData.getSpeakers(getActivity(), speakersRequestListener);
+        FirebaseData.INSTANCE.getSpeakers(getActivity(), speakersRequestListener);
         return view;
     }
 
@@ -60,8 +60,9 @@ public class SpeakersFragment extends BaseFragment {
 
         @Override
         public void onCancelled(FirebaseData.ErrorFirebase errorType) {
-            String message = errorType == FirebaseData.ErrorFirebase.network ? getString(R.string.default_error_message) : getString(R.string.error_message_serveur_prob);
-            setMessageError(message);
+            //TODO LATER
+            //String message = errorType == FirebaseData.INSTANCE.ErrorFirebase.network ? getString(R.string.default_error_message) : getString(R.string.error_message_serveur_prob);
+            //setMessageError(message);
         }
     };
 
@@ -70,6 +71,6 @@ public class SpeakersFragment extends BaseFragment {
         if (!isAdded()) {
             return;
         }
-        FirebaseData.getSpeakers(getActivity(), speakersRequestListener);
+        FirebaseData.INSTANCE.getSpeakers(getActivity(), speakersRequestListener);
     }
 }
