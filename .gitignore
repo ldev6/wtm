@@ -7,3 +7,16 @@
 /build
 /captures
 .externalNativeBuild
+.idea/checkstyle-idea.xml
+.idea/dictionaries/laurencedevillers.xml
+.idea/gradle.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/runConfigurations.xml
+app/app.iml
+app/app.iml
+*.iml
+app/google-services.json
+app/app.iml
+app/src/main/res/values/config.xml
+gradlew.bat
