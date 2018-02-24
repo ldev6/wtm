@@ -17,8 +17,9 @@ import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Session;
 import com.montreal.wtm.model.Speaker;
 import com.montreal.wtm.utils.Utils;
+import com.montreal.wtm.utils.ui.activity.BaseActivity;
 
-public class TalkActivity extends AppCompatActivity {
+public class TalkActivity extends BaseActivity {
 
     private static String EXTRA_TALK = "com.montreal.wtm.talk";
 

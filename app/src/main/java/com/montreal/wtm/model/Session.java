@@ -26,6 +26,9 @@ public class Session implements Parcelable {
     
     @PropertyName("roomId")
     public int roomId;
+    
+    @PropertyName("type")
+    public String type;
 
     @PropertyName("speakers")
     public ArrayList<Integer> speakersId;
@@ -75,6 +78,10 @@ public class Session implements Parcelable {
 
     public int getRoomId() {
         return roomId;
+    }
+
+    public String getType() {
+        return type;
     }
 
     @Override

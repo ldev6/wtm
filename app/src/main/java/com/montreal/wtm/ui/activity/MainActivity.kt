@@ -24,9 +24,10 @@ import com.montreal.wtm.ui.fragment.SpeakersFragment
 import com.montreal.wtm.ui.fragment.SponsorsFragment
 import com.montreal.wtm.ui.fragment.TwitterFragment
 import com.montreal.wtm.utils.Utils
+import com.montreal.wtm.utils.ui.activity.BaseActivity
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
 

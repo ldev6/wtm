@@ -45,7 +45,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
 
         if (holder instanceof BreakViewHolder) {
             BreakViewHolder headerHolder = (BreakViewHolder) holder;
-            if (talk.getType().equals(Talk.Type.Break.toString())) {
+            if (talk.getType().equals(Talk.Type.Break)) {
                 headerHolder.iconImageView.setImageResource(R.drawable.ic_access_time_black_24dp);
             } else {
                 headerHolder.iconImageView.setImageResource(R.drawable.ic_restaurant_menu_black_24dp);
@@ -89,9 +89,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return (talks.get(position).getType().equals(Talk.Type.Break.toString()) || talks.get(position)
+        return (talks.get(position).getType().equals(Talk.Type.Break) || talks.get(position)
             .getType()
-            .equals(Talk.Type.Food.toString())) ? TYPE_BREAK : TYPE_TALK;
+            .equals(Talk.Type.Food)) ? TYPE_BREAK : TYPE_TALK;
     }
 
     @Override
@@ -120,10 +120,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
 
         public TalkViewHolder(View itemView) {
             super(itemView);
-            loveImageView = (ImageView) itemView.findViewById(R.id.loveImageView);
-            timeTextView = (TextView) itemView.findViewById(R.id.timeTextView);
-            roomTextView = (TextView) itemView.findViewById(R.id.roomTextView);
-            talkTitleTextView = (TextView) itemView.findViewById(R.id.talkTitleTextView);
+            loveImageView =  itemView.findViewById(R.id.loveImageView);
+            timeTextView =  itemView.findViewById(R.id.timeTextView);
+            roomTextView =  itemView.findViewById(R.id.roomTextView);
+            talkTitleTextView =  itemView.findViewById(R.id.talkTitleTextView);
         }
     }
 }

@@ -11,12 +11,16 @@ public class Talk {
         this.session = session;
         this.time = time;
         this.room = room;
-        
+
         //TODO CHANGE 
         if (session.getSpeakersId() != null) {
             type = Type.Talk;
-        } else {
+        } else if (session.getType().equals("break")) {
             type = Type.Break;
+        } else if (session.getType().equals("food")) {
+            type = Type.Food;
+        } else {
+            type = Type.General;
         }
     }
 
@@ -42,7 +46,4 @@ public class Talk {
     public String getRoom() {
         return room;
     }
-
-  
-    
 }

@@ -15,8 +15,9 @@ import android.widget.TextView;
 import com.montreal.wtm.R;
 import com.montreal.wtm.model.Speaker;
 import com.montreal.wtm.utils.Utils;
+import com.montreal.wtm.utils.ui.activity.BaseActivity;
 
-public class SpeakerActivity extends AppCompatActivity {
+public class SpeakerActivity extends BaseActivity {
 
     private static String EXTRA_SPEAKER = "com.montreal.wtm.speaker";
 

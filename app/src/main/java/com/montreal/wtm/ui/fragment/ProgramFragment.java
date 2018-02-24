@@ -34,8 +34,8 @@ public class ProgramFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.program_fragment, container, false);
-        viewPager = (ViewPager) v.findViewById(R.id.viewpager);
-        TabLayout tabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
+        viewPager =  v.findViewById(R.id.viewpager);
+        TabLayout tabLayout = v.findViewById(R.id.sliding_tabs);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -66,22 +66,6 @@ public class ProgramFragment extends BaseFragment {
 
                 viewPager.setAdapter(new ProgramFragmentPagerAdapter(getChildFragmentManager(), days));
                 hideMessageView();
-                //talks.addAll(object);
-                //Collections.sort(talks, new Comparator<Talk>() {
-                //    public int compare(Talk v1, Talk v2) {
-                //        String time1 = v1.getTime().split("-")[0];
-                //        String time2 = v2.getTime().split("-")[0];
-                //        SimpleDateFormat sdf = new SimpleDateFormat("h:mm aa", Locale.CANADA);
-                //        try {
-                //            Date date1 = sdf.parse(time1);
-                //            Date date2 = sdf.parse(time2);
-                //            return date1.compareTo(date2);
-                //        } catch (ParseException e) {
-                //            e.printStackTrace();
-                //        }
-                //        return v1.getTime().toUpperCase().compareTo(v2.getTime().toUpperCase());
-                //    }
-                //});
                 //mAdapter.notifyDataSetChanged();
                 //hideMessageView();
             }
