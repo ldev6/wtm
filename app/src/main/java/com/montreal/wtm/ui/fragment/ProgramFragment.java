@@ -55,11 +55,9 @@ public class ProgramFragment extends BaseFragment {
                     ArrayList<Track> tracks = day.tracks;
                     ArrayList<Talk> talks = new ArrayList<>();
                     for (Timeslot timeslot : day.timeslots) {
-                        int room = 0;
                         for (ArrayList<Integer> sessionId : timeslot.sessionsId) {
                             Session session = sessionHashMap.get("" + sessionId.get(0));
-                            talks.add(new Talk(session, timeslot.getTime(), tracks.get(room).title));
-                            room++;
+                            talks.add(new Talk(session, timeslot.getTime(), tracks.get(session.getRoomId()).title));
                         }
                     }
 

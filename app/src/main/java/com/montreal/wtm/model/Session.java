@@ -23,6 +23,9 @@ public class Session implements Parcelable {
 
     @PropertyName("language")
     public String language;
+    
+    @PropertyName("roomId")
+    public int roomId;
 
     @PropertyName("speakers")
     public ArrayList<Integer> speakersId;
@@ -30,13 +33,14 @@ public class Session implements Parcelable {
     @PropertyName("tags")
     public ArrayList<String> tags;
 
-    public Session(int id, String complexity, String title, String description, String language,
+    public Session(int id, String complexity, String title, String description, String language, int roomId,
         ArrayList<Integer> speakersId, ArrayList<String> tags) {
         this.id = id;
         this.complexity = complexity;
         this.title = title;
         this.description = description;
         this.language = language;
+        this.roomId = roomId;
         this.speakersId = speakersId;
         this.tags = tags;
     }
@@ -67,6 +71,10 @@ public class Session implements Parcelable {
 
     public ArrayList<String> getTags() {
         return tags;
+    }
+
+    public int getRoomId() {
+        return roomId;
     }
 
     @Override

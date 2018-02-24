@@ -38,12 +38,12 @@ public class SpeakerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mSpeaker = intent.getExtras().getParcelable(EXTRA_SPEAKER);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(mSpeaker.getName());
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = findViewById(R.id.fab);
 
         //TODO if firebase with login with save
         //if (DataManager.Companion.getInstance().loveTalkContainSpeaker(mSpeakerKey)) {
@@ -70,8 +70,8 @@ public class SpeakerActivity extends AppCompatActivity {
             }
         });
 
-        //
-        ImageView avatarImageView = (ImageView) findViewById(R.id.avatarImageView);
+        findViewById(R.id.talkInformation).setVisibility(View.GONE);
+        ImageView avatarImageView =  findViewById(R.id.avatarImageView);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(getResources().getString(R.string.storage_url)).append(mSpeaker.getPhotoUrl());
 

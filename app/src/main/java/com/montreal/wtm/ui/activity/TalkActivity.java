@@ -16,6 +16,7 @@ import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Session;
 import com.montreal.wtm.model.Speaker;
+import com.montreal.wtm.utils.Utils;
 
 public class TalkActivity extends AppCompatActivity {
 
@@ -28,10 +29,11 @@ public class TalkActivity extends AppCompatActivity {
     }
 
     private Session session;
-    private Toolbar mToolBar;
-    private TextView mTitleTextView;
-    private TextView mDescriptionTextView;
-    private CollapsingToolbarLayout mCollapsingToolbar;
+    private Toolbar toolBar;
+    private TextView titleTextView;
+    private TextView descriptionTextView;
+    private ImageView avatarImageView;
+    private CollapsingToolbarLayout collapsingToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +41,11 @@ public class TalkActivity extends AppCompatActivity {
 
         setContentView(R.layout.speaker_activity);
         Intent intent = getIntent();
-        this.session = (Session) intent.getExtras().getParcelable(EXTRA_TALK);
+        this.session = intent.getExtras().getParcelable(EXTRA_TALK);
 
-        mToolBar = (Toolbar) findViewById(R.id.toolbar);
+        toolBar = findViewById(R.id.toolbar);
 
-        setSupportActionBar(mToolBar);
+        setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //TODO CHANGE THE VIEW FOR MORE THAN ONE SPEAKER
@@ -54,9 +56,9 @@ public class TalkActivity extends AppCompatActivity {
                 FirebaseData.INSTANCE.getSpeaker(this, requestListener, speakerId);
             }
         }
-        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        collapsingToolbar = findViewById(R.id.toolbar_layout);
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = findViewById(R.id.fab);
         //TODO do this logic with firebase
         //if (DataManager.Companion.getInstance().loveTalkContainSpeaker(mTimeslot.getSpeakerId())) {
         //    fab.setImageResource(R.drawable.ic_favorite_black_24px);
@@ -82,13 +84,7 @@ public class TalkActivity extends AppCompatActivity {
             }
         });
 
-        ImageView avatarImageView = (ImageView) findViewById(R.id.avatarImageView);
-        //StringBuilder stringBuilder = new StringBuilder();
-        //stringBuilder.append(getResources().getString(R.string.speakers_url))
-        //        .append("%2F")
-        //        .append(getResources().getString(R.string.speakers_url_end, mTimeslot.getSpeakerId()));
-
-        //Utils.downloadImage(stringBuilder.toString(), avatarImageView);
+        avatarImageView = findViewById(R.id.avatarImageView);
 
         findViewById(R.id.talkInformation).setVisibility(View.VISIBLE);
         ((TextView) findViewById(R.id.titleTalkTextView)).setText(
@@ -96,17 +92,21 @@ public class TalkActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.descriptionTalkTextView)).setText(
             session.getDescription() != null ? Html.fromHtml(session.getDescription()) : null);
 
-        mTitleTextView = (TextView) findViewById(R.id.titleTextView);
-        mDescriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
+        titleTextView = findViewById(R.id.titleTextView);
+        descriptionTextView = findViewById(R.id.descriptionTextView);
     }
 
     private FirebaseData.RequestListener<Speaker> requestListener = new FirebaseData.RequestListener<Speaker>() {
         @Override
         public void onDataChange(Speaker speaker) {
-            mToolBar.setTitle(speaker.getName());
-            mCollapsingToolbar.setTitle(speaker.getName());
-            mTitleTextView.setText(speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()) : null);
-            mDescriptionTextView.setText(speaker.getBio() != null ? Html.fromHtml(speaker.getBio()) : null);
+            toolBar.setTitle(speaker.getName());
+            collapsingToolbar.setTitle(speaker.getName());
+            titleTextView.setText(speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()) : null);
+            descriptionTextView.setText(speaker.getBio() != null ? Html.fromHtml(speaker.getBio()) : null);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(getResources().getString(R.string.storage_url)).append(speaker.getPhotoUrl());
+
+            Utils.downloadImage(stringBuilder.toString(), avatarImageView);
         }
 
         @Override
