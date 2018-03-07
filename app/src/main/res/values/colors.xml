@@ -12,5 +12,6 @@
     <color name="gold">#D4AF37</color>
     <color name="silver">#A5A5A5</color>
     <color name="bronze">#CD7F32</color>
+    <color name="transparent">#00FFFFFF</color>
 
 </resources>

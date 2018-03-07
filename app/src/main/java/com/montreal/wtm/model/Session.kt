@@ -22,7 +22,7 @@ class Session : Parcelable {
   lateinit var description: String
 
   @PropertyName("language")
-  lateinit var language: String
+  var language: String = "English"
 
   @PropertyName("roomId")
   var roomId: Int = 0
@@ -31,10 +31,10 @@ class Session : Parcelable {
   var type: String? = null
 
   @PropertyName("speakers")
-  lateinit var speakersId: ArrayList<Int>
+  var speakers: ArrayList<Int> = ArrayList<Int>()
 
   @PropertyName("tags")
-  lateinit var tags: ArrayList<String>
+  var tags: ArrayList<String> = ArrayList<String>()
 
   constructor()
 
@@ -48,7 +48,7 @@ class Session : Parcelable {
     dest.writeString(this.title)
     dest.writeString(this.description)
     dest.writeString(this.language)
-    dest.writeSerializable(this.speakersId)
+    dest.writeSerializable(if (this.speakers == null) ArrayList<Int>() else this.speakers)
     dest.writeSerializable(this.tags)
   }
 
@@ -58,13 +58,14 @@ class Session : Parcelable {
     this.title = `in`.readString()
     this.description = `in`.readString()
     this.language = `in`.readString()
-    this.speakersId = `in`.readSerializable() as ArrayList<Int>
+    this.speakers = `in`.readSerializable() as ArrayList<Int>
     this.tags = `in`.readSerializable() as ArrayList<String>
   }
 
   companion object {
 
-    @JvmField val CREATOR: Parcelable.Creator<Session> = object : Parcelable.Creator<Session> {
+    @JvmField
+    val CREATOR: Parcelable.Creator<Session> = object : Parcelable.Creator<Session> {
       override fun createFromParcel(source: Parcel): Session {
         return Session(source)
       }

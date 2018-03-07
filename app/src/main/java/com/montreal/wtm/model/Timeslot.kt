@@ -41,7 +41,7 @@ class Timeslot : Parcelable {
 
   companion object {
 
-    val CREATOR: Parcelable.Creator<Timeslot> = object : Parcelable.Creator<Timeslot> {
+    @JvmField val CREATOR: Parcelable.Creator<Timeslot> = object : Parcelable.Creator<Timeslot> {
       override fun createFromParcel(source: Parcel): Timeslot {
         return Timeslot(source)
       }

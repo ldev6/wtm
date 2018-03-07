@@ -22,7 +22,7 @@ public class SpeakersFragment extends BaseFragment {
         return new SpeakersFragment();
     }
 
-    private HashMap<String, Speaker> mSpeakerHashMap;
+    private HashMap<String, Speaker> speakerHashMap;
     private SpeakersAdapter mAdapter;
 
     @Nullable
@@ -36,8 +36,8 @@ public class SpeakersFragment extends BaseFragment {
             new DividerItemDecoration(getContext(), linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(linearLayoutManager);
-        mSpeakerHashMap = new HashMap();
-        mAdapter = new SpeakersAdapter(getContext(), mSpeakerHashMap);
+        speakerHashMap = new HashMap();
+        mAdapter = new SpeakersAdapter(getContext(), speakerHashMap);
         recyclerView.setAdapter(mAdapter);
         showProgressBar();
         FirebaseData.INSTANCE.getSpeakers(getActivity(), speakersRequestListener);
@@ -49,7 +49,7 @@ public class SpeakersFragment extends BaseFragment {
 
             @Override
             public void onDataChange(HashMap<String, Speaker> object) {
-                mSpeakerHashMap = object;
+                speakerHashMap = object;
                 mAdapter.dataChange(object);
                 hideMessageView();
             }

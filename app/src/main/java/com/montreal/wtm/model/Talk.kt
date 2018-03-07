@@ -8,16 +8,15 @@ class Talk(var session: Session, var time: String, var room: String) {
 
   init {
 
-//    //TODO CHANGE
-//    if (session.speakersId != null) {
-//      type = Type.Talk
-//    } else if (session.type == "break") {
-//      type = Type.Break
-//    } else if (session.type == "food") {
-//      type = Type.Food
-//    } else {
-//      type = Type.General
-//    }
+    if (session.speakers != null) {
+      type = Type.Talk
+    } else if (session.type == "break") {
+      type = Type.Break
+    } else if (session.type == "food") {
+      type = Type.Food
+    } else {
+      type = Type.General
+    }
     type = General
   }
 

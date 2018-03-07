@@ -35,7 +35,7 @@ class Sponsor : Parcelable {
 
   companion object {
 
-    val CREATOR: Parcelable.Creator<Sponsor> = object : Parcelable.Creator<Sponsor> {
+    @JvmField val CREATOR: Parcelable.Creator<Sponsor> = object : Parcelable.Creator<Sponsor> {
       override fun createFromParcel(source: Parcel): Sponsor {
         return Sponsor(source)
       }

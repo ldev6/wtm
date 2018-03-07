@@ -50,7 +50,7 @@ class Speaker : Parcelable {
 
   companion object {
 
-    val CREATOR: Parcelable.Creator<Speaker> = object : Parcelable.Creator<Speaker> {
+    @JvmField val CREATOR: Parcelable.Creator<Speaker> = object : Parcelable.Creator<Speaker> {
       override fun createFromParcel(source: Parcel): Speaker {
         return Speaker(source)
       }

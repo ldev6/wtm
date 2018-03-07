@@ -3,5 +3,5 @@
     <string name="clientKey">Twitter API </string>
     <string name="clientSecret">Client secret</string>
     <string name="map_api">Map API</string>
-    <string name="storage_url">Firebase URL</string>
+    <string name="storage_url">https://firebasestorage.googleapis.com/v0/b/wtmmontreal-2018.appspot.com/o</string>
 </resources>

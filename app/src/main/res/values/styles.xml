@@ -21,4 +21,18 @@
         <item name="windowActionModeOverlay">true</item>
     </style>
 
+    <style name="TextAppearance.AppCompat.Title.Wtm">
+        <item name="android:layout_margin">@dimen/activity_vertical_margin</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="TextAppearance.AppCompat.Body1.Wtm">
+        <item name="android:layout_margin">@dimen/activity_vertical_margin</item>
+    </style>
+
+    <style name="TextAppearance.Widget.AppCompat.Toolbar.Title.Transparent">
+        <item name="android:textColor">@color/transparent</item>
+    </style>
+
 </resources>

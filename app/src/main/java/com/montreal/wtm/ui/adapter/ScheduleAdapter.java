@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.montreal.wtm.R;
 import com.montreal.wtm.model.Talk;
-import com.montreal.wtm.model.Timeslot;
 import com.montreal.wtm.ui.activity.TalkActivity;
 import java.util.ArrayList;
 
@@ -106,7 +105,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
 
         public BreakViewHolder(View itemView) {
             super(itemView);
-            titleTextView = itemView.findViewById(R.id.titleTextView);
+            titleTextView = itemView.findViewById(R.id.speaker_position);
             iconImageView = itemView.findViewById(R.id.iconImageView);
         }
     }

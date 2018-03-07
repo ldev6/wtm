@@ -33,7 +33,7 @@ class PartnerCategory : Parcelable {
 
   companion object {
 
-    val CREATOR: Parcelable.Creator<PartnerCategory> = object : Parcelable.Creator<PartnerCategory> {
+    @JvmField val CREATOR: Parcelable.Creator<PartnerCategory> = object : Parcelable.Creator<PartnerCategory> {
       override fun createFromParcel(source: Parcel): PartnerCategory {
         return PartnerCategory(source)
       }

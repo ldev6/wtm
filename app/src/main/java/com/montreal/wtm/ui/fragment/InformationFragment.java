@@ -23,7 +23,7 @@ public class InformationFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.information_fragment, container, false);
-        ((TextView) view.findViewById(R.id.descriptionTextView)).setText(Html.fromHtml(getString(R.string.wtm_description)));
+        ((TextView) view.findViewById(R.id.speaker_bio)).setText(Html.fromHtml(getString(R.string.wtm_description)));
         ((TextView) view.findViewById(R.id.montrealWebsiteTextView)).setText(Html.fromHtml(getString(R.string.wtm_montreal_website)));
         ((TextView) view.findViewById(R.id.globalWebsiteTextView)).setText(Html.fromHtml(getString(R.string.wtm_global_website)));
         return view;

@@ -25,11 +25,16 @@ import java.util.Map;
 public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.SpeakerHolder> {
 
     private Context context;
-    private ArrayList<Map.Entry> data;
+    private ArrayList<Speaker> data;
 
     public SpeakersAdapter(Context context, HashMap<String, Speaker> speakerHashMap) {
-        data = new ArrayList<Map.Entry>();
-        data.addAll(speakerHashMap.entrySet());
+        data = new ArrayList<>();
+        data.addAll(speakerHashMap.values());
+        this.context = context;
+    }
+
+    public SpeakersAdapter(Context context) {
+        data = new ArrayList<>();
         this.context = context;
     }
 
@@ -41,8 +46,7 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
 
     @Override
     public void onBindViewHolder(SpeakerHolder holder, int position) {
-        final Map.Entry<String, Speaker> speakerHasmap = data.get(position);
-        final Speaker speaker = speakerHasmap.getValue();
+        final Speaker speaker = data.get(position);
         holder.nameTextView.setText(speaker.getName());
         holder.titleTextView.setText(speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()) : null);
         
@@ -66,14 +70,12 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
 
     public void dataChange(HashMap<String, Speaker> speakerHashMap) {
         data.clear();
-        data.addAll(speakerHashMap.entrySet());
+        data.addAll(speakerHashMap.values());
 
 
-        Collections.sort(data, new Comparator<Map.Entry>() {
+        Collections.sort(data, new Comparator<Speaker>() {
             @Override
-            public int compare(Map.Entry o1, Map.Entry o2) {
-                Speaker speaker1 = (Speaker) o1.getValue();
-                Speaker speaker2 = (Speaker) o2.getValue();
+            public int compare(Speaker speaker1, Speaker speaker2) {
                 String firstName1 = speaker1.getName() != null ? speaker1.getName().toUpperCase() : speaker1.getName();
                 String firstName2 = speaker2.getName() != null ? speaker2.getName().toUpperCase() : speaker2.getName();
                 if (firstName1 != null && firstName2 != null) {
@@ -88,6 +90,10 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
         notifyDataSetChanged();
     }
 
+    public void addSpeaker(Speaker speaker) {
+        data.add(speaker);
+    }
+
     public class SpeakerHolder extends RecyclerView.ViewHolder {
 
         TextView nameTextView;
@@ -97,7 +103,7 @@ public class SpeakersAdapter extends RecyclerView.Adapter<SpeakersAdapter.Speake
         public SpeakerHolder(View itemView) {
             super(itemView);
             nameTextView = (TextView) itemView.findViewById(R.id.nameTextView);
-            titleTextView = (TextView) itemView.findViewById(R.id.titleTextView);
+            titleTextView = (TextView) itemView.findViewById(R.id.speaker_position);
             avatarImageView = (ImageView) itemView.findViewById(R.id.avatarImageView);
         }
     }

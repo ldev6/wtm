@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.MenuItem;
@@ -19,7 +18,7 @@ import com.montreal.wtm.utils.ui.activity.BaseActivity;
 
 public class SpeakerActivity extends BaseActivity {
 
-    private static String EXTRA_SPEAKER = "com.montreal.wtm.speaker";
+    private static final String EXTRA_SPEAKER = "com.montreal.wtm.speaker";
 
     public static Intent newIntent(Context context, Speaker speaker) {
         Intent intent = new Intent(context, SpeakerActivity.class);
@@ -28,7 +27,7 @@ public class SpeakerActivity extends BaseActivity {
         return intent;
     }
 
-    private Speaker mSpeaker;
+    private Speaker speaker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +36,10 @@ public class SpeakerActivity extends BaseActivity {
         setContentView(R.layout.speaker_activity);
 
         Intent intent = getIntent();
-        mSpeaker = intent.getExtras().getParcelable(EXTRA_SPEAKER);
+        speaker = intent.getExtras().getParcelable(EXTRA_SPEAKER);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(mSpeaker.getName());
+        toolbar.setTitle(speaker.getName());
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -71,17 +70,16 @@ public class SpeakerActivity extends BaseActivity {
             }
         });
 
-        findViewById(R.id.talkInformation).setVisibility(View.GONE);
         ImageView avatarImageView =  findViewById(R.id.avatarImageView);
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getResources().getString(R.string.storage_url)).append(mSpeaker.getPhotoUrl());
+        stringBuilder.append(getResources().getString(R.string.storage_url)).append(speaker.getPhotoUrl());
 
         Utils.downloadImage(stringBuilder.toString(), avatarImageView);
 
-        ((TextView) findViewById(R.id.titleTextView)).setText(
-            mSpeaker.getTitle() != null ? Html.fromHtml(mSpeaker.getTitle()) : null);
-        ((TextView) findViewById(R.id.descriptionTextView)).setText(
-            mSpeaker.getBio() != null ? Html.fromHtml(mSpeaker.getBio()) : null);
+        ((TextView) findViewById(R.id.speaker_position)).setText(
+            speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()) : null);
+        ((TextView) findViewById(R.id.speaker_bio)).setText(
+            speaker.getBio() != null ? Html.fromHtml(speaker.getBio()) : null);
     }
 
     @Override

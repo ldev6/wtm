@@ -27,7 +27,7 @@ class Track : Parcelable {
 
   companion object {
 
-    val CREATOR: Parcelable.Creator<Track> = object : Parcelable.Creator<Track> {
+    @JvmField val CREATOR: Parcelable.Creator<Track> = object : Parcelable.Creator<Track> {
       override fun createFromParcel(source: Parcel): Track {
         return Track(source)
       }
