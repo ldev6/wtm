@@ -14,12 +14,14 @@ import com.montreal.wtm.model.Day;
 import com.montreal.wtm.model.Talk;
 import com.montreal.wtm.ui.adapter.ScheduleAdapter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProgramDayFragment extends Fragment {
 
     private static String EXTRA_DAY = "EXTRA_DAY";
 
     private ScheduleAdapter adapter;
+    private Day day;
 
     public static ProgramDayFragment newInstance(Day day) {
 
@@ -45,14 +47,23 @@ public class ProgramDayFragment extends Fragment {
         adapter = new ScheduleAdapter(getActivity(), talks);
         recyclerView.setAdapter(adapter);
 
-        Day day = getArguments().getParcelable(EXTRA_DAY);
+        day = getArguments().getParcelable(EXTRA_DAY);
         talks.addAll(day.talks);
         return v;
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
-        adapter.notifyDataSetChanged();
+    }
+
+    public void setSavedSession(HashMap<String, Boolean> mySchedule) {
+        if (day != null) {
+            for (Talk talk : day.talks) {
+                talk.saved = mySchedule.containsKey("" + talk.session.id);
+            }
+
+            adapter.notifyDataSetChanged();
+        }
     }
 }

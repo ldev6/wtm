@@ -28,6 +28,11 @@
             android:id="@+id/nav_twitter"
             android:icon="@drawable/ic_twitter_box"
             android:title="@string/twitter" />
+
+        <item
+            android:id="@+id/nav_login"
+            android:icon="@drawable/ic_account_circle_black_24dp"
+            android:title="@string/sign_in" />
     </group>
 
 </menu>

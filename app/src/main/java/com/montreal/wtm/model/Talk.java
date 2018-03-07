@@ -6,11 +6,13 @@ public class Talk {
     public Session session;
     public String time;
     public String room;
+    public boolean saved;
 
-    public Talk(Session session, String time, String room) {
+    public Talk(Session session, String time, String room, boolean saved) {
         this.session = session;
         this.time = time;
         this.room = room;
+        this.saved = saved;
 
         //TODO CHANGE 
         if (session.getSpeakersId() != null) {
@@ -46,4 +48,5 @@ public class Talk {
     public String getRoom() {
         return room;
     }
+    
 }
