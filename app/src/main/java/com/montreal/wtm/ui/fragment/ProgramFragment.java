@@ -52,16 +52,16 @@ public class ProgramFragment extends BaseFragment {
 
                 //TODO REFACTOR IN RX
                 for (Day day : days) {
-                    ArrayList<Track> tracks = day.tracks;
+                    ArrayList<Track> tracks = day.getTracks();
                     ArrayList<Talk> talks = new ArrayList<>();
-                    for (Timeslot timeslot : day.timeslots) {
-                        for (ArrayList<Integer> sessionId : timeslot.sessionsId) {
+                    for (Timeslot timeslot : day.getTimeslots()) {
+                        for (ArrayList<Integer> sessionId : timeslot.getSessionsId()) {
                             Session session = sessionHashMap.get("" + sessionId.get(0));
-                            talks.add(new Talk(session, timeslot.getTime(), tracks.get(session.getRoomId()).title));
+                            talks.add(new Talk(session, timeslot.getTime(), tracks.get(session.getRoomId()).getTitle()));
                         }
                     }
 
-                    day.talks = talks;
+                    day.setTalks(talks);
                 }
 
                 viewPager.setAdapter(new ProgramFragmentPagerAdapter(getChildFragmentManager(), days));

@@ -21,7 +21,7 @@ import com.montreal.wtm.utils.ui.activity.BaseActivity;
 
 public class TalkActivity extends BaseActivity {
 
-    private static String EXTRA_TALK = "com.montreal.wtm.talk";
+    private static final String EXTRA_TALK = "com.montreal.wtm.talk";
 
     public static Intent newIntent(Context context, Session session) {
         Intent intent = new Intent(context, TalkActivity.class);

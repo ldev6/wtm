@@ -29,6 +29,6 @@ public class ProgramFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return days.get(position).dateReadable;
+        return days.get(position).getDateReadable();
     }
 }

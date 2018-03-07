@@ -49,11 +49,11 @@ public class SponsorsFragment extends BaseFragment {
                     View partnerView = getLayoutInflater().inflate(R.layout.partner_row, null);
                     TextView title = ((TextView) partnerView.findViewById(R.id.partnerTitle));
                     title.setText(partnerCategory.getTitle());
-                    title.setTextColor(getColor(partnerCategory.title));
+                    title.setTextColor(getColor(partnerCategory.getTitle()));
 
                     GridView partnerGridview = ((GridView) partnerView.findViewById(R.id.sponsorGridView));
                     partnerGridview.setAdapter(
-                        new SponsorsGridViewAdapter(getActivity(), partnerCategory, getSize(partnerCategory.title)));
+                        new SponsorsGridViewAdapter(getActivity(), partnerCategory, getSize(partnerCategory.getTitle())));
 
                     layoutContainer.addView(partnerView);
                 }

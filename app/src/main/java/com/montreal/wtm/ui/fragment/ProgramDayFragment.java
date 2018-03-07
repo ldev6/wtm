@@ -46,7 +46,7 @@ public class ProgramDayFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         Day day = getArguments().getParcelable(EXTRA_DAY);
-        talks.addAll(day.talks);
+        talks.addAll(day.getTalks());
         return v;
     }
     

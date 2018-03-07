@@ -24,14 +24,13 @@ import com.montreal.wtm.ui.fragment.SpeakersFragment
 import com.montreal.wtm.ui.fragment.SponsorsFragment
 import com.montreal.wtm.ui.fragment.TwitterFragment
 import com.montreal.wtm.utils.Utils
+import com.montreal.wtm.utils.Utils.changeFragment
 import com.montreal.wtm.utils.ui.activity.BaseActivity
 
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
-
-    val TAG = MainActivity::class.java.simpleName
 
     super.onCreate(savedInstanceState)
     setContentView(layout.activity_main)
@@ -56,27 +55,35 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     val id = item.itemId
     var fragment: Fragment? = null
-    if (id == R.id.nav_program) {
-      fragment = ProgramFragment.newInstance()
-      setActionBarName(getString(R.string.program))
-    } else if (id == R.id.nav_speakers) {
-      fragment = SpeakersFragment.newIntance()
-      setActionBarName(getString(R.string.speakers))
-    } else if (id == R.id.nav_sponsors) {
-      fragment = SponsorsFragment.newInstance()
-      setActionBarName(getString(R.string.sponsors))
-    } else if (id == R.id.nav_information) {
-      fragment = InformationFragment.newInstance()
-      setActionBarName(getString(R.string.information))
-    } else if (id == R.id.nav_map) {
-      fragment = LocationFragment.newInstance()
-      setActionBarName(getString(R.string.location))
-    } else if (id == R.id.nav_twitter) {
-      fragment = TwitterFragment.newInstance()
-      setActionBarName(getString(R.string.twitter))
-    } else {
-      fragment = ProgramFragment.newInstance()
-      setActionBarName(getString(R.string.program))
+    when(id) {
+      R.id.nav_program -> {
+        fragment = ProgramFragment.newInstance()
+        setActionBarName(getString(R.string.program))
+      }
+      R.id.nav_speakers -> {
+        fragment = SpeakersFragment.newIntance()
+        setActionBarName(getString(R.string.speakers))
+      }
+      R.id.nav_sponsors -> {
+        fragment = SponsorsFragment.newInstance()
+        setActionBarName(getString(R.string.sponsors))
+      }
+      R.id.nav_information -> {
+        fragment = InformationFragment.newInstance()
+        setActionBarName(getString(R.string.information))
+      }
+      R.id.nav_map -> {
+        fragment = LocationFragment.newInstance()
+        setActionBarName(getString(R.string.location))
+      }
+      R.id.nav_twitter -> {
+        fragment = TwitterFragment.newInstance()
+        setActionBarName(getString(R.string.twitter))
+      }
+      else -> {
+        fragment = ProgramFragment.newInstance()
+        setActionBarName(getString(R.string.program))
+      }
     }
     val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
     drawer.closeDrawer(GravityCompat.START)
@@ -124,5 +131,5 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
       Utils.updateTheApplication(this, false)
     }
   }
-
 }
+

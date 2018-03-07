@@ -44,7 +44,7 @@ class WTMApplication : Application() {
         .build()
     Twitter.initialize(config)
 
-    Fabric.with(this, Crashlytics());
+//    Fabric.with(this, Crashlytics());
 
     val cacheDir = StorageUtils.getCacheDirectory(applicationContext)
 
