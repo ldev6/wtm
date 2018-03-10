@@ -7,10 +7,10 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.montreal.wtm.BuildConfig
 import com.montreal.wtm.R
@@ -30,6 +30,8 @@ import com.montreal.wtm.utils.ui.activity.BaseActivity
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+  lateinit var navigationView: NavigationView
+
   override fun onCreate(savedInstanceState: Bundle?) {
 
     super.onCreate(savedInstanceState)
@@ -40,13 +42,19 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     setSupportActionBar(toolbar)
 
     val drawer = findViewById<View>(id.drawer_layout) as DrawerLayout
+
     val toggle = ActionBarDrawerToggle(
         this, drawer, toolbar, string.navigation_drawer_open, string.navigation_drawer_close)
     drawer.setDrawerListener(toggle)
-    toggle.syncState()
 
-    val navigationView = findViewById<View>(id.nav_view) as NavigationView
-    navigationView.setNavigationItemSelectedListener(this)
+    toggle.syncState()
+    navigationView = findViewById<View>(id.nav_view) as NavigationView
+    navigationView?.setNavigationItemSelectedListener(this)
+
+    setLoginDrawer()
+    changeLogin.subscribe({
+      setLoginDrawer()
+    })
 
     Utils.changeFragment(this, R.id.container, ProgramFragment.newInstance())
   }
@@ -79,6 +87,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
       R.id.nav_twitter -> {
         fragment = TwitterFragment.newInstance()
         setActionBarName(getString(R.string.twitter))
+      }R.id.nav_login -> {
+        fragment = ProgramFragment.newInstance()
+        setActionBarName(getString(R.string.program))
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+          signOut()
+        } else {
+          signIn()
+        }
       }
       else -> {
         fragment = ProgramFragment.newInstance()
@@ -90,6 +106,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     Utils.changeFragment(this, R.id.container, fragment)
     return true
+  }
+
+  fun setLoginDrawer() {
+    val navLogin = navigationView.menu.findItem(R.id.nav_login)
+
+    if (FirebaseAuth.getInstance().currentUser == null) {
+      navLogin.setTitle(R.string.sign_in)
+    } else {
+      navLogin.setTitle(R.string.sign_out)
+    }
   }
 
   override fun onResume() {

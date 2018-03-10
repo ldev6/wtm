@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
 import com.crashlytics.android.Crashlytics
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -130,8 +131,45 @@ object FirebaseData {
       }
     })
   }
-  
-  fun getSessions(activity: Activity, requestListener: RequestListener<HashMap<String,Session>>) {
+
+  fun getMyShedule(activity: Activity, requestListener: RequestListener<HashMap<String, Boolean>>) {
+    val fileName = "mySession.json"
+    val uid = FirebaseAuth.getInstance().getCurrentUser()?.getUid();
+
+    val myRef = FirebaseDatabase.getInstance().getReference("/userSessions/" + uid)
+    myRef.addValueEventListener(object : ValueEventListener {
+      override fun onDataChange(dataSnapshot: DataSnapshot) {
+        if (dataSnapshot.children != null) {
+          val mySessions = HashMap<String, Boolean>()
+          for (children in dataSnapshot.children) {
+            mySessions.put(children.key, children.getValue(Boolean::class.java)!!)
+          }
+          saveInFile(activity, fileName, mySessions)
+          requestListener.onDataChange(mySessions)
+        }
+      }
+
+      override fun onCancelled(error: DatabaseError) {
+        // Failed to read value
+        Crashlytics.log("Get My Schedule failed =" + error.message)
+        requestListener.onCancelled(ErrorFirebase.firebase)
+      }
+    })
+
+  }
+
+  fun saveSession(activity: Activity, sessionId: String, save: Boolean) {
+    val uid = FirebaseAuth.getInstance().getCurrentUser()?.getUid();
+    if(save) {
+      FirebaseDatabase.getInstance().reference.child("userSessions").child(uid).child(
+          sessionId).setValue(save)
+    } else {
+      FirebaseDatabase.getInstance().reference.child("userSessions").child(uid).child(
+          sessionId).setValue(null)
+    }
+  }
+
+  fun getSessions(activity: Activity, requestListener: RequestListener<HashMap<String, Session>>) {
     val fileName = "Sessions.json"
 
     firebaseConnected(activity, requestListener, fileName,
@@ -143,7 +181,7 @@ object FirebaseData {
     myRef.addValueEventListener(object : ValueEventListener {
       override fun onDataChange(dataSnapshot: DataSnapshot) {
         if (dataSnapshot.children != null) {
-          val sessions = HashMap<String,Session>()
+          val sessions = HashMap<String, Session>()
           for (children in dataSnapshot.children) {
             sessions.put(children.key, children.getValue(Session::class.java)!!)
           }

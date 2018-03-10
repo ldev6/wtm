@@ -1,13 +1,16 @@
 package com.montreal.wtm.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.montreal.wtm.R;
+import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Talk;
 import com.montreal.wtm.ui.activity.TalkActivity;
 import java.util.ArrayList;
@@ -39,41 +42,44 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         final Talk talk = talks.get(position);
 
         if (holder instanceof BreakViewHolder) {
             BreakViewHolder headerHolder = (BreakViewHolder) holder;
+            
             if (talk.getType().equals(Talk.Type.Break)) {
                 headerHolder.iconImageView.setImageResource(R.drawable.ic_access_time_black_24dp);
             } else {
                 headerHolder.iconImageView.setImageResource(R.drawable.ic_restaurant_menu_black_24dp);
             }
+            
             headerHolder.titleTextView.setText(talk.getTime());
         } else if (holder instanceof TalkViewHolder) {
             final TalkViewHolder talkViewHolder = (TalkViewHolder) holder;
-            //if (timeslot.getSpeakerId() != null) {
-                //TODO do this logic with firebase
-                //if (DataManager.Companion.getInstance().loveTalkContainSpeaker(timeslot.getSpeakerId())) {
-                //    talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
-                //} else {
+            
+            if (talk.getSaved()) {
+                talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
+            } else {
                 talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
-                //}
-                talkViewHolder.loveImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO do this logic with firebase
-
-                        //if (DataManager.Companion.getInstance().loveTalkContainSpeaker(timeslot.getSpeakerId())) {
-                        //    DataManager.Companion.getInstance().removeLoveTalks(timeslot.getSpeakerId());
-                        //    talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
-                        //} else {
-                        //    DataManager.Companion.getInstance().addLoveTalk(timeslot.getSpeakerId());
-                        //    talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
-                        //}
+            }
+            
+            talkViewHolder.loveImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (talk.getSaved()) {
+                        FirebaseData.INSTANCE.saveSession((Activity) holder.itemView.getContext(),
+                            "" + talk.getSession().getId(), false);
+                        talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
+                    } else {
+                        FirebaseData.INSTANCE.saveSession((Activity) holder.itemView.getContext(),
+                            "" + talk.getSession().getId(), true);
+                        talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
                     }
-                });
-            //}
+                    talk.setSaved(!talk.getSaved());
+                }
+            });
+
             talkViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -119,10 +125,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
 
         public TalkViewHolder(View itemView) {
             super(itemView);
-            loveImageView =  itemView.findViewById(R.id.loveImageView);
-            timeTextView =  itemView.findViewById(R.id.timeTextView);
-            roomTextView =  itemView.findViewById(R.id.roomTextView);
-            talkTitleTextView =  itemView.findViewById(R.id.talkTitleTextView);
+            loveImageView = itemView.findViewById(R.id.loveImageView);
+            timeTextView = itemView.findViewById(R.id.timeTextView);
+            roomTextView = itemView.findViewById(R.id.roomTextView);
+            talkTitleTextView = itemView.findViewById(R.id.talkTitleTextView);
         }
     }
 }

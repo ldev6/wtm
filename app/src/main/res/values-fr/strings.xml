@@ -15,6 +15,9 @@
     <string name="information">Information</string>
     <string name="location">Lieu</string>
     <string name="twitter">Twitter</string>
+    <string name="sign_in">Se connecter</string>
+    <string name="sign_out">Se déconnecter</string>
+
 
 
     <string name="error_field_required">Champ obligatoire</string>

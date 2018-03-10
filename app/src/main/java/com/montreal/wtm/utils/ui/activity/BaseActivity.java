@@ -9,26 +9,39 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.montreal.wtm.R;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import java.util.Arrays;
 import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
 
-    private static final int RC_SIGN_IN = 102930;
+    private static final int RC_SIGN_IN = 1;
+    private static PublishSubject<Boolean> changeLogin = PublishSubject.create();
+
+    protected Observable<Boolean> getChangeLogin() {
+       return Observable.just(true)
+            .mergeWith(changeLogin);
+    }
 
     protected void signIn() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
             new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build());
 
         // Create and launch sign-in intent
-        startActivityForResult(
-            AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), RC_SIGN_IN);
+        startActivityForResult(AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setLogo(R.drawable.wtm_logo_vertical)      // Set logo drawable
+            .setTheme(R.style.AppTheme)
+            .setAvailableProviders(providers)
+            .build(), RC_SIGN_IN);
     }
 
     protected void signOut() {
         AuthUI.getInstance().signOut(this).addOnCompleteListener(new OnCompleteListener<Void>() {
             public void onComplete(@NonNull Task<Void> task) {
-                // ...
+                changeLogin.onNext(false);
             }
         });
     }
@@ -43,10 +56,9 @@ public class BaseActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                // ...
+                changeLogin.onNext(true);
             } else {
-                // Sign in failed, check response for error code
-                // ...
+                changeLogin.onNext(false);
             }
         }
     }
