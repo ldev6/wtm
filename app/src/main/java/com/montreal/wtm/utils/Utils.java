@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.montreal.wtm.BuildConfig;
 import com.montreal.wtm.R;
 import com.montreal.wtm.utils.view.ViewUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -130,7 +131,7 @@ public class Utils {
      * @param forceUpdate
      */
     public static void updateTheApplication(final Activity context, boolean forceUpdate) {
-        final String appPackageName = context.getPackageName(); // getPackageName() from Context or Activity object
+        final String appPackageName = BuildConfig.APPLICATION_ID; // getPackageName() from Context or Activity object
         if (forceUpdate) {
             ViewUtils.showAlertMessageWithCancel(context, context.getString(R.string.update_alert_force_title), context.getString(R.string.update_alert_force_message), new DialogInterface.OnClickListener() {
                 @Override

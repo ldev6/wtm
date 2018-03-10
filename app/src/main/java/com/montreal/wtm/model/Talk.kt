@@ -26,4 +26,8 @@ class Talk(var session: Session, var time: String, var room: String, var saved: 
     Food,
     Break
   }
+
+  fun getSessionId() : String {
+    return Integer.toString(session.id)
+  }
 }

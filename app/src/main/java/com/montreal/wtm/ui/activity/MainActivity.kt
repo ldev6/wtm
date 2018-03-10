@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseWrapper
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.montreal.wtm.BuildConfig
 import com.montreal.wtm.R
@@ -90,7 +91,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
       }R.id.nav_login -> {
         fragment = ProgramFragment.newInstance()
         setActionBarName(getString(R.string.program))
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+        if (FirebaseWrapper.isLogged()) {
           signOut()
         } else {
           signIn()
@@ -111,7 +112,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
   fun setLoginDrawer() {
     val navLogin = navigationView.menu.findItem(R.id.nav_login)
 
-    if (FirebaseAuth.getInstance().currentUser == null) {
+    if (FirebaseWrapper.isLogged()) {
       navLogin.setTitle(R.string.sign_in)
     } else {
       navLogin.setTitle(R.string.sign_out)
@@ -147,9 +148,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
   private fun checkNeedUpdate() {
     val versionCode = BuildConfig.VERSION_CODE
-    val minVersion = Integer.parseInt(FirebaseRemoteConfig.getInstance().getString("min_version"))
-    val currentVersion = Integer.parseInt(
-        FirebaseRemoteConfig.getInstance().getString("current_version"))
+    val minVersion = FirebaseWrapper.getMinVersion()
+    val currentVersion = FirebaseWrapper.getRemoteVersion()
 
     if (versionCode < minVersion) {
       Utils.updateTheApplication(this, true)

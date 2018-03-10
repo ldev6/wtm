@@ -158,7 +158,7 @@ object FirebaseData {
 
   }
 
-  fun saveSession(activity: Activity, sessionId: String, save: Boolean) {
+  fun saveSession(sessionId: String, save: Boolean) {
     val uid = FirebaseAuth.getInstance().getCurrentUser()?.getUid();
     if(save) {
       FirebaseDatabase.getInstance().reference.child("userSessions").child(uid).child(

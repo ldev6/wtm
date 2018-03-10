@@ -1,9 +1,7 @@
 package com.montreal.wtm.ui.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,35 +45,32 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
 
         if (holder instanceof BreakViewHolder) {
             BreakViewHolder headerHolder = (BreakViewHolder) holder;
-            
+
             if (talk.getType().equals(Talk.Type.Break)) {
                 headerHolder.iconImageView.setImageResource(R.drawable.ic_access_time_black_24dp);
             } else {
                 headerHolder.iconImageView.setImageResource(R.drawable.ic_restaurant_menu_black_24dp);
             }
-            
+
             headerHolder.titleTextView.setText(talk.getTime());
         } else if (holder instanceof TalkViewHolder) {
             final TalkViewHolder talkViewHolder = (TalkViewHolder) holder;
-            
+
             if (talk.getSaved()) {
                 talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
             } else {
                 talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
             }
-            
+
             talkViewHolder.loveImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (talk.getSaved()) {
-                        FirebaseData.INSTANCE.saveSession((Activity) holder.itemView.getContext(),
-                            "" + talk.getSession().getId(), false);
                         talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
                     } else {
-                        FirebaseData.INSTANCE.saveSession((Activity) holder.itemView.getContext(),
-                            "" + talk.getSession().getId(), true);
                         talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
                     }
+                    FirebaseData.INSTANCE.saveSession(talk.getSessionId(), !talk.getSaved());
                     talk.setSaved(!talk.getSaved());
                 }
             });
