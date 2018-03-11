@@ -5,35 +5,37 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.firebase.auth.FirebaseWrapper;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
-import com.montreal.wtm.model.Session;
 import com.montreal.wtm.model.Speaker;
+import com.montreal.wtm.model.Talk;
 import com.montreal.wtm.ui.adapter.SpeakersAdapter;
 import com.montreal.wtm.utils.ui.activity.BaseActivity;
-import java.util.HashMap;
 
-public class TalkActivity extends BaseActivity {
+public class TalkActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String EXTRA_TALK = "com.montreal.wtm.talk";
 
-    public static Intent newIntent(Context context, Session session) {
+    public static Intent newIntent(Context context, Talk talk) {
         Intent intent = new Intent(context, TalkActivity.class);
-        intent.putExtra(EXTRA_TALK, session);
+        intent.putExtra(EXTRA_TALK, talk);
         return intent;
     }
 
+    private FloatingActionButton fab;
     private View speakerTitle;
     private RecyclerView speakers;
-    private Session session;
+    private Talk talk;
     private Toolbar toolBar;
     private TextView talkTitle;
     private TextView talkDescription;
@@ -47,7 +49,7 @@ public class TalkActivity extends BaseActivity {
 
         setContentView(R.layout.talk_activity);
         Intent intent = getIntent();
-        this.session = intent.getExtras().getParcelable(EXTRA_TALK);
+        this.talk = intent.getExtras().getParcelable(EXTRA_TALK);
 
         toolBar = findViewById(R.id.toolbar);
         collapsingToolbar = findViewById(R.id.toolbar_layout);
@@ -61,10 +63,10 @@ public class TalkActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         talkTitle.setVisibility(View.VISIBLE);
-        talkTitle.setText(session.getTitle() != null ? Html.fromHtml(session.getTitle()) : null);
-        talkDescription.setText(session.getDescription() != null ? Html.fromHtml(session.getDescription()) : null);
+        talkTitle.setText(talk.getSessionTitle());
+        talkDescription.setText(talk.getSessionDescription());
 
-        if (session.getSpeakers() != null && !session.getSpeakers().isEmpty()){
+        if (talk.hasSpeakers()) {
             speakerTitle.setVisibility(View.VISIBLE);
             speakers.setVisibility(View.VISIBLE);
             speakersAdapter = new SpeakersAdapter(this);
@@ -72,7 +74,7 @@ public class TalkActivity extends BaseActivity {
             layoutManager.setAutoMeasureEnabled(true);
             speakers.setLayoutManager(layoutManager);
             speakers.setAdapter(speakersAdapter);
-            for (int speakerId : session.getSpeakers()) {
+            for (int speakerId : talk.getSpeakers()) {
                 FirebaseData.INSTANCE.getSpeaker(this, requestListener, speakerId);
             }
         } else {
@@ -80,31 +82,13 @@ public class TalkActivity extends BaseActivity {
             speakers.setVisibility(View.GONE);
         }
 
-        final FloatingActionButton fab = findViewById(R.id.fab);
-        //TODO do this logic with firebase
-        //if (DataManager.Companion.getInstance().loveTalkContainSpeaker(mTimeslot.getSpeakerId())) {
-        //    fab.setImageResource(R.drawable.ic_favorite_black_24px);
-        //} else {
-        //    fab.setImageResource(R.drawable.ic_favorite_white_24px);
-        //}
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO do this logic with firebase
-
-                //if (DataManager.Companion.getInstance().loveTalkContainSpeaker(mTimeslot.getSpeakerId())) {
-                //    DataManager.Companion.getInstance().removeLoveTalks(mTimeslot.getSpeakerId());
-                //    fab.setImageResource(R.drawable.ic_favorite_white_24px);
-                //    Snackbar.make(view, R.string.talk_removed, Snackbar.LENGTH_LONG)
-                //            .setAction("Action", null).show();
-                //} else {
-                //    DataManager.Companion.getInstance().addLoveTalk(mTimeslot.getSpeakerId());
-                //    fab.setImageResource(R.drawable.ic_favorite_black_24px);
-                //    Snackbar.make(view, R.string.talk_added, Snackbar.LENGTH_LONG)
-                //            .setAction("Action", null).show();
-                //}
-            }
-        });
+        fab = findViewById(R.id.fab);
+        int drawableId = R.drawable.ic_favorite_white_24px;
+        if (talk.getSaved()) {
+            drawableId = R.drawable.ic_favorite_black_24px;
+        }
+        fab.setImageResource(drawableId);
+        fab.setOnClickListener(this);
     }
 
     private FirebaseData.RequestListener<Speaker> requestListener = new FirebaseData.RequestListener<Speaker>() {
@@ -128,6 +112,36 @@ public class TalkActivity extends BaseActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.fab) {
+            if (FirebaseWrapper.Companion.isLogged()) {
+                talk.setSaved(!talk.getSaved());
+                FirebaseData.INSTANCE.saveSpeaker(talk.getSession().getId(), talk.getSaved());
+                int drawableId, messageId;
+
+                if (talk.getSaved()) {
+                    drawableId = R.drawable.ic_favorite_black_24px;
+                    messageId = R.string.speaker_added;
+                } else {
+                    drawableId = R.drawable.ic_favorite_white_24px;
+                    messageId = R.string.speaker_removed;
+                }
+                fab.setImageResource(drawableId);
+                Snackbar.make(v, messageId, Snackbar.LENGTH_LONG).show();
+            } else {
+                (new AlertDialog.Builder(this)).setTitle(R.string.login_required)
+                    .setCancelable(true)
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        dialog.dismiss();
+                        signIn();
+                    })
+                    .show();
+            }
         }
     }
 }

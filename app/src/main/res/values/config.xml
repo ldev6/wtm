@@ -3,6 +3,5 @@
     <string name="clientKey">UpPTK7F9iZfoLxJaUT1UkKnKm</string>
     <string name="clientSecret">0k5AjfZU0cjVW66g21HFd0p5vDmV1TUyiQnOGbEgv0PsbExNgV</string>
     <string name="map_api">AIzaSyAa7gsE0KFHZXWSpCAlNL0T9XkTn68gLvo</string>
-
     <string name="storage_url">https://firebasestorage.googleapis.com/v0/b/wtmmontreal-2018.appspot.com/o</string>
 </resources>

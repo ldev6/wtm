@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseWrapper
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.montreal.wtm.BuildConfig
@@ -22,10 +21,9 @@ import com.montreal.wtm.ui.fragment.InformationFragment
 import com.montreal.wtm.ui.fragment.LocationFragment
 import com.montreal.wtm.ui.fragment.ProgramFragment
 import com.montreal.wtm.ui.fragment.SpeakersFragment
-import com.montreal.wtm.ui.fragment.SponsorsFragment
+import com.montreal.wtm.ui.fragment.PartnersFragment
 import com.montreal.wtm.ui.fragment.TwitterFragment
 import com.montreal.wtm.utils.Utils
-import com.montreal.wtm.utils.Utils.changeFragment
 import com.montreal.wtm.utils.ui.activity.BaseActivity
 
 
@@ -50,7 +48,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     toggle.syncState()
     navigationView = findViewById<View>(id.nav_view) as NavigationView
-    navigationView?.setNavigationItemSelectedListener(this)
+    navigationView.setNavigationItemSelectedListener(this)
 
     setLoginDrawer()
     changeLogin.subscribe({
@@ -63,7 +61,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     val id = item.itemId
-    var fragment: Fragment? = null
+    var fragment: Fragment
     when(id) {
       R.id.nav_program -> {
         fragment = ProgramFragment.newInstance()
@@ -74,7 +72,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setActionBarName(getString(R.string.speakers))
       }
       R.id.nav_sponsors -> {
-        fragment = SponsorsFragment.newInstance()
+        fragment = PartnersFragment.newInstance()
         setActionBarName(getString(R.string.sponsors))
       }
       R.id.nav_information -> {
@@ -91,7 +89,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
       }R.id.nav_login -> {
         fragment = ProgramFragment.newInstance()
         setActionBarName(getString(R.string.program))
-        if (FirebaseWrapper.isLogged()) {
+        if (!FirebaseWrapper.isLogged()) {
           signOut()
         } else {
           signIn()

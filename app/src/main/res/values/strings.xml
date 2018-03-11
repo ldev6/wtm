@@ -43,6 +43,8 @@
     <string name="no_tweets">No Tweets</string>
     <string name="talk_added">This talk has been added to your schedule</string>
     <string name="talk_removed">This talk has been removed from the schedule</string>
+    <string name="speaker_removed">This speaker\'s talk has been removed from the schedule</string>
+    <string name="speaker_added">This speaker\'s talk has been added the schedule</string>
 
 
     <string name="wtm_description"><![CDATA[<b>Women Techmakers</b> is a program created by Google to celebrate International Women\'s Day and to highlight the talent of women in technology. In 2018, we\'re organizing the third edition in Montreal as part of the special event  \"<b>The Women Techmakers Global Event Series Celebrating International Women\’s Day</b>\" (WTM IWD). This program has been in over 200 global events and seen across 52 countries. The main focus of this community-building initiative is to promote talented and passionate women, increase the visibility of the Montreal technology community and honour women in technology.]]></string>
@@ -54,4 +56,7 @@
     <string name="write_your_message_here">Write your message here</string>
     <string name="send">send</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris velit enim, imperdiet faucibus lacus ut, pretium faucibus ex.</string>
+    <string name="login_required">Login required</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
 </resources>

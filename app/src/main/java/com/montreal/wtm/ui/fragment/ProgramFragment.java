@@ -17,6 +17,10 @@ import com.montreal.wtm.model.Timeslot;
 import com.montreal.wtm.model.Track;
 import com.montreal.wtm.ui.adapter.ProgramFragmentPagerAdapter;
 import com.montreal.wtm.utils.ui.fragment.BaseFragment;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,37 +62,43 @@ public class ProgramFragment extends BaseFragment {
         new FirebaseData.RequestListener<ArrayList<Day>>() {
             @Override
             public void onDataChange(ArrayList<Day> days) {
+                Single.fromCallable(() -> {
+                    for (Day day : days) {
+                        ArrayList<Track> tracks = day.getTracks();
+                        ArrayList<Talk> talks = new ArrayList<>();
+                        for (Timeslot timeslot : day.getTimeslots()) {
+                            for (ArrayList<Integer> sessionIds : timeslot.sessionsId) {
+                                int i = 0;
+                                for (int sessionID : sessionIds) {
+                                    Session session = sessionHashMap.get("" + sessionID);
+                                    boolean saveSession =
+                                        saveSessions != null && saveSessions.containsKey("" + session.getId());
 
-                //TODO REFACTOR IN RX
-                for (Day day : days) {
-                    ArrayList<Track> tracks = day.getTracks();
-                    ArrayList<Talk> talks = new ArrayList<>();
-                    for (Timeslot timeslot : day.getTimeslots()) {
-                        for (ArrayList<Integer> sessionIds : timeslot.sessionsId) {
-                            int i = 0;
-                            for (int sessionID : sessionIds) {
-                                Session session = sessionHashMap.get("" + sessionID);
-                                boolean saveSession = saveSessions != null && saveSessions.containsKey("" + session.getId());
+                                    String time = timeslot.getTime();
+                                    if (sessionIds.size() > 1) {
+                                        time = getStartDate(day.date, timeslot.startTime, timeslot.endTime,
+                                            sessionIds.size(), i);
+                                    }
 
-                                String time = timeslot.getTime();
-                                if (sessionIds.size() > 1) {
-                                    time =
-                                        getStartDate(day.date, timeslot.startTime, timeslot.endTime, sessionIds.size(),
-                                            i);
+                                    talks.add(
+                                        new Talk(session, time, tracks.get(session.getRoomId()).title, saveSession));
+                                    i++;
                                 }
-
-                                talks.add(new Talk(session, time, tracks.get(session.getRoomId()).title, saveSession));
-                                i++;
                             }
                         }
+
+                        day.setTalks(talks);
                     }
+                    return days;
+                })
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(days1 -> {
 
-                    day.setTalks(talks);
-                }
-
-                adapter = new ProgramFragmentPagerAdapter(getChildFragmentManager(), days);
-                viewPager.setAdapter(adapter);
-                hideMessageView();
+                        adapter = new ProgramFragmentPagerAdapter(getChildFragmentManager(), days1);
+                        viewPager.setAdapter(adapter);
+                        hideMessageView();
+                    });
             }
 
             @Override
@@ -146,7 +156,7 @@ public class ProgramFragment extends BaseFragment {
             double difference = Math.floor((timeEnd - timeStart) / totalNumber);
             Log.v("Date", "difference = " + difference);
 
-            long newDateTime = (long) (timeStart + difference * number );
+            long newDateTime = (long) (timeStart + difference * number);
 
             Date result = new Date(newDateTime);
             int minutes = result.getMinutes();

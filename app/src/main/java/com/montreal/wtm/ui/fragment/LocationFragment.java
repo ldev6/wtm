@@ -38,14 +38,14 @@ public class LocationFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.location_fragment, container, false);
-        mImageView = (ImageView) view.findViewById(R.id.mapImageView);
-        mPlaceNameTextView = (TextView) view.findViewById(R.id.placeNameTextView);
-        mAddressTextView = (TextView) view.findViewById(R.id.addressTextView);
-        mMetroTextView = (TextView) view.findViewById(R.id.metroInfoTextView);
-        mParkingTextView = (TextView) view.findViewById(R.id.parkingInfoTextView);
-        mParkingImageView = (ImageView) view.findViewById(R.id.parkingImageView);
+        mImageView = view.findViewById(R.id.mapImageView);
+        mPlaceNameTextView = view.findViewById(R.id.placeNameTextView);
+        mAddressTextView = view.findViewById(R.id.addressTextView);
+        mMetroTextView = view.findViewById(R.id.metroInfoTextView);
+        mParkingTextView = view.findViewById(R.id.parkingInfoTextView);
+        mParkingImageView = view.findViewById(R.id.parkingImageView);
 
-        mFloatingAction = (FloatingActionButton) view.findViewById(R.id.fab);
+        mFloatingAction = view.findViewById(R.id.fab);
         showProgressBar();
         FirebaseData.INSTANCE.getLocation(getActivity(), requestListener);
         return view;

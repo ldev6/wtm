@@ -4,21 +4,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.firebase.auth.FirebaseWrapper;
 import com.montreal.wtm.R;
+import com.montreal.wtm.api.FirebaseData;
+import com.montreal.wtm.model.Session;
 import com.montreal.wtm.model.Speaker;
 import com.montreal.wtm.utils.Utils;
 import com.montreal.wtm.utils.ui.activity.BaseActivity;
+import java.util.HashMap;
+import org.jetbrains.annotations.NotNull;
 
-public class SpeakerActivity extends BaseActivity {
+public class SpeakerActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String EXTRA_SPEAKER = "com.montreal.wtm.speaker";
+    protected FloatingActionButton fab;
 
     public static Intent newIntent(Context context, Speaker speaker) {
         Intent intent = new Intent(context, SpeakerActivity.class);
@@ -28,6 +37,7 @@ public class SpeakerActivity extends BaseActivity {
     }
 
     private Speaker speaker;
+    private Boolean sessionSaved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,34 +53,12 @@ public class SpeakerActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final FloatingActionButton fab = findViewById(R.id.fab);
-
-        //TODO if firebase with login with save
-        //if (DataManager.Companion.getInstance().loveTalkContainSpeaker(mSpeakerKey)) {
-        //    fab.setImageResource(R.drawable.ic_favorite_black_24px);
-        //} else {
+        fab = findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_favorite_white_24px);
-        //}
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO SEND TO FIREBASE
-                //if (DataManager.Companion.getInstance().loveTalkContainSpeaker(mSpeakerKey)) {
-                //    DataManager.Companion.getInstance().removeLoveTalks(mSpeakerKey);
-                //    fab.setImageResource(R.drawable.ic_favorite_white_24px);
-                //    Snackbar.make(view, R.string.talk_removed, Snackbar.LENGTH_LONG)
-                //            .setAction("Action", null).show();
-                //} else {
-                //    DataManager.Companion.getInstance().addLoveTalk(mSpeakerKey);
-                //    fab.setImageResource(R.drawable.ic_favorite_black_24px);
-                //    Snackbar.make(view, R.string.talk_added, Snackbar.LENGTH_LONG)
-                //            .setAction("Action", null).show();
-                //}
-            }
-        });
+        fab.setOnClickListener(this);
 
-        ImageView avatarImageView =  findViewById(R.id.avatarImageView);
+        ImageView avatarImageView = findViewById(R.id.avatarImageView);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(getResources().getString(R.string.storage_url)).append(speaker.getPhotoUrl());
 
@@ -80,6 +68,8 @@ public class SpeakerActivity extends BaseActivity {
             speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()) : null);
         ((TextView) findViewById(R.id.speaker_bio)).setText(
             speaker.getBio() != null ? Html.fromHtml(speaker.getBio()) : null);
+
+        FirebaseData.INSTANCE.getMySessionState(this, speakerListener, speaker.getId());
     }
 
     @Override
@@ -92,4 +82,48 @@ public class SpeakerActivity extends BaseActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onClick(View view) {
+        if (FirebaseWrapper.Companion.isLogged()) {
+            sessionSaved = !sessionSaved;
+            FirebaseData.INSTANCE.saveSpeaker(speaker.getId(), sessionSaved);
+            int drawableId, messageId;
+
+            if (sessionSaved) {
+                drawableId = R.drawable.ic_favorite_black_24px;
+                messageId = R.string.speaker_added;
+            } else {
+                drawableId = R.drawable.ic_favorite_white_24px;
+                messageId = R.string.speaker_removed;
+            }
+            fab.setImageResource(drawableId);
+            Snackbar.make(view, messageId, Snackbar.LENGTH_LONG).show();
+        } else {
+            (new AlertDialog.Builder(this)).setTitle(R.string.login_required)
+                .setCancelable(true)
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .setPositiveButton(R.string.ok,(dialog, which)->{dialog.dismiss();signIn();})
+                .show();
+        }
+    }
+
+
+    private FirebaseData.RequestListener<Pair<String, Boolean>> speakerListener =
+        new FirebaseData.RequestListener<Pair<String, Boolean>>() {
+            @Override
+            public void onDataChange(Pair<String, Boolean> sessionState) {
+                sessionSaved = sessionState.second;
+                int resource = R.drawable.ic_favorite_white_24px;
+                if (FirebaseWrapper.Companion.isLogged() && sessionSaved) {
+                    resource = R.drawable.ic_favorite_black_24px;
+                }
+                fab.setImageResource(resource);
+            }
+
+            @Override
+            public void onCancelled(@NotNull FirebaseData.ErrorFirebase errorType) {
+
+            }
+        };
 }

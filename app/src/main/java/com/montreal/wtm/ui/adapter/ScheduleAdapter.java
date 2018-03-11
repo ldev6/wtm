@@ -70,15 +70,15 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
                     } else {
                         talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
                     }
-                    FirebaseData.INSTANCE.saveSession(talk.getSessionId(), !talk.getSaved());
                     talk.setSaved(!talk.getSaved());
+                    FirebaseData.INSTANCE.saveSession(talk.getSessionId(), talk.getSaved());
                 }
             });
 
             talkViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(TalkActivity.newIntent(context, talk.getSession()));
+                    context.startActivity(TalkActivity.newIntent(context, talk));
                 }
             });
             talkViewHolder.timeTextView.setText(talk.getTime());

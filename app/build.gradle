@@ -4,7 +4,17 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+
+def RELEASE_KEYSTORE = ".android/wtm/release.keystore"
 android {
+  signingConfigs {
+    debug {
+      storeFile file("../config/debug.keystore")
+    }
+    release {
+      storeFile file(System.getenv("HOME") + RELEASE_KEYSTORE)
+    }
+  }
   compileSdkVersion 26
   defaultConfig {
     applicationId "com.montreal.wtm"
@@ -19,10 +29,15 @@ android {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      print System.getenv("HOME") + RELEASE_KEYSTORE
     }
     debug {
       minifyEnabled false
     }
+  }
+  compileOptions {
+    targetCompatibility 1.8
+    sourceCompatibility 1.8
   }
 }
 

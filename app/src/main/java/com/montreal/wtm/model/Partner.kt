@@ -7,10 +7,10 @@ import com.google.firebase.database.PropertyName
 import java.util.ArrayList
 
 @IgnoreExtraProperties
-class PartnerCategory : Parcelable {
+class Partner : Parcelable {
 
   @PropertyName("logos")
-  lateinit var sponsors: ArrayList<Sponsor>
+  lateinit var logos: ArrayList<Logo>
 
   @PropertyName("title")
   lateinit var title: String
@@ -22,23 +22,23 @@ class PartnerCategory : Parcelable {
   }
 
   override fun writeToParcel(dest: Parcel, flags: Int) {
-    dest.writeTypedList(this.sponsors)
+    dest.writeTypedList(this.logos)
     dest.writeString(this.title)
   }
 
   protected constructor(`in`: Parcel) {
-    this.sponsors = `in`.createTypedArrayList(Sponsor.CREATOR)
+    this.logos = `in`.createTypedArrayList(Logo.CREATOR)
     this.title = `in`.readString()
   }
 
   companion object {
 
-    @JvmField val CREATOR: Parcelable.Creator<PartnerCategory> = object : Parcelable.Creator<PartnerCategory> {
-      override fun createFromParcel(source: Parcel): PartnerCategory {
-        return PartnerCategory(source)
+    @JvmField val CREATOR: Parcelable.Creator<Partner> = object : Parcelable.Creator<Partner> {
+      override fun createFromParcel(source: Parcel): Partner {
+        return Partner(source)
       }
 
-      override fun newArray(size: Int): Array<PartnerCategory?> {
+      override fun newArray(size: Int): Array<Partner?> {
         return arrayOfNulls(size)
       }
     }

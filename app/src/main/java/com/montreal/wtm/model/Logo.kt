@@ -6,20 +6,22 @@ import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.PropertyName
 
 @IgnoreExtraProperties
-class Sponsor : Parcelable {
+class Logo : Parcelable {
 
   @PropertyName("logoUrl")
-  var logoUrl: String
+  lateinit var logoUrl: String
 
   @PropertyName("name")
-  var name: String
+  lateinit var name: String
 
   @PropertyName("url")
-  var urlWebsite: String
+  lateinit var urlWebsite: String
 
   override fun describeContents(): Int {
     return 0
   }
+
+  constructor()
 
   override fun writeToParcel(dest: Parcel, flags: Int) {
     dest.writeString(this.logoUrl)
@@ -35,12 +37,12 @@ class Sponsor : Parcelable {
 
   companion object {
 
-    @JvmField val CREATOR: Parcelable.Creator<Sponsor> = object : Parcelable.Creator<Sponsor> {
-      override fun createFromParcel(source: Parcel): Sponsor {
-        return Sponsor(source)
+    @JvmField val CREATOR: Parcelable.Creator<Logo> = object : Parcelable.Creator<Logo> {
+      override fun createFromParcel(source: Parcel): Logo {
+        return Logo(source)
       }
 
-      override fun newArray(size: Int): Array<Sponsor?> {
+      override fun newArray(size: Int): Array<Logo?> {
         return arrayOfNulls(size)
       }
     }
