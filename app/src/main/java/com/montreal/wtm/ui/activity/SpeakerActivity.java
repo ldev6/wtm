@@ -5,11 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import com.google.firebase.auth.FirebaseAuth;
-import kotlin.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -18,17 +17,23 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseWrapper;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
-import com.montreal.wtm.model.Session;
 import com.montreal.wtm.model.Speaker;
+import com.montreal.wtm.model.Talk;
+import com.montreal.wtm.ui.adapter.MediaAdapter;
+import com.montreal.wtm.ui.adapter.ScheduleAdapter;
 import com.montreal.wtm.utils.Utils;
 import com.montreal.wtm.utils.ui.activity.BaseActivity;
-import java.util.HashMap;
+import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 
 public class SpeakerActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String EXTRA_SPEAKER = "com.montreal.wtm.speaker";
     protected FloatingActionButton fab;
+    private TextView speakerTitle;
+    private TextView speakerBio;
+    private RecyclerView sessions;
+    private RecyclerView mediaSources;
 
     public static Intent newIntent(Context context, Speaker speaker) {
         Intent intent = new Intent(context, SpeakerActivity.class);
@@ -66,19 +71,26 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
 
         Utils.downloadImage(stringBuilder.toString(), avatarImageView);
 
-        ((TextView) findViewById(R.id.speaker_position)).setText(
-            speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()) : null);
-        ((TextView) findViewById(R.id.speaker_bio)).setText(
-            speaker.getBio() != null ? Html.fromHtml(speaker.getBio()) : null);
+        speakerTitle = findViewById(R.id.speaker_position);
+        speakerBio = findViewById(R.id.speaker_bio);
+        sessions = findViewById(R.id.sessions);
+        mediaSources = findViewById(R.id.media_sources);
+
+        speakerTitle.setText(speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()) : null);
+        speakerBio.setText(speaker.getBio() != null ? Html.fromHtml(speaker.getBio()) : null);
+
+        mediaSources.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+        mediaSources.setAdapter(new MediaAdapter(speaker.getSocials()));
 
         FirebaseData.INSTANCE.getMySessionState(this, speakerListener, speaker.getSessionId());
+        FirebaseData.INSTANCE.getTalk(this, talkListener, speaker.getSessionId(), sessionSaved);
 
         getLoginChanged().subscribe(this::onLoginChanged);
     }
 
     private void onLoginChanged(Boolean loggedIn) {
         this.loggedIn = loggedIn;
-        if(loggedIn) {
+        if (loggedIn) {
             FirebaseData.INSTANCE.getMySessionState(this, speakerListener, speaker.getSessionId());
         }
     }
@@ -101,6 +113,9 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
             FirebaseData.INSTANCE.saveSession(speaker.getSessionId(), sessionSaved);
             int drawableId, messageId;
 
+            if (sessions.getAdapter() instanceof ScheduleAdapter) {
+                ((ScheduleAdapter) sessions.getAdapter()).updateSession(speaker.getSessionId(), sessionSaved);
+            }
             if (sessionSaved) {
                 drawableId = R.drawable.ic_favorite_black_24px;
                 messageId = R.string.speaker_added;
@@ -115,6 +130,22 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
+    private FirebaseData.RequestListener<Talk> talkListener = new FirebaseData.RequestListener<Talk>() {
+        @Override
+        public void onDataChange(Talk talk) {
+            Context context = SpeakerActivity.this;
+            if (context != null) {
+                sessions.setVisibility(View.VISIBLE);
+                sessions.setLayoutManager(new LinearLayoutManager(SpeakerActivity.this));
+                sessions.setAdapter(new ScheduleAdapter(context, talk));
+            }
+        }
+
+        @Override
+        public void onCancelled(@NotNull FirebaseData.ErrorFirebase errorType) {
+
+        }
+    };
 
     private FirebaseData.RequestListener<Pair<String, Boolean>> speakerListener =
         new FirebaseData.RequestListener<Pair<String, Boolean>>() {

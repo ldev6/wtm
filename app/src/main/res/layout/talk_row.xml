@@ -29,7 +29,6 @@
         tools:text="9:00 AM - 10:00PM"
         />
 
-
     <TextView
         android:id="@+id/roomTextView"
         android:layout_width="0dp"
@@ -47,7 +46,22 @@
         android:layout_marginLeft="8dp"
         />
 
-    
+    <TextView
+        android:id="@+id/localeTextView"
+        android:layout_width="0dp"
+        android:layout_marginEnd="@dimen/material_base_margin"
+        android:layout_marginRight="@dimen/material_base_margin"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAlignment="textEnd"
+        app:layout_constraintTop_toBottomOf="@id/roomTextView"
+        app:layout_constraintRight_toRightOf="@id/track"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:text="French"
+        android:gravity="end"
+
+        android:layout_marginLeft="8dp"
+        />
     
     <TextView
         android:id="@+id/talkTitleTextView"
@@ -57,7 +71,7 @@
         android:paddingBottom="@dimen/material_base_margin"
         android:paddingRight="@dimen/material_base_margin"
         tools:text="Super conference yahoo"
-        app:layout_constraintTop_toBottomOf="@id/timeTextView"
+        app:layout_constraintTop_toBottomOf="@+id/localeTextView"
         app:layout_constraintEnd_toEndOf="@+id/track"
         app:layout_constraintStart_toStartOf="@id/timeTextView"
 

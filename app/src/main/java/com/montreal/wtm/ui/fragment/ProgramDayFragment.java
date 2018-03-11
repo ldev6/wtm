@@ -57,12 +57,11 @@ public class ProgramDayFragment extends Fragment {
         super.onResume();
     }
 
-    public void setSavedSession(HashMap<String, Boolean> mySchedule) {
+    public void loadSavedSessions(HashMap<String, Boolean> mySchedule) {
         if (day != null) {
             for (Talk talk : day.getTalks()) {
-                talk.setSaved(mySchedule.containsKey("" + talk.getSession().getId()));
+                talk.setSaved(mySchedule.containsKey(talk.getSessionId()));
             }
-
             adapter.notifyDataSetChanged();
         }
     }

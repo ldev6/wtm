@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
+import com.montreal.wtm.model.Session;
 import com.montreal.wtm.model.Talk;
 import com.montreal.wtm.ui.activity.TalkActivity;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
 
     private static final int TYPE_BREAK = 0;
     private static final int TYPE_TALK = 1;
+    private final boolean updatable;
 
     private ArrayList<Talk> talks;
     private Context context;
@@ -24,6 +26,15 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
     public ScheduleAdapter(Context context, ArrayList<Talk> talks) {
         this.talks = talks;
         this.context = context;
+        this.updatable = true;
+    }
+
+    public ScheduleAdapter(Context context, Talk talk) {
+        this.talks = new ArrayList<>();
+        this.talks.add(talk);
+        this.context = context;
+        this.updatable = false;
+
     }
 
     @Override
@@ -63,7 +74,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
             }
             if(talk.getType() == Talk.Type.General) {
                 talkViewHolder.trackView.setVisibility(View.INVISIBLE);
+                talkViewHolder.talkLocale.setVisibility(View.INVISIBLE);
             } else {
+                talkViewHolder.talkLocale.setVisibility(View.VISIBLE);
+                talkViewHolder.talkLocale.setText(talk.getSession().getLanguage());
                 int trackColor = R.color.soft_skill;
                 if (talk.getSession().isTechnicalTalk()) {
                     trackColor = R.color.technical_skill;
@@ -72,17 +86,18 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
                 talkViewHolder.trackView.setBackgroundColor(talkViewHolder.trackView.getResources().getColor(trackColor));
             }
 
+            if(updatable) {
+                talkViewHolder.loveImageView.setOnClickListener(v -> {
+                    if (talk.getSaved()) {
+                        talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
+                    } else {
+                        talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
+                    }
 
-            talkViewHolder.loveImageView.setOnClickListener(v -> {
-                if (talk.getSaved()) {
-                    talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
-                } else {
-                    talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
-                }
-
-                talk.setSaved(!talk.getSaved());
-                FirebaseData.INSTANCE.saveSession(talk.getSessionId(), talk.getSaved());
-            });
+                    talk.setSaved(!talk.getSaved());
+                    FirebaseData.INSTANCE.saveSession(talk.getSessionId(), talk.getSaved());
+                });
+            }
 
             talkViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,6 +122,15 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
         return talks.size();
     }
 
+    public void updateSession(int sessionId, boolean sessionSaved) {
+        for(Talk talk: talks) {
+            if(talk.getSessionId() == sessionId) {
+                talk.setSaved(sessionSaved);
+                break;
+            }
+        }
+    }
+
     class BreakViewHolder extends RecyclerView.ViewHolder {
 
         TextView titleTextView;
@@ -125,6 +149,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
         TextView timeTextView;
         TextView roomTextView;
         TextView talkTitleTextView;
+        TextView talkLocale;
         View trackView;
 
         public TalkViewHolder(View itemView) {
@@ -134,6 +159,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
             roomTextView = itemView.findViewById(R.id.roomTextView);
             talkTitleTextView = itemView.findViewById(R.id.talkTitleTextView);
             trackView = itemView.findViewById(R.id.track);
+            talkLocale = itemView.findViewById(R.id.localeTextView);
         }
     }
 }

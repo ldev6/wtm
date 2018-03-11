@@ -114,7 +114,7 @@ public class ProgramFragment extends BaseFragment {
                 savedSessions = mySchedule;
                 hideMessageView();
                 if (adapter != null) {
-                    adapter.getItem(viewPager.getCurrentItem()).setSavedSession(mySchedule);
+                    adapter.getItem(viewPager.getCurrentItem()).loadSavedSessions(mySchedule);
                 }
                 //hideMessageView();
             }

@@ -19,6 +19,7 @@ import com.montreal.wtm.model.Location
 import com.montreal.wtm.model.Partner
 import com.montreal.wtm.model.Session
 import com.montreal.wtm.model.Speaker
+import com.montreal.wtm.model.Talk
 import com.montreal.wtm.model.Timeslot
 import com.montreal.wtm.utils.NetworkUtils
 import com.montreal.wtm.utils.Utils
@@ -230,6 +231,24 @@ object FirebaseData {
       override fun onCancelled(error: DatabaseError) {
         // Failed to read value
         Crashlytics.log("Get ratings failed =" + error.message)
+        requestListener.onCancelled(ErrorFirebase.firebase)
+      }
+    })
+  }
+
+  fun getTalk(activity: Activity, requestListener: RequestListener<Talk>, sessionId: Int, saved:Boolean) {
+    firebaseConnected(activity, requestListener, SESSIONS_JSON, Speaker::class.java)
+    val session = getReference(Utils.getLanguage() + "/" + SPEAKERS + "/" + sessionId)
+    session.addListenerForSingleValueEvent(object : ValueEventListener {
+      override fun onDataChange(dataSnapshot: DataSnapshot) {
+        if(dataSnapshot.exists()) {
+          val session = dataSnapshot.getValue(Session::class.java)
+          var talk = Talk(session!!,"", "", saved)
+          requestListener.onDataChange(talk)
+        }
+      }
+      override fun onCancelled(error: DatabaseError) {
+        Crashlytics.log("Get session failed =" + error.message)
         requestListener.onCancelled(ErrorFirebase.firebase)
       }
     })
