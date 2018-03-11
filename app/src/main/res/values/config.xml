@@ -4,4 +4,6 @@
     <string name="clientSecret">0k5AjfZU0cjVW66g21HFd0p5vDmV1TUyiQnOGbEgv0PsbExNgV</string>
     <string name="map_api">AIzaSyAa7gsE0KFHZXWSpCAlNL0T9XkTn68gLvo</string>
     <string name="storage_url">https://firebasestorage.googleapis.com/v0/b/wtmmontreal-2018.appspot.com/o</string>
+    <string name="fb_share_url">https://www.facebook.com/sharer.php?u=%s</string>
+    <string name="gplus_share_url">https://plus.google.com/share?url=%s</string>
 </resources>

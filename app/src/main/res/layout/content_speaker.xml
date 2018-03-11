@@ -32,5 +32,12 @@
             style="@style/TextAppearance.AppCompat.Body1.Wtm"
             tools:text="@string/lorem_ipsum"
             />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/sessions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/talk_row"
+            />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

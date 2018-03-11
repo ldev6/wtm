@@ -19,7 +19,6 @@ import com.montreal.wtm.ui.adapter.ProgramFragmentPagerAdapter;
 import com.montreal.wtm.utils.ui.fragment.BaseFragment;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class ProgramFragment extends BaseFragment {
 
+    private static final String TAG = ProgramFragment.class.getSimpleName();
+
     public static ProgramFragment newInstance() {
         ProgramFragment fragment = new ProgramFragment();
         return fragment;
@@ -38,7 +39,7 @@ public class ProgramFragment extends BaseFragment {
 
     private ViewPager viewPager;
     private HashMap<String, Session> sessionHashMap;
-    private HashMap<String, Boolean> saveSessions;
+    private HashMap<String, Boolean> savedSessions;
     private ProgramFragmentPagerAdapter adapter;
 
     @Nullable
@@ -52,6 +53,7 @@ public class ProgramFragment extends BaseFragment {
 
         FirebaseData.INSTANCE.getMyShedule(getActivity(), requestListenerMySchedule);
         FirebaseData.INSTANCE.getSessions(getActivity(), requestListenerSession);
+        FirebaseData.INSTANCE.getMyRatings(getActivity(), requestListenerRatings);
 
         setMessageViewInterface(this);
         showProgressBar();
@@ -71,17 +73,14 @@ public class ProgramFragment extends BaseFragment {
                                 int i = 0;
                                 for (int sessionID : sessionIds) {
                                     Session session = sessionHashMap.get("" + sessionID);
-                                    boolean saveSession =
-                                        saveSessions != null && saveSessions.containsKey("" + session.getId());
 
                                     String time = timeslot.getTime();
                                     if (sessionIds.size() > 1) {
                                         time = getStartDate(day.date, timeslot.startTime, timeslot.endTime,
                                             sessionIds.size(), i);
                                     }
-
-                                    talks.add(
-                                        new Talk(session, time, tracks.get(session.getRoomId()).title, saveSession));
+                                    talks.add(new Talk(session, time, tracks.get(session.getRoomId()).title,
+                                        session.isIncludedIn(savedSessions)));
                                     i++;
                                 }
                             }
@@ -90,15 +89,12 @@ public class ProgramFragment extends BaseFragment {
                         day.setTalks(talks);
                     }
                     return days;
-                })
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(days1 -> {
+                }).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(days1 -> {
 
-                        adapter = new ProgramFragmentPagerAdapter(getChildFragmentManager(), days1);
-                        viewPager.setAdapter(adapter);
-                        hideMessageView();
-                    });
+                    adapter = new ProgramFragmentPagerAdapter(getChildFragmentManager(), days1);
+                    viewPager.setAdapter(adapter);
+                    hideMessageView();
+                });
             }
 
             @Override
@@ -115,7 +111,7 @@ public class ProgramFragment extends BaseFragment {
             @Override
             public void onDataChange(HashMap<String, Boolean> mySchedule) {
                 Log.v("Saved schedule", " Saved schedule=" + mySchedule);
-                saveSessions = mySchedule;
+                savedSessions = mySchedule;
                 hideMessageView();
                 if (adapter != null) {
                     adapter.getItem(viewPager.getCurrentItem()).setSavedSession(mySchedule);
@@ -164,7 +160,7 @@ public class ProgramFragment extends BaseFragment {
             Log.v("result", " result = " + result.getHours() + ":" + minutes);
             return result.getHours() + ":" + minutes;
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e(TAG, "ParseException", e);
         }
         return startTime + " " + endTime;
     }
@@ -178,6 +174,19 @@ public class ProgramFragment extends BaseFragment {
 
         FirebaseData.INSTANCE.getMyShedule(getActivity(), requestListenerMySchedule);
     }
+
+    private FirebaseData.RequestListener<HashMap<String, Long>> requestListenerRatings =
+        new FirebaseData.RequestListener<HashMap<String, Long>>() {
+            @Override
+            public void onDataChange(@org.jetbrains.annotations.Nullable HashMap<String, Long> data) {
+                Log.d(TAG, "Received ratings:" + data);
+            }
+
+            @Override
+            public void onCancelled(@NotNull FirebaseData.ErrorFirebase errorType) {
+
+            }
+        };
 
     private FirebaseData.RequestListener<HashMap<String, Session>> requestListenerSession =
         new FirebaseData.RequestListener<HashMap<String, Session>>() {

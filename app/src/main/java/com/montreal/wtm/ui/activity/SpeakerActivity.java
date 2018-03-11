@@ -8,7 +8,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Pair;
+import com.google.firebase.auth.FirebaseAuth;
+import kotlin.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -37,7 +38,8 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
     }
 
     private Speaker speaker;
-    private Boolean sessionSaved;
+    private boolean sessionSaved;
+    private boolean loggedIn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,16 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
         ((TextView) findViewById(R.id.speaker_bio)).setText(
             speaker.getBio() != null ? Html.fromHtml(speaker.getBio()) : null);
 
-        FirebaseData.INSTANCE.getMySessionState(this, speakerListener, speaker.getId());
+        FirebaseData.INSTANCE.getMySessionState(this, speakerListener, speaker.getSessionId());
+
+        getLoginChanged().subscribe(this::onLoginChanged);
+    }
+
+    private void onLoginChanged(Boolean loggedIn) {
+        this.loggedIn = loggedIn;
+        if(loggedIn) {
+            FirebaseData.INSTANCE.getMySessionState(this, speakerListener, speaker.getSessionId());
+        }
     }
 
     @Override
@@ -87,7 +98,7 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View view) {
         if (FirebaseWrapper.Companion.isLogged()) {
             sessionSaved = !sessionSaved;
-            FirebaseData.INSTANCE.saveSpeaker(speaker.getId(), sessionSaved);
+            FirebaseData.INSTANCE.saveSession(speaker.getSessionId(), sessionSaved);
             int drawableId, messageId;
 
             if (sessionSaved) {
@@ -100,11 +111,7 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
             fab.setImageResource(drawableId);
             Snackbar.make(view, messageId, Snackbar.LENGTH_LONG).show();
         } else {
-            (new AlertDialog.Builder(this)).setTitle(R.string.login_required)
-                .setCancelable(true)
-                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
-                .setPositiveButton(R.string.ok,(dialog, which)->{dialog.dismiss();signIn();})
-                .show();
+            promptLogin();
         }
     }
 
@@ -113,7 +120,7 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
         new FirebaseData.RequestListener<Pair<String, Boolean>>() {
             @Override
             public void onDataChange(Pair<String, Boolean> sessionState) {
-                sessionSaved = sessionState.second;
+                sessionSaved = sessionState.getSecond();
                 int resource = R.drawable.ic_favorite_white_24px;
                 if (FirebaseWrapper.Companion.isLogged() && sessionSaved) {
                     resource = R.drawable.ic_favorite_black_24px;

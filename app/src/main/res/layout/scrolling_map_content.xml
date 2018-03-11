@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.activity.SpeakerActivity"
-    tools:showIn="@layout/speaker_activity"
     >
 
 
@@ -35,9 +34,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_margin="@dimen/activity_vertical_margin"
             >
 
             <ImageView
+                android:visibility="invisible"
+                android:id="@+id/metro_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_stm"
@@ -54,9 +56,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_margin="@dimen/activity_vertical_margin"
             >
 
             <ImageView
+                android:visibility="invisible"
+                android:id="@+id/parking_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_parking_black_24dp"
@@ -70,6 +75,7 @@
         </LinearLayout>
 
         <ImageView
+            android:layout_margin="@dimen/activity_vertical_margin"
             android:id="@+id/parkingImageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

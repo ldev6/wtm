@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -34,7 +35,11 @@ public class Utils {
     
     
     public static String getLanguage() {
-       return Locale.getDefault().getLanguage();
+        String language = Locale.getDefault().getLanguage();
+        if(language == null || !language.equalsIgnoreCase("en") || !language.equalsIgnoreCase("fr")) {
+            return Locale.US.getLanguage();
+        }
+        return language;
     }
 
     /**
@@ -229,6 +234,5 @@ public class Utils {
     public static void clearCacheUrl(String url) {
         MemoryCacheUtils.removeFromCache(url, ImageLoader.getInstance().getMemoryCache());
     }
-
 
 }

@@ -14,7 +14,7 @@ public class ProgramFragmentPagerAdapter extends FragmentPagerAdapter {
     public ProgramFragmentPagerAdapter(FragmentManager fm, ArrayList<Day> days) {
         super(fm);
         this.days = days;
-        fragments = new ArrayList<ProgramDayFragment>();
+        fragments = new ArrayList<>();
 
         for (Day day : days) {
             fragments.add(ProgramDayFragment.newInstance(day));

@@ -61,18 +61,27 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
             } else {
                 talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
             }
-
-            talkViewHolder.loveImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (talk.getSaved()) {
-                        talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
-                    } else {
-                        talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
-                    }
-                    talk.setSaved(!talk.getSaved());
-                    FirebaseData.INSTANCE.saveSession(talk.getSessionId(), talk.getSaved());
+            if(talk.getType() == Talk.Type.General) {
+                talkViewHolder.trackView.setVisibility(View.INVISIBLE);
+            } else {
+                int trackColor = R.color.soft_skill;
+                if (talk.getSession().isTechnicalTalk()) {
+                    trackColor = R.color.technical_skill;
                 }
+                talkViewHolder.trackView.setVisibility(View.VISIBLE);
+                talkViewHolder.trackView.setBackgroundColor(talkViewHolder.trackView.getResources().getColor(trackColor));
+            }
+
+
+            talkViewHolder.loveImageView.setOnClickListener(v -> {
+                if (talk.getSaved()) {
+                    talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
+                } else {
+                    talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_24px);
+                }
+
+                talk.setSaved(!talk.getSaved());
+                FirebaseData.INSTANCE.saveSession(talk.getSessionId(), talk.getSaved());
             });
 
             talkViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -89,9 +98,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return (talks.get(position).getType().equals(Talk.Type.Break) || talks.get(position)
-            .getType()
-            .equals(Talk.Type.Food)) ? TYPE_BREAK : TYPE_TALK;
+        return (talks.get(position).getType() == Talk.Type.Break || talks.get(position)
+            .getType() == Talk.Type.Food) ? TYPE_BREAK : TYPE_TALK;
     }
 
     @Override
@@ -117,6 +125,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
         TextView timeTextView;
         TextView roomTextView;
         TextView talkTitleTextView;
+        View trackView;
 
         public TalkViewHolder(View itemView) {
             super(itemView);
@@ -124,6 +133,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
             timeTextView = itemView.findViewById(R.id.timeTextView);
             roomTextView = itemView.findViewById(R.id.roomTextView);
             talkTitleTextView = itemView.findViewById(R.id.talkTitleTextView);
+            trackView = itemView.findViewById(R.id.track);
         }
     }
 }

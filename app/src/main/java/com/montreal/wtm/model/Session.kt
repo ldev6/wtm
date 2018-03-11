@@ -8,6 +8,7 @@ import java.util.ArrayList
 
 @IgnoreExtraProperties
 class Session : Parcelable {
+  val TECHNICAL_SKILL = "Technical Skill"
 
   @PropertyName("id")
   var id: Int = 0
@@ -74,5 +75,18 @@ class Session : Parcelable {
         return arrayOfNulls(size)
       }
     }
+  }
+
+  fun isTechnicalTalk():Boolean {
+    for(tag in tags) {
+      if(tag.contains(TECHNICAL_SKILL, true)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  fun isIncludedIn(savedSessions:HashMap<String, Boolean>? ) :Boolean {
+    return savedSessions?.get(id.toString())?:false;
   }
 }

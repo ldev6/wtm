@@ -44,14 +44,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     val toggle = ActionBarDrawerToggle(
         this, drawer, toolbar, string.navigation_drawer_open, string.navigation_drawer_close)
-    drawer.setDrawerListener(toggle)
+    drawer.addDrawerListener(toggle)
 
     toggle.syncState()
     navigationView = findViewById<View>(id.nav_view) as NavigationView
     navigationView.setNavigationItemSelectedListener(this)
 
     setLoginDrawer()
-    changeLogin.subscribe({
+    loginChanged.subscribe({
       setLoginDrawer()
     })
 

@@ -4,12 +4,22 @@ import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.PropertyName
 
 @IgnoreExtraProperties
-class Location(@PropertyName("name") var name: String, address: String, @PropertyName(
-    "metro") var metro: String, @PropertyName("parking") var parking: String, @PropertyName(
-    "parking_url") var imageParkingUrl: String) {
+class Location {
+
+  @PropertyName("name")
+  lateinit var name: String
 
   @PropertyName("address")
-  var address: String = address
-    protected set
+  lateinit var address: String
 
+  @PropertyName("metro")
+  lateinit var metro: String
+
+  @PropertyName("parking")
+  lateinit var parking: String
+
+  @PropertyName("parking_url")
+  lateinit var imageParkingUrl: String
+
+  constructor(){}
 }

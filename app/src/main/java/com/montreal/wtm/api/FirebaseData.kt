@@ -33,9 +33,13 @@ import java.util.ArrayList
 import java.util.HashMap
 
 object FirebaseData {
-
+  private val MY_RATINGS_JSON = "myRatings.json"
+  private val MY_SESSION_JSON = "mySession.json"
+  private val SESSIONS_JSON = "Sessions.json"
+  private val SPEAKERS_JSON = "Speakers.json"
+  private val SCHEDULE_JSON = "Schedule.json"
   private val USER_SESSIONS = "userSessions"
-  private val USER_SPEAKERS = "userSpeakers"
+  private val RATINGS = "ratings"
   private val SPEAKERS = "speakers"
   private val SESSIONS = "sessions"
   private val PARTNERS = "partners"
@@ -80,6 +84,37 @@ object FirebaseData {
     })
   }
 
+  //TODO in next version speakerId and global array id should match
+  fun getSpeakerByInnerSpeakerId(activity: Activity, requestListener: RequestListener<Speaker>,
+      speakerId: Int) {
+    val fileName = "Speaker_$speakerId.json"
+    firebaseConnected(activity, requestListener, fileName, Speaker::class.java)
+    val reference = FirebaseDatabase.getInstance().reference.child(Utils.getLanguage()).child(
+        SPEAKERS).orderByChild("id").equalTo(speakerId.toDouble())
+    reference?.addListenerForSingleValueEvent(object : ValueEventListener {
+      override fun onDataChange(dataSnapshot: DataSnapshot) {
+        if (dataSnapshot.exists()) {
+          val speaker = dataSnapshot.children.first().getValue(Speaker::class.java)
+
+          if (speaker != null) {
+            requestListener.onDataChange(speaker)
+            saveInFile(activity, fileName, speaker)
+          } else {
+            if (NetworkUtils.isNetworkAvailable(activity.baseContext)) {
+              requestListener.onCancelled(ErrorFirebase.network)
+            }
+          }
+        }
+      }
+
+      override fun onCancelled(error: DatabaseError) {
+        // Failed to read value
+        Crashlytics.log("Get Speaker failed" + error.message)
+        requestListener.onCancelled(ErrorFirebase.firebase)
+      }
+    })
+  }
+
   private fun getReference(reference: String): DatabaseReference {
     return FirebaseDatabase.getInstance().getReference(reference)
   }
@@ -87,7 +122,7 @@ object FirebaseData {
   fun getSpeakers(activity: Activity,
       requestListener: RequestListener<HashMap<Integer, Speaker?>>) {
 
-    val fileName = "Speakers.json"
+    val fileName = SPEAKERS_JSON
     firebaseConnected(activity, requestListener, fileName,
         object : TypeToken<HashMap<Integer, Speaker>>() {
         }.type)
@@ -113,7 +148,7 @@ object FirebaseData {
   }
 
   fun getSchedule(activity: Activity, requestListener: RequestListener<ArrayList<Day>>) {
-    val fileName = "Schedule.json"
+    val fileName = SCHEDULE_JSON
     firebaseConnected(activity, requestListener, fileName,
         object : TypeToken<ArrayList<Timeslot>>() {
 
@@ -141,7 +176,7 @@ object FirebaseData {
   }
 
   fun getMyShedule(activity: Activity, requestListener: RequestListener<HashMap<String, Boolean>>) {
-    val fileName = "mySession.json"
+    val fileName = MY_SESSION_JSON
     val uid = FirebaseAuth.getInstance().getCurrentUser()?.getUid();
 
     firebaseConnected(activity, requestListener, fileName,
@@ -170,6 +205,36 @@ object FirebaseData {
     })
   }
 
+  fun getMyRatings(activity: Activity, requestListener: RequestListener<HashMap<String, Long>>) {
+    val fileName = MY_RATINGS_JSON
+    val uid = FirebaseAuth.getInstance().getCurrentUser()?.getUid();
+
+    firebaseConnected(activity, requestListener, fileName,
+        object : TypeToken<HashMap<String, Boolean>>() {
+
+        }.type)
+
+    val myRef = getReference("/" + RATINGS + "/" + uid + "/" + SESSIONS)
+    myRef?.addValueEventListener(object : ValueEventListener {
+      override fun onDataChange(dataSnapshot: DataSnapshot) {
+        if (dataSnapshot.children != null) {
+          val ratings = HashMap<String, Long>()
+          for (children in dataSnapshot.children) {
+            ratings.put(children.key, children.getValue(Long::class.java)!!)
+          }
+          saveInFile(activity, fileName, ratings)
+          requestListener.onDataChange(ratings)
+        }
+      }
+
+      override fun onCancelled(error: DatabaseError) {
+        // Failed to read value
+        Crashlytics.log("Get ratings failed =" + error.message)
+        requestListener.onCancelled(ErrorFirebase.firebase)
+      }
+    })
+  }
+
   fun getMySessionState(activity: Activity, requestListener: RequestListener<Pair<String, Boolean>>,
       sessionId: Int) {
     val uid = FirebaseAuth.getInstance().getCurrentUser()?.getUid();
@@ -188,7 +253,38 @@ object FirebaseData {
 
       override fun onCancelled(error: DatabaseError) {
         // Failed to read value
-        Crashlytics.log("Get My Schedule failed =" + error.message)
+        Crashlytics.log("Get My session stats failed =" + error.message)
+        requestListener.onCancelled(ErrorFirebase.firebase)
+      }
+    })
+  }
+
+  fun getMySessionRating(activity: Activity, requestListener: RequestListener<Pair<String, Long>>,
+      sessionId: Int) {
+    val uid = FirebaseAuth.getInstance().getCurrentUser()?.getUid();
+    if(uid == null) {
+      return
+    }
+
+    val sessionRating = FirebaseDatabase.getInstance().reference
+        .child(RATINGS)
+        .child(uid)
+        .child(SESSIONS)
+        .child(sessionId.toString())
+
+    sessionRating.addListenerForSingleValueEvent(object : ValueEventListener {
+      override fun onDataChange(dataSnapshot: DataSnapshot) {
+        if (dataSnapshot.exists()) {
+          val mySessionRating = Pair(dataSnapshot.key ?: "",
+              dataSnapshot.getValue(Long::class.java) ?: 0)
+          updateSessionRating(activity, mySessionRating)
+          requestListener.onDataChange(mySessionRating)
+        }
+      }
+
+      override fun onCancelled(error: DatabaseError) {
+        // Failed to read value
+        Crashlytics.log("Get My session stats failed =" + error.message)
         requestListener.onCancelled(ErrorFirebase.firebase)
       }
     })
@@ -207,17 +303,18 @@ object FirebaseData {
     }
   }
 
-  fun saveSpeaker(speakerId: Int, save: Boolean) {
+  fun saveSessionRating(sessionId: Int, rating: Int) {
     val uid = FirebaseAuth.getInstance().getCurrentUser()?.getUid();
-    Log.d(TAG, "Speaker id: " + speakerId)
+    Log.d(TAG, "Session id: " + sessionId + ", rating: " + rating)
     uid?.let {
-      getUserData(uid, USER_SPEAKERS)?.child(speakerId?.toString())?.setValue(save)
+      getUserData(uid, RATINGS)?.child(SESSIONS)?.child(sessionId?.toString())?.setValue(rating)
     }
+
   }
 
   fun getSessions(activity: Activity,
       requestListener: RequestListener<HashMap<String, Session>>) {
-    val fileName = "Sessions.json"
+    val fileName = SESSIONS_JSON
 
     firebaseConnected(activity, requestListener, fileName,
         object : TypeToken<ArrayList<Timeslot>>() {
@@ -276,8 +373,8 @@ object FirebaseData {
   fun getLocation(activity: Activity, requestListener: RequestListener<Location>) {
     val fileName = "Location.json"
     firebaseConnected(activity, requestListener, fileName, Location::class.java as Type)
-    val myRef = getReference("location")
-    myRef.addValueEventListener(object : ValueEventListener {
+    val myRef = getReference(Utils.getLanguage()).child("location")
+    myRef.addListenerForSingleValueEvent(object : ValueEventListener {
 
       override fun onDataChange(dataSnapshot: DataSnapshot) {
         val location = dataSnapshot.getValue(Location::class.java)
@@ -321,14 +418,35 @@ object FirebaseData {
         val gson = Gson()
         val json = gson.toJson(data)
 
-        saveFile(activity, "mySession.json", json).observeOn(AndroidSchedulers.mainThread()).subscribe()
+        saveFile(activity, MY_SESSION_JSON, json).observeOn(
+            AndroidSchedulers.mainThread()).subscribe()
       }
 
       override fun onCancelled(errorType: ErrorFirebase) {}
 
-      }, object : TypeToken<HashMap<String, Boolean>>() {
+    }, object : TypeToken<HashMap<String, Boolean>>() {
 
-    }.type).execute("mySession.json")
+    }.type).execute(MY_SESSION_JSON)
+  }
+
+  private fun updateSessionRating(activity: Activity,
+      mySessionRating: Pair<String, Long>) {
+
+    val listener = object : RequestListener<HashMap<String, Long>> {
+      override fun onDataChange(data: HashMap<String, Long>?) {
+        data?.put(mySessionRating.first, mySessionRating.second)
+        val gson = Gson()
+        val json = gson.toJson(data)
+
+        saveFile(activity, MY_RATINGS_JSON, json).observeOn(
+            AndroidSchedulers.mainThread()).subscribe()
+      }
+
+      override fun onCancelled(errorType: ErrorFirebase) {}
+
+    };
+//    ReadFile(activity, listener, object : TypeToken<HashMap<String, Long>>() {
+//    }.type).execute(MY_RATINGS_JSON)
   }
 
   private fun saveInFile(context: Context, nameFile: String, `object`: Any?) {

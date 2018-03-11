@@ -5,7 +5,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 class FirebaseWrapper {
   companion object {
     fun isLogged(): Boolean {
-      return FirebaseAuth.getInstance().currentUser == null
+      return FirebaseAuth.getInstance().currentUser != null
     }
 
     fun getRemoteVersion(): Int {

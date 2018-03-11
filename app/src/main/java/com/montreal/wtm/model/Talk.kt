@@ -6,10 +6,9 @@ import android.os.Parcelable
 import android.os.Parcelable.Creator
 import android.text.Html
 import android.text.Spanned
-import com.montreal.wtm.model.Talk.Type.General
-import java.io.Serializable
 
-class Talk(var session: Session, var time: String, var room: String, var saved: Boolean): Parcelable {
+class Talk(var session: Session, var time: String, var room: String,
+    var saved: Boolean) : Parcelable {
 
   var type: Type
 
@@ -23,16 +22,15 @@ class Talk(var session: Session, var time: String, var room: String, var saved: 
 
   init {
 
-    if (session.speakers.isEmpty()) {
-      type = Type.Talk
-    } else if (session.type == "break") {
+    if (session.type == "break") {
       type = Type.Break
     } else if (session.type == "food") {
       type = Type.Food
-    } else {
+    } else if (session.type == "general") {
       type = Type.General
+    } else {
+      type = Type.Talk
     }
-    type = General
   }
 
   enum class Type {
@@ -42,25 +40,41 @@ class Talk(var session: Session, var time: String, var room: String, var saved: 
     Break
   }
 
-  fun getSessionId() : Int {
+  fun getSessionId(): Int {
     return session.id
   }
 
   fun getSessionTitle(): Spanned? {
-      return Html.fromHtml(session.title?:"")
+    return Html.fromHtml(session.title ?: "")
   }
 
   fun getSessionDescription(): Spanned? {
-      return Html.fromHtml(session.description?:"")
+    return Html.fromHtml(session.description ?: "")
   }
 
-  fun getSpeakers():ArrayList<Int> {
+  fun getSpeakers(): ArrayList<Int> {
     return session.speakers
   }
 
-  fun hasSpeakers():Boolean {
+  fun hasSpeakers(): Boolean {
     return session.speakers.isNotEmpty()
   }
+
+  fun getLocationTimeLocale(): String {
+    return room + " / " + time + " / " + session.language
+  }
+
+  fun getSessionTags(): String {
+    var result = ""
+    for (tag in session.tags) {
+      if (!result.isBlank()) {
+        result += ", "
+      }
+      result += tag
+    }
+    return result
+  }
+
 
   override fun writeToParcel(parcel: Parcel, flags: Int) {
     parcel.writeParcelable(session, flags)

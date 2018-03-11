@@ -39,7 +39,7 @@
         android:layout_marginRight="@dimen/material_base_margin"
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="@id/loveImageView"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/track"
         app:layout_constraintStart_toEndOf="@+id/timeTextView"
         app:layout_constraintTop_toTopOf="@id/loveImageView"
         tools:text="Room(A-1600)"
@@ -58,9 +58,19 @@
         android:paddingRight="@dimen/material_base_margin"
         tools:text="Super conference yahoo"
         app:layout_constraintTop_toBottomOf="@id/timeTextView"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/track"
         app:layout_constraintStart_toStartOf="@id/timeTextView"
 
         />
-    
+    <View
+        android:id="@+id/track"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="5dp"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@color/soft_skill"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 </android.support.constraint.ConstraintLayout>
