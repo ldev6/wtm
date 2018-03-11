@@ -17,10 +17,10 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseWrapper;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
+import com.montreal.wtm.model.Session;
 import com.montreal.wtm.model.Speaker;
-import com.montreal.wtm.model.Talk;
 import com.montreal.wtm.ui.adapter.MediaAdapter;
-import com.montreal.wtm.ui.adapter.ScheduleAdapter;
+import com.montreal.wtm.ui.adapter.SimpleSessionAdapter;
 import com.montreal.wtm.utils.Utils;
 import com.montreal.wtm.utils.ui.activity.BaseActivity;
 import kotlin.Pair;
@@ -32,6 +32,7 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
     protected FloatingActionButton fab;
     private TextView speakerTitle;
     private TextView speakerBio;
+    private TextView sessionTitle;
     private RecyclerView sessions;
     private RecyclerView mediaSources;
 
@@ -75,15 +76,16 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
         speakerBio = findViewById(R.id.speaker_bio);
         sessions = findViewById(R.id.sessions);
         mediaSources = findViewById(R.id.media_sources);
+        sessionTitle = findViewById(R.id.session_title);
 
         speakerTitle.setText(speaker.getTitle() != null ? Html.fromHtml(speaker.getTitle()) : null);
         speakerBio.setText(speaker.getBio() != null ? Html.fromHtml(speaker.getBio()) : null);
 
-        mediaSources.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+        mediaSources.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mediaSources.setAdapter(new MediaAdapter(speaker.getSocials()));
 
         FirebaseData.INSTANCE.getMySessionState(this, speakerListener, speaker.getSessionId());
-        FirebaseData.INSTANCE.getTalk(this, talkListener, speaker.getSessionId(), sessionSaved);
+        FirebaseData.INSTANCE.getSession(this, sessionListener, speaker.getSessionId());
 
         getLoginChanged().subscribe(this::onLoginChanged);
     }
@@ -113,9 +115,6 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
             FirebaseData.INSTANCE.saveSession(speaker.getSessionId(), sessionSaved);
             int drawableId, messageId;
 
-            if (sessions.getAdapter() instanceof ScheduleAdapter) {
-                ((ScheduleAdapter) sessions.getAdapter()).updateSession(speaker.getSessionId(), sessionSaved);
-            }
             if (sessionSaved) {
                 drawableId = R.drawable.ic_favorite_black_24px;
                 messageId = R.string.speaker_added;
@@ -130,14 +129,15 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-    private FirebaseData.RequestListener<Talk> talkListener = new FirebaseData.RequestListener<Talk>() {
+    private FirebaseData.RequestListener<Session> sessionListener = new FirebaseData.RequestListener<Session>() {
         @Override
-        public void onDataChange(Talk talk) {
+        public void onDataChange(Session session) {
             Context context = SpeakerActivity.this;
             if (context != null) {
+                sessionTitle.setVisibility(View.VISIBLE);
                 sessions.setVisibility(View.VISIBLE);
                 sessions.setLayoutManager(new LinearLayoutManager(SpeakerActivity.this));
-                sessions.setAdapter(new ScheduleAdapter(context, talk));
+                sessions.setAdapter(new SimpleSessionAdapter(session));
             }
         }
 

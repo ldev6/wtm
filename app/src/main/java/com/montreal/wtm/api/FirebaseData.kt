@@ -236,15 +236,14 @@ object FirebaseData {
     })
   }
 
-  fun getTalk(activity: Activity, requestListener: RequestListener<Talk>, sessionId: Int, saved:Boolean) {
+  fun getSession(activity: Activity, requestListener: RequestListener<Session>, sessionId: Int) {
     firebaseConnected(activity, requestListener, SESSIONS_JSON, Speaker::class.java)
-    val session = getReference(Utils.getLanguage() + "/" + SPEAKERS + "/" + sessionId)
+    val session = getReference(Utils.getLanguage() + "/" + SESSIONS + "/" + sessionId)
     session.addListenerForSingleValueEvent(object : ValueEventListener {
       override fun onDataChange(dataSnapshot: DataSnapshot) {
         if(dataSnapshot.exists()) {
           val session = dataSnapshot.getValue(Session::class.java)
-          var talk = Talk(session!!,"", "", saved)
-          requestListener.onDataChange(talk)
+          requestListener.onDataChange(session)
         }
       }
       override fun onCancelled(error: DatabaseError) {

@@ -71,4 +71,6 @@
     <string name="wtm_twitter_handler">WTM_Montreal</string>
     <string name="loading">Loading…</string>
     <string name="rate_session">Rate session</string>
+    <string name="sessions">Session</string>
+    <string name="wrapped_content"> (%s)</string>
 </resources>
