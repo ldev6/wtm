@@ -4,7 +4,17 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+
+def RELEASE_KEYSTORE = ".android/wtm/release.keystore"
 android {
+  signingConfigs {
+    debug {
+      storeFile file("../config/debug.keystore")
+    }
+    release {
+      storeFile file(System.getenv("HOME") + RELEASE_KEYSTORE)
+    }
+  }
   compileSdkVersion 26
   defaultConfig {
     applicationId "com.montreal.wtm"
@@ -19,7 +29,15 @@ android {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      print System.getenv("HOME") + RELEASE_KEYSTORE
     }
+    debug {
+      minifyEnabled false
+    }
+  }
+  compileOptions {
+    targetCompatibility 1.8
+    sourceCompatibility 1.8
   }
 }
 
@@ -28,6 +46,7 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
   implementation 'com.android.support:appcompat-v7:26.1.0'
   implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+  implementation 'com.jakewharton.timber:timber:4.6.1'
   compile 'com.android.support:design:26.1.0'
   compile "com.android.support:support-core-utils:26.1.0"
   

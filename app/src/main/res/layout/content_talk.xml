@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/material_base_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.activity.TalkActivity"
+    tools:showIn="@layout/talk_activity"
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/talk_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Talk title"
+            style="@style/TextAppearance.AppCompat.Title.Wtm"
+            />
+
+        <TextView
+            android:id="@+id/talk_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/lorem_ipsum"
+            style="@style/TextAppearance.AppCompat.Body1.Wtm"
+            />
+
+        <TextView
+            android:id="@+id/talk_location_time_locale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/lorem_ipsum"
+            style="@style/TextAppearance.AppCompat.Body1.WtmCompat"
+            />
+
+        <TextView
+            android:id="@+id/talk_tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/lorem_ipsum"
+            style="@style/TextAppearance.AppCompat.Body1.WtmCompat"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/rating_content"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/rate_session"
+                style="@style/TextAppearance.AppCompat.Title.Wtm"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                >
+                <ImageView
+                    android:id="@+id/one_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/star_rating"
+                    />
+                <ImageView
+                    android:id="@+id/two_stars"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/star_rating"
+                    />
+                <ImageView
+                    android:id="@+id/three_stars"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/star_rating"
+                    />
+                <ImageView
+                    android:id="@+id/four_stars"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/star_rating"
+                    />
+                <ImageView
+                    android:id="@+id/five_stars"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/star_rating"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/speaker_title_section"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/speaker_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/speaker"
+                style="@style/TextAppearance.AppCompat.Title.Wtm"
+                />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/speakers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/speaker_row"
+            />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

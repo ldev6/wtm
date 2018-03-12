@@ -33,7 +33,7 @@
         />
 
     <TextView
-        android:id="@+id/titleTextView"
+        android:id="@+id/speaker_position"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/material_base_margin"

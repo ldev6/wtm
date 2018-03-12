@@ -21,4 +21,32 @@
         <item name="windowActionModeOverlay">true</item>
     </style>
 
+    <style name="TextAppearance.AppCompat.Title.Wtm">
+        <item name="android:layout_margin">@dimen/activity_vertical_margin</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="TextAppearance.AppCompat.Body1.Wtm">
+        <item name="android:layout_margin">@dimen/activity_vertical_margin</item>
+    </style>
+    <style name="TextAppearance.AppCompat.Body1.WtmCompat">
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:layout_marginLeft">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginRight">@dimen/activity_vertical_margin</item>
+    </style>
+
+    <style name="TextAppearance.Widget.AppCompat.Toolbar.Title.Transparent">
+        <item name="android:textColor">@color/transparent</item>
+    </style>
+
+    <style name="star_rating">
+        <item name="android:background">@null</item>
+        <item name="srcCompat">@drawable/ic_star</item>
+        <item name="android:clickable">true</item>
+        <item name="android:padding">5dp</item>
+
+    </style>
+
 </resources>

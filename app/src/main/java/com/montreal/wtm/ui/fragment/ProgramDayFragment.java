@@ -44,11 +44,11 @@ public class ProgramDayFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
         ArrayList<Talk> talks = new ArrayList<>();
+        day = getArguments().getParcelable(EXTRA_DAY);
+        talks.addAll(day.getTalks());
         adapter = new ScheduleAdapter(getActivity(), talks);
         recyclerView.setAdapter(adapter);
 
-        day = getArguments().getParcelable(EXTRA_DAY);
-        talks.addAll(day.talks);
         return v;
     }
 
@@ -57,12 +57,12 @@ public class ProgramDayFragment extends Fragment {
         super.onResume();
     }
 
-    public void setSavedSession(HashMap<String, Boolean> mySchedule) {
+    public void loadSavedSessions(HashMap<String, Boolean> savedSessions) {
         if (day != null) {
-            for (Talk talk : day.talks) {
-                talk.saved = mySchedule.containsKey("" + talk.session.id);
+            for (Talk talk : day.getTalks()) {
+                talk.setSaved(talk.getSession().isIncludedIn(savedSessions));
             }
-
+            adapter.updateTalks(day.getTalks());
             adapter.notifyDataSetChanged();
         }
     }

@@ -10,7 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseWrapper
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.montreal.wtm.BuildConfig
 import com.montreal.wtm.R
@@ -21,7 +21,7 @@ import com.montreal.wtm.ui.fragment.InformationFragment
 import com.montreal.wtm.ui.fragment.LocationFragment
 import com.montreal.wtm.ui.fragment.ProgramFragment
 import com.montreal.wtm.ui.fragment.SpeakersFragment
-import com.montreal.wtm.ui.fragment.SponsorsFragment
+import com.montreal.wtm.ui.fragment.PartnersFragment
 import com.montreal.wtm.ui.fragment.TwitterFragment
 import com.montreal.wtm.utils.Utils
 import com.montreal.wtm.utils.ui.activity.BaseActivity
@@ -32,8 +32,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
   lateinit var navigationView: NavigationView
 
   override fun onCreate(savedInstanceState: Bundle?) {
-
-    val TAG = MainActivity::class.java.simpleName
 
     super.onCreate(savedInstanceState)
     setContentView(layout.activity_main)
@@ -46,53 +44,61 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     val toggle = ActionBarDrawerToggle(
         this, drawer, toolbar, string.navigation_drawer_open, string.navigation_drawer_close)
-    drawer.setDrawerListener(toggle)
+    drawer.addDrawerListener(toggle)
 
     toggle.syncState()
     navigationView = findViewById<View>(id.nav_view) as NavigationView
-    navigationView?.setNavigationItemSelectedListener(this)
+    navigationView.setNavigationItemSelectedListener(this)
 
     setLoginDrawer()
-    changeLogin.subscribe({
+    loginChanged.subscribe({
       setLoginDrawer()
     })
-    
+
     Utils.changeFragment(this, R.id.container, ProgramFragment.newInstance())
   }
 
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     val id = item.itemId
-    var fragment: Fragment? = null
-    if (id == R.id.nav_program) {
-      fragment = ProgramFragment.newInstance()
-      setActionBarName(getString(R.string.program))
-    } else if (id == R.id.nav_speakers) {
-      fragment = SpeakersFragment.newIntance()
-      setActionBarName(getString(R.string.speakers))
-    } else if (id == R.id.nav_sponsors) {
-      fragment = SponsorsFragment.newInstance()
-      setActionBarName(getString(R.string.sponsors))
-    } else if (id == R.id.nav_information) {
-      fragment = InformationFragment.newInstance()
-      setActionBarName(getString(R.string.information))
-    } else if (id == R.id.nav_map) {
-      fragment = LocationFragment.newInstance()
-      setActionBarName(getString(R.string.location))
-    } else if (id == R.id.nav_twitter) {
-      fragment = TwitterFragment.newInstance()
-      setActionBarName(getString(R.string.twitter))
-    } else if (id == R.id.nav_login) {
-      fragment = ProgramFragment.newInstance()
-      setActionBarName(getString(R.string.program))
-      if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-        signOut()
-      } else {
-        signIn()
+    var fragment: Fragment
+    when(id) {
+      R.id.nav_program -> {
+        fragment = ProgramFragment.newInstance()
+        setActionBarName(getString(R.string.program))
       }
-    } else {
-      fragment = ProgramFragment.newInstance()
-      setActionBarName(getString(R.string.program))
+      R.id.nav_speakers -> {
+        fragment = SpeakersFragment.newIntance()
+        setActionBarName(getString(R.string.speakers))
+      }
+      R.id.nav_sponsors -> {
+        fragment = PartnersFragment.newInstance()
+        setActionBarName(getString(R.string.sponsors))
+      }
+      R.id.nav_information -> {
+        fragment = InformationFragment.newInstance()
+        setActionBarName(getString(R.string.information))
+      }
+      R.id.nav_map -> {
+        fragment = LocationFragment.newInstance()
+        setActionBarName(getString(R.string.location))
+      }
+      R.id.nav_twitter -> {
+        fragment = TwitterFragment.newInstance()
+        setActionBarName(getString(R.string.twitter))
+      }R.id.nav_login -> {
+        fragment = ProgramFragment.newInstance()
+        setActionBarName(getString(R.string.program))
+        if (FirebaseWrapper.isLogged()) {
+          signOut()
+        } else {
+          signIn()
+        }
+      }
+      else -> {
+        fragment = ProgramFragment.newInstance()
+        setActionBarName(getString(R.string.program))
+      }
     }
     val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
     drawer.closeDrawer(GravityCompat.START)
@@ -104,10 +110,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
   fun setLoginDrawer() {
     val navLogin = navigationView.menu.findItem(R.id.nav_login)
 
-    if (FirebaseAuth.getInstance().currentUser == null) {
-      navLogin.setTitle(R.string.sign_in)
-    } else {
+    if (FirebaseWrapper.isLogged()) {
       navLogin.setTitle(R.string.sign_out)
+    } else {
+      navLogin.setTitle(R.string.sign_in)
     }
   }
 
@@ -140,9 +146,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
   private fun checkNeedUpdate() {
     val versionCode = BuildConfig.VERSION_CODE
-    val minVersion = Integer.parseInt(FirebaseRemoteConfig.getInstance().getString("min_version"))
-    val currentVersion = Integer.parseInt(
-        FirebaseRemoteConfig.getInstance().getString("current_version"))
+    val minVersion = FirebaseWrapper.getMinVersion()
+    val currentVersion = FirebaseWrapper.getRemoteVersion()
 
     if (versionCode < minVersion) {
       Utils.updateTheApplication(this, true)
@@ -150,5 +155,5 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
       Utils.updateTheApplication(this, false)
     }
   }
-
 }
+

@@ -11,15 +11,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
-import com.montreal.wtm.model.PartnerCategory;
+import com.montreal.wtm.model.Partner;
 import com.montreal.wtm.ui.adapter.SponsorsGridViewAdapter;
 import com.montreal.wtm.utils.ui.fragment.BaseFragment;
 import java.util.HashMap;
 
-public class SponsorsFragment extends BaseFragment {
+public class PartnersFragment extends BaseFragment {
 
-    public static SponsorsFragment newInstance() {
-        return new SponsorsFragment();
+    public static PartnersFragment newInstance() {
+        return new PartnersFragment();
     }
 
     private LinearLayout layoutContainer;
@@ -29,31 +29,31 @@ public class SponsorsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.sponsors_fragment, container, false);
-        layoutContainer = (LinearLayout) v.findViewById(R.id.container);
-        FirebaseData.INSTANCE.getSponsors(getActivity(), requestListener);
+        layoutContainer = v.findViewById(R.id.container);
+        FirebaseData.INSTANCE.getPartners(getActivity(), requestListener);
         showProgressBar();
         return v;
     }
 
-    private FirebaseData.RequestListener<HashMap<Integer, PartnerCategory>> requestListener =
-        new FirebaseData.RequestListener<HashMap<Integer, PartnerCategory>>() {
+    private FirebaseData.RequestListener<HashMap<Integer, Partner>> requestListener =
+        new FirebaseData.RequestListener<HashMap<Integer, Partner>>() {
 
             @Override
-            public void onDataChange(HashMap<Integer, PartnerCategory> partnerCategoryies) {
+            public void onDataChange(HashMap<Integer, Partner> partnerCategoryies) {
                 if (!isAdded()) {
                     return;
                 }
 
-                for (PartnerCategory partnerCategory : partnerCategoryies.values()) {
+                for (Partner partner : partnerCategoryies.values()) {
 
                     View partnerView = getLayoutInflater().inflate(R.layout.partner_row, null);
-                    TextView title = ((TextView) partnerView.findViewById(R.id.partnerTitle));
-                    title.setText(partnerCategory.getTitle());
-                    title.setTextColor(getColor(partnerCategory.title));
+                    TextView title = partnerView.findViewById(R.id.partnerTitle);
+                    title.setText(partner.getTitle());
+                    title.setTextColor(getColor(partner.getTitle()));
 
-                    GridView partnerGridview = ((GridView) partnerView.findViewById(R.id.sponsorGridView));
+                    GridView partnerGridview = partnerView.findViewById(R.id.sponsorGridView);
                     partnerGridview.setAdapter(
-                        new SponsorsGridViewAdapter(getActivity(), partnerCategory, getSize(partnerCategory.title)));
+                        new SponsorsGridViewAdapter(getActivity(), partner, getSize(partner.getTitle())));
 
                     layoutContainer.addView(partnerView);
                 }
@@ -64,10 +64,6 @@ public class SponsorsFragment extends BaseFragment {
 
             @Override
             public void onCancelled(FirebaseData.ErrorFirebase errorType) {
-                //TODO 
-                //String message = errorType == FirebaseData.INSTANCE.ErrorFirebase.network ? getString(R.string
-                // .default_error_message) : getString(R.string.error_message_serveur_prob);
-                //setMessageError(message);
             }
         };
 
@@ -76,7 +72,7 @@ public class SponsorsFragment extends BaseFragment {
         if (!isAdded()) {
             return;
         }
-        FirebaseData.INSTANCE.getSponsors(getActivity(), requestListener);
+        FirebaseData.INSTANCE.getPartners(getActivity(), requestListener);
     }
 
     private int getSize(String title) {

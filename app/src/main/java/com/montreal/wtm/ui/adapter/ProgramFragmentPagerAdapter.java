@@ -14,7 +14,7 @@ public class ProgramFragmentPagerAdapter extends FragmentPagerAdapter {
     public ProgramFragmentPagerAdapter(FragmentManager fm, ArrayList<Day> days) {
         super(fm);
         this.days = days;
-        fragments = new ArrayList<ProgramDayFragment>();
+        fragments = new ArrayList<>();
 
         for (Day day : days) {
             fragments.add(ProgramDayFragment.newInstance(day));
@@ -33,6 +33,6 @@ public class ProgramFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return days.get(position).dateReadable;
+        return days.get(position).getDateReadable();
     }
 }

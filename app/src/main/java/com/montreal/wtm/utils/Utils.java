@@ -10,12 +10,14 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.montreal.wtm.BuildConfig;
 import com.montreal.wtm.R;
 import com.montreal.wtm.utils.view.ViewUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -26,14 +28,18 @@ import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
 import java.io.File;
 import java.util.Locale;
-
+import timber.log.Timber;
 
 public class Utils {
     
     
     
     public static String getLanguage() {
-       return Locale.getDefault().getLanguage();
+        String language = Locale.getDefault().getLanguage();
+        if(language == null || !language.equalsIgnoreCase("en") || !language.equalsIgnoreCase("fr")) {
+            return Locale.US.getLanguage();
+        }
+        return language;
     }
 
     /**
@@ -130,7 +136,7 @@ public class Utils {
      * @param forceUpdate
      */
     public static void updateTheApplication(final Activity context, boolean forceUpdate) {
-        final String appPackageName = context.getPackageName(); // getPackageName() from Context or Activity object
+        final String appPackageName = BuildConfig.APPLICATION_ID; // getPackageName() from Context or Activity object
         if (forceUpdate) {
             ViewUtils.showAlertMessageWithCancel(context, context.getString(R.string.update_alert_force_title), context.getString(R.string.update_alert_force_message), new DialogInterface.OnClickListener() {
                 @Override
@@ -184,7 +190,7 @@ public class Utils {
         if (url != null && url.length() > 0) {
 
             if (enableLog) {
-                LogU.v("DOWNLOADIDMAGE", "DOWNLOAD IMAGE:" + url);
+                Timber.v("Download image: " + url);
             }
 
 
@@ -228,6 +234,5 @@ public class Utils {
     public static void clearCacheUrl(String url) {
         MemoryCacheUtils.removeFromCache(url, ImageLoader.getInstance().getMemoryCache());
     }
-
 
 }

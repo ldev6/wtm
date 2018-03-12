@@ -1,5 +1,6 @@
 package com.montreal.wtm.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -37,25 +38,16 @@ public class TwitterFragment extends ListFragment {
         View view = inflater.inflate(R.layout.twitter_fragment, container, false);
 
         final SearchTimeline searchTimeline = new SearchTimeline.Builder()
-                .query("#WomenTechmakers OR #IWD18 OR #WTM18 OR #WTMMontreal")
+                .query(getString(R.string.tweet_search_query))
                 .build();
-        final UserTimeline userTimeline = new UserTimeline.Builder()
-                .screenName("WTM_Montreal")
-                .build();
-
         final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(getActivity())
                 .setTimeline(searchTimeline)
                 .build();
 
         setListAdapter(adapter);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTweetComposer();
-            }
-        });
+        FloatingActionButton fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener(clicked -> showTweetComposer());
 
         return view;
     }
@@ -70,7 +62,7 @@ public class TwitterFragment extends ListFragment {
 
     private void showTweetComposer() {
         TweetComposer.Builder builder = new TweetComposer.Builder(getActivity())
-                .text("#WomenTechmakers #IWD17 #WTM17 #WTMMontreal \n \n");
+                .text(getString(R.string.tweet_composer_text));
         builder.show();
     }
 }

@@ -10,31 +10,31 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.montreal.wtm.R;
-import com.montreal.wtm.model.PartnerCategory;
-import com.montreal.wtm.model.Sponsor;
+import com.montreal.wtm.model.Partner;
+import com.montreal.wtm.model.Logo;
 import com.montreal.wtm.utils.Utils;
 import java.util.ArrayList;
 
 public class SponsorsGridViewAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<Sponsor> sponsors;
+    private ArrayList<Logo> logos;
     private int size;
 
-    public SponsorsGridViewAdapter(Context context, PartnerCategory partnerCategory, int size) {
+    public SponsorsGridViewAdapter(Context context, Partner partner, int size) {
         mContext = context;
-        sponsors = partnerCategory.getSponsors();
+        logos = partner.getLogos();
         this.size = size;
     }
 
     @Override
     public int getCount() {
-        return sponsors.size();
+        return logos.size();
     }
 
     @Override
-    public Sponsor getItem(int position) {
-        return sponsors.get(position);
+    public Logo getItem(int position) {
+        return logos.get(position);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SponsorsGridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        final Sponsor sponsor = getItem(position);
+        final Logo logo = getItem(position);
         View view;
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
@@ -56,13 +56,13 @@ public class SponsorsGridViewAdapter extends BaseAdapter {
 
             StringBuilder stringBuilder =
                 new StringBuilder().append(mContext.getResources().getString(R.string.storage_url))
-                    .append(sponsor.getLogoUrl());
+                    .append(logo.getLogoUrl());
 
             Utils.downloadImage(stringBuilder.toString(), imageView);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Uri uri = Uri.parse(sponsor.getUrlWebsite());
+                    Uri uri = Uri.parse(logo.getUrlWebsite());
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     mContext.startActivity(intent);
                 }

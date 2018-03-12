@@ -55,4 +55,15 @@
     <string name="subject">Suject</string>
     <string name="write_your_message_here">Écrivez un message ici</string>
     <string name="send">envoyer</string>
+    <string name="speaker">Conférencière</string>
+    <string name="speaker_removed">La conférence de cette conférencière a été retirée de l\'horaire</string>
+    <string name="speaker_added">La conférence de cette conférencière a été ajouté à l\'horaire</string>
+    <string name="login_required">Connexion requise</string>
+    <string name="cancel">Annuler</string>
+    <string name="ok">Ok</string>
+    <string name="please_login">Afin de sauvegarder vos favoris</string>
+    <string name="tweet_share_talk">Découvrez Women Techmakers Montreal 2018 sur #wtm: %s</string>
+    <string name="loading">Chargement en cours…</string>
+    <string name="rate_session">Évaluer la session</string>
+    <string name="sessions">Session</string>
 </resources>

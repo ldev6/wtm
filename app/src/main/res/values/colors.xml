@@ -7,10 +7,16 @@
     <color name="gray">#efeded</color>
 
     <color name="transGrey">#70000000</color>
+    <color name="black">#000000</color>
 
     <color name="platinum">#A0B8C7</color>
     <color name="gold">#D4AF37</color>
     <color name="silver">#A5A5A5</color>
     <color name="bronze">#CD7F32</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="divider">#e1e8ed</color>
+
+    <color name="technical_skill">#4285F4</color>
+    <color name="soft_skill">#00BFA5</color>
 
 </resources>
