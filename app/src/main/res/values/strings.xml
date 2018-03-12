@@ -12,7 +12,7 @@
         <item quantity="other">@string/speakers</item>
     </plurals>
     <string name="speakers">Speakers</string>
-    <string name="speaker">Speaker</string>
+    <string name="speaker" translatable="false">Speaker</string>
     <string name="sponsors">Sponsors</string>
     <string name="my_schedule">My Schedule</string>
     <string name="program">Program</string>
@@ -65,12 +65,12 @@
     <string name="cancel">Cancel</string>
     <string name="ok">Ok</string>
     <string name="please_login">In order to save your favorites</string>
-    <string name="tweet_composer_text">#WomenTechmakers #IWD18 #WTM18 #WTMMontreal \\n \\n</string>
-    <string name="tweet_search_query">#WomenTechmakers OR #IWD18 OR #WTM18 OR #WTMMontreal</string>
+    <string name="tweet_composer_text">#WomenTechmakers #IWD18 #WTM18 #WTMMontreal \n \n</string>
+    <string name="tweet_search_query" translatable="false">#WomenTechmakers OR #IWD18 OR #WTM18 OR #WTMMontreal</string>
     <string name="tweet_share_talk">Check out Women Techmakers Montreal 2018 at #wtm: %s</string>
-    <string name="wtm_twitter_handler">WTM_Montreal</string>
+    <string name="wtm_twitter_handler" translatable="false">WTM_Montreal</string>
     <string name="loading">Loading…</string>
-    <string name="rate_session">Rate session</string>
+    <string name="rate_session">Rate session</string>z
     <string name="sessions">Session</string>
-    <string name="wrapped_content"> (%s)</string>
+    <string name="wrapped_content" translatable="false"> (%s)</string>
 </resources>

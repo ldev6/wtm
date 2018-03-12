@@ -240,7 +240,7 @@ object FirebaseData {
   fun getSession(activity: Activity, requestListener: RequestListener<Session>, sessionId: Int) {
     firebaseConnected(activity, requestListener, SESSIONS_JSON, Speaker::class.java)
     val session = getReference(Utils.getLanguage() + "/" + SESSIONS + "/" + sessionId)
-    session.addListenerForSingleValueEvent(object : ValueEventListener {
+    session.addValueEventListener(object : ValueEventListener {
       override fun onDataChange(dataSnapshot: DataSnapshot) {
         if(dataSnapshot.exists()) {
           val session = dataSnapshot.getValue(Session::class.java)
@@ -291,7 +291,7 @@ object FirebaseData {
         .child(SESSIONS)
         .child(sessionId.toString())
 
-    sessionRating.addListenerForSingleValueEvent(object : ValueEventListener {
+    sessionRating.addValueEventListener(object : ValueEventListener {
       override fun onDataChange(dataSnapshot: DataSnapshot) {
         if (dataSnapshot.exists()) {
           val mySessionRating = Pair(dataSnapshot.key ?: "",

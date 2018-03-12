@@ -7,11 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.firebase.auth.FirebaseWrapper;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Session;
 import com.montreal.wtm.model.Talk;
 import com.montreal.wtm.ui.activity.TalkActivity;
+import com.montreal.wtm.utils.ui.activity.BaseActivity;
 import java.util.ArrayList;
 
 public class ScheduleAdapter extends RecyclerView.Adapter {
@@ -27,14 +29,6 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
         this.talks = talks;
         this.context = context;
         this.updatable = true;
-    }
-
-    public ScheduleAdapter(Context context, Talk talk) {
-        this.talks = new ArrayList<>();
-        this.talks.add(talk);
-        this.context = context;
-        this.updatable = false;
-
     }
 
     @Override
@@ -86,7 +80,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
                 talkViewHolder.trackView.setBackgroundColor(talkViewHolder.trackView.getResources().getColor(trackColor));
             }
 
-            if(updatable) {
+            if(updatable && FirebaseWrapper.Companion.isLogged()) {
                 talkViewHolder.loveImageView.setOnClickListener(v -> {
                     if (talk.getSaved()) {
                         talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
@@ -97,14 +91,14 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
                     talk.setSaved(!talk.getSaved());
                     FirebaseData.INSTANCE.saveSession(talk.getSessionId(), talk.getSaved());
                 });
+            } else {
+                if(context instanceof BaseActivity) {
+                    ((BaseActivity)context).promptLogin();
+                }
             }
 
-            talkViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    context.startActivity(TalkActivity.newIntent(context, talk));
-                }
-            });
+            talkViewHolder.itemView.setOnClickListener(
+                v -> context.startActivity(TalkActivity.newIntent(context, talk)));
             talkViewHolder.timeTextView.setText(talk.getTime());
             talkViewHolder.roomTextView.setText(talk.getRoom());
             talkViewHolder.talkTitleTextView.setText(talk.getSession().getTitle());
@@ -122,13 +116,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
         return talks.size();
     }
 
-    public void updateSession(int sessionId, boolean sessionSaved) {
-        for(Talk talk: talks) {
-            if(talk.getSessionId() == sessionId) {
-                talk.setSaved(sessionSaved);
-                break;
-            }
-        }
+    public void updateTalks(ArrayList<Talk> talks) {
+        this.talks = talks;
     }
 
     class BreakViewHolder extends RecyclerView.ViewHolder {

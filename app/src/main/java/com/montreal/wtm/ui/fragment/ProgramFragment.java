@@ -52,7 +52,9 @@ public class ProgramFragment extends BaseFragment {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
 
+        FirebaseData.INSTANCE.getMyShedule(getActivity(), requestListenerMySchedule);
         FirebaseData.INSTANCE.getSessions(getActivity(), requestListenerSession);
+        FirebaseData.INSTANCE.getMyRatings(getActivity(), requestListenerRatings);
 
         setMessageViewInterface(this);
         showProgressBar();
@@ -95,8 +97,6 @@ public class ProgramFragment extends BaseFragment {
                     viewPager.setAdapter(adapter);
                     hideMessageView();
                 });
-                FirebaseData.INSTANCE.getMyShedule(getActivity(), requestListenerMySchedule);
-                FirebaseData.INSTANCE.getMyRatings(getActivity(), requestListenerRatings);
             }
 
             @Override
@@ -118,15 +118,12 @@ public class ProgramFragment extends BaseFragment {
                 if (adapter != null) {
                     adapter.getItem(viewPager.getCurrentItem()).loadSavedSessions(mySchedule);
                 }
-                //hideMessageView();
+
             }
 
             @Override
             public void onCancelled(FirebaseData.ErrorFirebase errorType) {
-                //TODO
-                //String message = errorType == FirebaseData.INSTANCE.ErrorFirebase.network ? getString(R.string
-                // .default_error_message) : getString(R.string.error_message_serveur_prob);
-                //setMessageError(message);
+
             }
         };
 
@@ -173,9 +170,10 @@ public class ProgramFragment extends BaseFragment {
         if (!isAdded()) {
             return;
         }
-        FirebaseData.INSTANCE.getSessions(getActivity(), requestListenerSession);
 
         FirebaseData.INSTANCE.getMyShedule(getActivity(), requestListenerMySchedule);
+        FirebaseData.INSTANCE.getSessions(getActivity(), requestListenerSession);
+        FirebaseData.INSTANCE.getMyRatings(getActivity(), requestListenerRatings);
     }
 
     private FirebaseData.RequestListener<HashMap<String, Long>> requestListenerRatings =
