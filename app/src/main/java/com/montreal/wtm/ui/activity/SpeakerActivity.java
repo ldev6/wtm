@@ -84,7 +84,7 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
         mediaSources.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mediaSources.setAdapter(new MediaAdapter(speaker.getSocials()));
 
-        FirebaseData.INSTANCE.getMySessionState(this, speakerListener, speaker.getSessionId());
+        FirebaseData.INSTANCE.getMySessionState(this, savedSessionListener, speaker.getSessionId());
         FirebaseData.INSTANCE.getSession(this, sessionListener, speaker.getSessionId());
 
         getLoginChanged().subscribe(this::onLoginChanged);
@@ -93,7 +93,7 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
     private void onLoginChanged(Boolean loggedIn) {
         this.loggedIn = loggedIn;
         if (loggedIn) {
-            FirebaseData.INSTANCE.getMySessionState(this, speakerListener, speaker.getSessionId());
+            FirebaseData.INSTANCE.getMySessionState(this, savedSessionListener, speaker.getSessionId());
         }
     }
 
@@ -147,13 +147,13 @@ public class SpeakerActivity extends BaseActivity implements View.OnClickListene
         }
     };
 
-    private FirebaseData.RequestListener<Pair<String, Boolean>> speakerListener =
+    private FirebaseData.RequestListener<Pair<String, Boolean>> savedSessionListener =
         new FirebaseData.RequestListener<Pair<String, Boolean>>() {
             @Override
             public void onDataChange(Pair<String, Boolean> sessionState) {
                 sessionSaved = sessionState.getSecond();
                 int resource = R.drawable.ic_favorite_white_24px;
-                if (FirebaseWrapper.Companion.isLogged() && sessionSaved) {
+                if (sessionSaved) {
                     resource = R.drawable.ic_favorite_black_24px;
                 }
                 fab.setImageResource(resource);

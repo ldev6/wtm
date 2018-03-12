@@ -19,7 +19,6 @@ import com.montreal.wtm.model.Location
 import com.montreal.wtm.model.Partner
 import com.montreal.wtm.model.Session
 import com.montreal.wtm.model.Speaker
-import com.montreal.wtm.model.Talk
 import com.montreal.wtm.model.Timeslot
 import com.montreal.wtm.utils.NetworkUtils
 import com.montreal.wtm.utils.Utils
@@ -242,11 +241,12 @@ object FirebaseData {
     val session = getReference(Utils.getLanguage() + "/" + SESSIONS + "/" + sessionId)
     session.addValueEventListener(object : ValueEventListener {
       override fun onDataChange(dataSnapshot: DataSnapshot) {
-        if(dataSnapshot.exists()) {
+        if (dataSnapshot.exists()) {
           val session = dataSnapshot.getValue(Session::class.java)
           requestListener.onDataChange(session)
         }
       }
+
       override fun onCancelled(error: DatabaseError) {
         Crashlytics.log("Get session failed =" + error.message)
         requestListener.onCancelled(ErrorFirebase.firebase)
@@ -258,30 +258,29 @@ object FirebaseData {
       sessionId: Int) {
     val uid = FirebaseAuth.getInstance().getCurrentUser()?.getUid();
 
-    val myRef = getReference("/" + USER_SESSIONS + "/" + uid + "/" + sessionId)
-    myRef.addValueEventListener(object : ValueEventListener {
-      override fun onDataChange(dataSnapshot: DataSnapshot) {
-        if (dataSnapshot.children != null && dataSnapshot.children.count() > 0) {
-          val dataSnapshot = dataSnapshot.children.first()
-          val mySessionState = Pair(dataSnapshot.key ?: "",
-              dataSnapshot.getValue(Boolean::class.java) ?: false)
-          updateSession(activity, mySessionState)
-          requestListener.onDataChange(mySessionState)
-        }
-      }
+    getReference(
+        "/" + USER_SESSIONS + "/" + uid + "/" + sessionId)?.addValueEventListener(
+        object : ValueEventListener {
+          override fun onDataChange(dataSnapshot: DataSnapshot) {
+            if (dataSnapshot.exists()) {
+              val mySessionState = Pair(dataSnapshot.key ?: "",
+                  dataSnapshot.getValue(Boolean::class.java) ?: false)
+              requestListener.onDataChange(mySessionState)
+            }
+          }
 
-      override fun onCancelled(error: DatabaseError) {
-        // Failed to read value
-        Crashlytics.log("Get My session stats failed =" + error.message)
-        requestListener.onCancelled(ErrorFirebase.firebase)
-      }
-    })
+          override fun onCancelled(error: DatabaseError) {
+            // Failed to read value
+            Crashlytics.log("Get My session stats failed =" + error.message)
+            requestListener.onCancelled(ErrorFirebase.firebase)
+          }
+        })
   }
 
   fun getMySessionRating(activity: Activity, requestListener: RequestListener<Pair<String, Long>>,
       sessionId: Int) {
     val uid = FirebaseAuth.getInstance().getCurrentUser()?.getUid();
-    if(uid == null) {
+    if (uid == null) {
       return
     }
 
@@ -296,7 +295,6 @@ object FirebaseData {
         if (dataSnapshot.exists()) {
           val mySessionRating = Pair(dataSnapshot.key ?: "",
               dataSnapshot.getValue(Long::class.java) ?: 0)
-          updateSessionRating(activity, mySessionRating)
           requestListener.onDataChange(mySessionRating)
         }
       }
@@ -428,46 +426,6 @@ object FirebaseData {
     })
   }
 
-  private fun updateSession(activity: Activity,
-      mySessionState: Pair<String, Boolean>) {
-
-    ReadFile(activity, object : RequestListener<HashMap<String, Boolean>> {
-      override fun onDataChange(data: HashMap<String, Boolean>?) {
-        data?.put(mySessionState.first, mySessionState.second)
-        val gson = Gson()
-        val json = gson.toJson(data)
-
-        saveFile(activity, MY_SESSION_JSON, json).observeOn(
-            AndroidSchedulers.mainThread()).subscribe()
-      }
-
-      override fun onCancelled(errorType: ErrorFirebase) {}
-
-    }, object : TypeToken<HashMap<String, Boolean>>() {
-
-    }.type).execute(MY_SESSION_JSON)
-  }
-
-  private fun updateSessionRating(activity: Activity,
-      mySessionRating: Pair<String, Long>) {
-
-    val listener = object : RequestListener<HashMap<String, Long>> {
-      override fun onDataChange(data: HashMap<String, Long>?) {
-        data?.put(mySessionRating.first, mySessionRating.second)
-        val gson = Gson()
-        val json = gson.toJson(data)
-
-        saveFile(activity, MY_RATINGS_JSON, json).observeOn(
-            AndroidSchedulers.mainThread()).subscribe()
-      }
-
-      override fun onCancelled(errorType: ErrorFirebase) {}
-
-    };
-//    ReadFile(activity, listener, object : TypeToken<HashMap<String, Long>>() {
-//    }.type).execute(MY_RATINGS_JSON)
-  }
-
   private fun saveInFile(context: Context, nameFile: String, `object`: Any?) {
     val gson = Gson()
     val json = gson.toJson(`object`)
@@ -502,6 +460,7 @@ object FirebaseData {
         mActivity.runOnUiThread {
           try {
             val gson = Gson()
+
             val data = gson.fromJson<Nothing?>(jsonFile, mType)
             TODO("Check how to fix this")
             mRequestListener.onDataChange(data)
