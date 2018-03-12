@@ -17,6 +17,9 @@ import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
 import io.fabric.sdk.android.Fabric
+import timber.log.Timber
+import timber.log.Timber.DebugTree
+import timber.log.Timber.Tree
 
 
 class WTMApplication : Application() {
@@ -31,6 +34,9 @@ class WTMApplication : Application() {
         .build()
     remoteConfig.setConfigSettings(configSettings)
     remoteConfig.setDefaults(R.xml.remote_config_defaults)
+    if(BuildConfig.DEBUG) {
+      Timber.plant(DebugTree())
+    }
 
     //CONFIGURATION
     val twitterKey = resources.getString(R.string.clientKey)
@@ -44,7 +50,7 @@ class WTMApplication : Application() {
         .build()
     Twitter.initialize(config)
 
-//    Fabric.with(this, Crashlytics());
+    Fabric.with(this, Crashlytics());
 
     val cacheDir = StorageUtils.getCacheDirectory(applicationContext)
 

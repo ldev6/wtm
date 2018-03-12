@@ -28,7 +28,7 @@ import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
 import java.io.File;
 import java.util.Locale;
-
+import timber.log.Timber;
 
 public class Utils {
     
@@ -190,7 +190,7 @@ public class Utils {
         if (url != null && url.length() > 0) {
 
             if (enableLog) {
-                LogU.v("DOWNLOADIDMAGE", "DOWNLOAD IMAGE:" + url);
+                Timber.v("Download image: " + url);
             }
 
 

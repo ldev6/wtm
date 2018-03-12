@@ -12,11 +12,11 @@ import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseWrapper;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
@@ -27,11 +27,11 @@ import com.montreal.wtm.utils.ui.activity.BaseActivity;
 import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import timber.log.Timber;
 
 public class TalkActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String EXTRA_TALK = "com.montreal.wtm.talk";
-    private static final String TAG = TalkActivity.class.getSimpleName();
 
     public static Intent newIntent(Context context, Talk talk) {
         Intent intent = new Intent(context, TalkActivity.class);
@@ -208,11 +208,12 @@ public class TalkActivity extends BaseActivity implements View.OnClickListener {
         new FirebaseData.RequestListener<Pair<String, Long>>() {
             @Override
             public void onDataChange(@Nullable Pair<String, Long> data) {
-                Log.d(TAG, "Received session rating " + data.getFirst() + ", " + data.getSecond());
+                Timber.d("Received session rating " + data.getFirst() + ", " + data.getSecond());
                 try {
                     highlightStars(data.getSecond());
                 } catch (NumberFormatException ex) {
-                    Log.w(TAG, "Invalid rating", ex);
+                    Timber.w(ex, "Invalid rating");
+                    Crashlytics.logException(ex);
                 }
             }
 

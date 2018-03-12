@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +27,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import org.jetbrains.annotations.NotNull;
+import timber.log.Timber;
 
 public class ProgramFragment extends BaseFragment {
-
-    private static final String TAG = ProgramFragment.class.getSimpleName();
 
     public static ProgramFragment newInstance() {
         ProgramFragment fragment = new ProgramFragment();
@@ -108,13 +106,12 @@ public class ProgramFragment extends BaseFragment {
         new FirebaseData.RequestListener<HashMap<String, Boolean>>() {
             @Override
             public void onDataChange(HashMap<String, Boolean> mySchedule) {
-                Log.v("Saved schedule", " Saved schedule=" + mySchedule);
+                Timber.v(" Saved schedule " + mySchedule);
                 savedSessions = mySchedule;
                 hideMessageView();
                 if (adapter != null) {
                     adapter.getItem(viewPager.getCurrentItem()).loadSavedSessions(mySchedule);
                 }
-
             }
 
             @Override
@@ -132,17 +129,15 @@ public class ProgramFragment extends BaseFragment {
             Date dateEnd = format.parse(stringDateEnd);
             long timeStart = dateStart.getTime();
             long timeEnd = dateEnd.getTime();
-            Log.v("Date", "Date = " + dateStart);
 
             long difference = (timeEnd - timeStart) / totalNumber;
-            Log.v("Date", "difference = " + new Date(difference));
 
             long newStartTime = timeStart + difference * number;
             long newEndTime = timeStart + difference * (number + 1);
 
             return getTime(newStartTime) + " - " + getTime(newEndTime);
         } catch (ParseException e) {
-            Log.e(TAG, "ParseException", e);
+            Timber.e(e, "ParseException");
         }
         return startTime + " " + endTime;
     }
@@ -176,7 +171,7 @@ public class ProgramFragment extends BaseFragment {
         new FirebaseData.RequestListener<HashMap<String, Long>>() {
             @Override
             public void onDataChange(@org.jetbrains.annotations.Nullable HashMap<String, Long> data) {
-                Log.d(TAG, "Received ratings:" + data);
+                Timber.d("Received ratings:" + data);
             }
 
             @Override
