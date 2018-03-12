@@ -74,7 +74,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
             }
             if(talk.getType() == Talk.Type.General) {
                 talkViewHolder.trackView.setVisibility(View.INVISIBLE);
-                talkViewHolder.talkLocale.setVisibility(View.INVISIBLE);
+                talkViewHolder.talkLocale.setVisibility(View.GONE);
             } else {
                 talkViewHolder.talkLocale.setVisibility(View.VISIBLE);
                 talkViewHolder.talkLocale.setText(talk.getSession().getLanguage());

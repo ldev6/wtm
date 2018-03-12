@@ -23,6 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -51,9 +52,7 @@ public class ProgramFragment extends BaseFragment {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
 
-        FirebaseData.INSTANCE.getMyShedule(getActivity(), requestListenerMySchedule);
         FirebaseData.INSTANCE.getSessions(getActivity(), requestListenerSession);
-        FirebaseData.INSTANCE.getMyRatings(getActivity(), requestListenerRatings);
 
         setMessageViewInterface(this);
         showProgressBar();
@@ -70,18 +69,19 @@ public class ProgramFragment extends BaseFragment {
                         ArrayList<Talk> talks = new ArrayList<>();
                         for (Timeslot timeslot : day.getTimeslots()) {
                             for (ArrayList<Integer> sessionIds : timeslot.sessionsId) {
-                                int i = 0;
-                                for (int sessionID : sessionIds) {
-                                    Session session = sessionHashMap.get("" + sessionID);
-
-                                    String time = timeslot.getTime();
-                                    if (sessionIds.size() > 1) {
-                                        time = getStartDate(day.date, timeslot.startTime, timeslot.endTime,
-                                            sessionIds.size(), i);
+                                if (sessionIds.size() > 1) {
+                                    for (int pos = 0; pos < sessionIds.size(); pos++) {
+                                        Session session = sessionHashMap.get(String.valueOf(sessionIds.get(pos)));
+                                        String time = getTimePeriod(day.date, timeslot.startTime, timeslot.endTime,
+                                            sessionIds.size(), pos);
+                                        talks.add(new Talk(session, time, tracks.get(session.getRoomId()).title,
+                                            session.isIncludedIn(savedSessions)));
                                     }
+                                } else if (sessionIds.size() == 1) {
+                                    Session session = sessionHashMap.get(String.valueOf(sessionIds.get(0)));
+                                    String time = timeslot.getTime();
                                     talks.add(new Talk(session, time, tracks.get(session.getRoomId()).title,
                                         session.isIncludedIn(savedSessions)));
-                                    i++;
                                 }
                             }
                         }
@@ -95,6 +95,8 @@ public class ProgramFragment extends BaseFragment {
                     viewPager.setAdapter(adapter);
                     hideMessageView();
                 });
+                FirebaseData.INSTANCE.getMyShedule(getActivity(), requestListenerMySchedule);
+                FirebaseData.INSTANCE.getMyRatings(getActivity(), requestListenerRatings);
             }
 
             @Override
@@ -128,17 +130,7 @@ public class ProgramFragment extends BaseFragment {
             }
         };
 
-    //function getEndTime(String date, startTime, endTime, totalNumber, number) {
-    //    var timeStart = new Date(date + ' ' + startTime).getTime(), timeEnd = new Date(date + ' ' + endTime)
-    // .getTime(),
-    //        difference = Math.floor((timeEnd - timeStart) / totalNumber), result =
-    //        new Date(timeStart + difference * number);
-    //    var minutes = result.getMinutes();
-    //    minutes = minutes > 9 ? minutes : '0' + minutes;
-    //    return result.getHours() + ':' + minutes;
-    //}
-
-    public String getStartDate(String stringDate, String startTime, String endTime, int totalNumber, int number) {
+    public String getTimePeriod(String stringDate, String startTime, String endTime, int totalNumber, int number) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CANADA);
         try {
             String stringDateStart = stringDate + " " + startTime;
@@ -149,20 +141,31 @@ public class ProgramFragment extends BaseFragment {
             long timeEnd = dateEnd.getTime();
             Log.v("Date", "Date = " + dateStart);
 
-            double difference = Math.floor((timeEnd - timeStart) / totalNumber);
-            Log.v("Date", "difference = " + difference);
+            long difference = (timeEnd - timeStart) / totalNumber;
+            Log.v("Date", "difference = " + new Date(difference));
 
-            long newDateTime = (long) (timeStart + difference * number);
+            long newStartTime = timeStart + difference * number;
+            long newEndTime = timeStart + difference * (number + 1);
 
-            Date result = new Date(newDateTime);
-            int minutes = result.getMinutes();
-            minutes = minutes > 9 ? minutes : '0' + minutes;
-            Log.v("result", " result = " + result.getHours() + ":" + minutes);
-            return result.getHours() + ":" + minutes;
+            return getTime(newStartTime) + " - " + getTime(newEndTime);
         } catch (ParseException e) {
             Log.e(TAG, "ParseException", e);
         }
         return startTime + " " + endTime;
+    }
+
+    protected String getTime(long timeInMillis) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeInMillis);
+        StringBuilder builder = new StringBuilder();
+        builder.append(calendar.get(Calendar.HOUR_OF_DAY));
+        builder.append(":");
+        int minutes = calendar.get(Calendar.MINUTE);
+        if (minutes <= 9) {
+            builder.append("0");
+        }
+        builder.append(minutes);
+        return builder.toString();
     }
 
     @Override

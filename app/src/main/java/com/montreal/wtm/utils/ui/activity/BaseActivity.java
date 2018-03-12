@@ -23,7 +23,7 @@ public class BaseActivity extends AppCompatActivity {
     private static PublishSubject<Boolean> loginChanged = PublishSubject.create();
 
     protected Observable<Boolean> getLoginChanged() {
-       return loginChanged.observeOn(AndroidSchedulers.mainThread());
+       return Observable.just(true).mergeWith(loginChanged).observeOn(AndroidSchedulers.mainThread());
     }
 
     protected void signIn() {
@@ -40,11 +40,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void signOut() {
-        AuthUI.getInstance().signOut(this).addOnCompleteListener(new OnCompleteListener<Void>() {
-            public void onComplete(@NonNull Task<Void> task) {
-                loginChanged.onNext(false);
-            }
-        });
+        AuthUI.getInstance().signOut(this).addOnCompleteListener(task -> loginChanged.onNext(false));
     }
 
     @Override

@@ -34,6 +34,7 @@ import java.util.ArrayList
 import java.util.HashMap
 
 object FirebaseData {
+  private val SCHEDULE = "schedule"
   private val MY_RATINGS_JSON = "myRatings.json"
   private val MY_SESSION_JSON = "mySession.json"
   private val SESSIONS_JSON = "Sessions.json"
@@ -155,7 +156,7 @@ object FirebaseData {
 
         }.type)
 
-    val ref = Utils.getLanguage() + "/schedule"
+    val ref = Utils.getLanguage() + "/" + SCHEDULE
     getReference(ref)?.addValueEventListener(object : ValueEventListener {
       override fun onDataChange(dataSnapshot: DataSnapshot) {
         if (dataSnapshot.children != null) {

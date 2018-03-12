@@ -12,11 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleSessionAdapter extends RecyclerView.Adapter {
-    protected static final String LINKEDIN = "linkedin";
-    protected static final String GITHUB = "github";
-    protected static final String WEBSITE = "website";
-    protected static final String TWITTER = "twitter";
-    protected static final String FACEBOOK = "facebook";
 
     protected List<Session> sessions;
 
