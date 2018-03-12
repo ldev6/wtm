@@ -89,7 +89,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
       }R.id.nav_login -> {
         fragment = ProgramFragment.newInstance()
         setActionBarName(getString(R.string.program))
-        if (!FirebaseWrapper.isLogged()) {
+        if (FirebaseWrapper.isLogged()) {
           signOut()
         } else {
           signIn()
@@ -111,9 +111,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     val navLogin = navigationView.menu.findItem(R.id.nav_login)
 
     if (FirebaseWrapper.isLogged()) {
-      navLogin.setTitle(R.string.sign_in)
-    } else {
       navLogin.setTitle(R.string.sign_out)
+    } else {
+      navLogin.setTitle(R.string.sign_in)
     }
   }
 

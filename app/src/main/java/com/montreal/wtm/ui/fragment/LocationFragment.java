@@ -107,10 +107,6 @@ public class LocationFragment extends BaseFragment {
 
         @Override
         public void onCancelled(FirebaseData.ErrorFirebase errorType) {
-            //TODO 
-            //String message = errorType == FirebaseData.INSTANCE.ErrorFirebase.network ? getString(R.string
-            // .default_error_message) : getString(R.string.error_message_serveur_prob);
-            //setMessageError(message);
         }
     };
 

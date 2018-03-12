@@ -91,10 +91,6 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
                     talk.setSaved(!talk.getSaved());
                     FirebaseData.INSTANCE.saveSession(talk.getSessionId(), talk.getSaved());
                 });
-            } else {
-                if(context instanceof BaseActivity) {
-                    ((BaseActivity)context).promptLogin();
-                }
             }
 
             talkViewHolder.itemView.setOnClickListener(
