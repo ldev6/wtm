@@ -13,7 +13,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import kotlin.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,6 +24,7 @@ import com.montreal.wtm.model.Speaker;
 import com.montreal.wtm.model.Talk;
 import com.montreal.wtm.ui.adapter.SpeakersAdapter;
 import com.montreal.wtm.utils.ui.activity.BaseActivity;
+import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,7 +83,7 @@ public class TalkActivity extends BaseActivity implements View.OnClickListener {
 
         for (int i = 0; i < stars.length; i++) {
             stars[i].setOnClickListener(this);
-            stars[i].setTag(i);
+            stars[i].setTag(i + 1);
         }
 
         setSupportActionBar(toolBar);
@@ -119,7 +119,7 @@ public class TalkActivity extends BaseActivity implements View.OnClickListener {
         fab.setImageResource(drawableId);
         fab.setOnClickListener(this);
 
-        if(FirebaseWrapper.Companion.isLogged()) {
+        if (FirebaseWrapper.Companion.isLogged()) {
             FirebaseData.INSTANCE.getMySessionRating(this, requestSessionRatingListener, talk.getSessionId());
         }
     }
@@ -185,12 +185,12 @@ public class TalkActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void highlightStars(long rating) {
-        if(rating < 0) {
+        if (rating < 0) {
             return;
         }
         for (int i = 0; i < stars.length; i++) {
             int highlightColor;
-            if (i <= rating) {
+            if (i < rating) {
                 highlightColor = R.color.green_wtm;
             } else {
                 highlightColor = R.color.black;
@@ -201,14 +201,14 @@ public class TalkActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void saveRating(int rating) {
-        FirebaseData.INSTANCE.saveSessionRating(talk.getSessionId(), rating + 1);
+        FirebaseData.INSTANCE.saveSessionRating(talk.getSessionId(), rating);
     }
 
     private FirebaseData.RequestListener<Pair<String, Long>> requestSessionRatingListener =
         new FirebaseData.RequestListener<Pair<String, Long>>() {
             @Override
             public void onDataChange(@Nullable Pair<String, Long> data) {
-                Log.d(TAG, "Received session rating " + data.getFirst()+ ", " + data.getSecond());
+                Log.d(TAG, "Received session rating " + data.getFirst() + ", " + data.getSecond());
                 try {
                     highlightStars(data.getSecond());
                 } catch (NumberFormatException ex) {
