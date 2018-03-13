@@ -18,14 +18,16 @@ import java.util.HashMap;
 
 public class ProgramDayFragment extends Fragment {
 
-    private static String EXTRA_DAY = "EXTRA_DAY";
+    private static final String EXTRA_DAY = "EXTRA_DAY";
+    private static final String EXTRA_SAVED_SESSIONS = "SAVED_SESSIONS";
 
     private ScheduleAdapter adapter;
     private Day day;
 
-    public static ProgramDayFragment newInstance(Day day) {
+    public static ProgramDayFragment newInstance(Day day, HashMap<String, Boolean> savedSessions) {
 
         Bundle args = new Bundle();
+        args.putSerializable(EXTRA_SAVED_SESSIONS, savedSessions);
         args.putParcelable(EXTRA_DAY, day);
         ProgramDayFragment fragment = new ProgramDayFragment();
         fragment.setArguments(args);
@@ -37,6 +39,12 @@ public class ProgramDayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.program_day_fragment, container, false);
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(v, savedInstanceState);
         RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         DividerItemDecoration dividerItemDecoration =
@@ -44,12 +52,16 @@ public class ProgramDayFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
         ArrayList<Talk> talks = new ArrayList<>();
-        day = getArguments().getParcelable(EXTRA_DAY);
+        if (getArguments() != null) {
+            day = getArguments().getParcelable(EXTRA_DAY);
+
+        }
         talks.addAll(day.getTalks());
         adapter = new ScheduleAdapter(getActivity(), talks);
+        if(getArguments() != null) {
+            updateSavedSessions((HashMap<String, Boolean>) getArguments().getSerializable(EXTRA_SAVED_SESSIONS));
+        }
         recyclerView.setAdapter(adapter);
-
-        return v;
     }
 
     @Override
@@ -57,8 +69,8 @@ public class ProgramDayFragment extends Fragment {
         super.onResume();
     }
 
-    public void loadSavedSessions(HashMap<String, Boolean> savedSessions) {
-        if (day != null) {
+    private void updateSavedSessions(HashMap<String, Boolean> savedSessions) {
+        if (day != null && adapter != null) {
             for (Talk talk : day.getTalks()) {
                 talk.setSaved(talk.getSession().isIncludedIn(savedSessions));
             }

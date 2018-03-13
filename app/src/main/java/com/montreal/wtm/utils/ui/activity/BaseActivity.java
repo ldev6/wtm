@@ -22,7 +22,7 @@ public class BaseActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1;
     private static PublishSubject<Boolean> loginChanged = PublishSubject.create();
 
-    protected Observable<Boolean> getLoginChanged() {
+    public Observable<Boolean> getLoginChanged() {
        return Observable.just(true).mergeWith(loginChanged).observeOn(AndroidSchedulers.mainThread());
     }
 

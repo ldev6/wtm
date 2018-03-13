@@ -15,9 +15,11 @@ import com.montreal.wtm.model.Talk;
 import com.montreal.wtm.model.Timeslot;
 import com.montreal.wtm.model.Track;
 import com.montreal.wtm.ui.adapter.ProgramFragmentPagerAdapter;
+import com.montreal.wtm.utils.ui.activity.BaseActivity;
 import com.montreal.wtm.utils.ui.fragment.BaseFragment;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +32,8 @@ import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 public class ProgramFragment extends BaseFragment {
+
+    private Disposable disposable;
 
     public static ProgramFragment newInstance() {
         ProgramFragment fragment = new ProgramFragment();
@@ -49,14 +53,41 @@ public class ProgramFragment extends BaseFragment {
         TabLayout tabLayout = v.findViewById(R.id.sliding_tabs);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
+        adapter = new ProgramFragmentPagerAdapter(getChildFragmentManager());
 
-        FirebaseData.INSTANCE.getMyShedule(getActivity(), requestListenerMySchedule);
+            FirebaseData.INSTANCE.getMyShedule(getActivity(), requestListenerMySchedule);
         FirebaseData.INSTANCE.getSessions(getActivity(), requestListenerSession);
         FirebaseData.INSTANCE.getMyRatings(getActivity(), requestListenerRatings);
 
         setMessageViewInterface(this);
         showProgressBar();
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        disposable = ((BaseActivity) getActivity()).getLoginChanged().subscribe(this::onLoginChanged);
+    }
+
+    private void onLoginChanged(Boolean loggedIn) {
+        Timber.d("Received login change on ProgramFragment %s", loggedIn);
+        if (loggedIn != null && loggedIn) {
+            retryOnProblem();
+        }
     }
 
     private FirebaseData.RequestListener<ArrayList<Day>> requestListenerDays =
@@ -91,7 +122,11 @@ public class ProgramFragment extends BaseFragment {
                     return days;
                 }).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(days1 -> {
 
-                    adapter = new ProgramFragmentPagerAdapter(getChildFragmentManager(), days1);
+                    if(adapter != null) {
+                        adapter.updateDays(days1);
+                    } else {
+                        adapter = new ProgramFragmentPagerAdapter(getChildFragmentManager(), days1);
+                    }
                     viewPager.setAdapter(adapter);
                     hideMessageView();
                 });
@@ -110,7 +145,8 @@ public class ProgramFragment extends BaseFragment {
                 savedSessions = mySchedule;
                 hideMessageView();
                 if (adapter != null) {
-                    adapter.getItem(viewPager.getCurrentItem()).loadSavedSessions(mySchedule);
+                    adapter.loadSavedSessions(mySchedule);
+                    adapter.notifyDataSetChanged();
                 }
             }
 
@@ -185,7 +221,9 @@ public class ProgramFragment extends BaseFragment {
             @Override
             public void onDataChange(HashMap<String, Session> sessionMap) {
                 sessionHashMap = sessionMap;
-                FirebaseData.INSTANCE.getSchedule(getActivity(), requestListenerDays);
+                if(getActivity() != null) {
+                    FirebaseData.INSTANCE.getSchedule(getActivity(), requestListenerDays);
+                }
             }
 
             @Override
