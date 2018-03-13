@@ -3,33 +3,38 @@ package com.montreal.wtm.ui.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
+import com.montreal.wtm.model.Logo;
 import com.montreal.wtm.model.Partner;
-import com.montreal.wtm.ui.adapter.SponsorsGridViewAdapter;
+import com.montreal.wtm.ui.adapter.SponsorAdapter;
 import com.montreal.wtm.utils.ui.fragment.BaseFragment;
 import java.util.HashMap;
 
 public class PartnersFragment extends BaseFragment {
 
+    private RecyclerView recyclerView;
+    private SponsorAdapter adapter;
+
     public static PartnersFragment newInstance() {
         return new PartnersFragment();
     }
-
-    private LinearLayout layoutContainer;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.sponsors_fragment, container, false);
-        layoutContainer = v.findViewById(R.id.container);
+        recyclerView = v.findViewById(R.id.recyclerView);
+        adapter = new SponsorAdapter();
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
         FirebaseData.INSTANCE.getPartners(getActivity(), requestListener);
         showProgressBar();
         return v;
@@ -39,27 +44,34 @@ public class PartnersFragment extends BaseFragment {
         new FirebaseData.RequestListener<HashMap<Integer, Partner>>() {
 
             @Override
-            public void onDataChange(HashMap<Integer, Partner> partnerCategoryies) {
+            public void onDataChange(HashMap<Integer, Partner> partnerCategories) {
                 if (!isAdded()) {
                     return;
                 }
 
-                for (Partner partner : partnerCategoryies.values()) {
-
-                    View partnerView = getLayoutInflater().inflate(R.layout.partner_row, null);
-                    TextView title = partnerView.findViewById(R.id.partnerTitle);
-                    title.setText(partner.getTitle());
-                    title.setTextColor(getColor(partner.getTitle()));
-
-                    GridView partnerGridview = partnerView.findViewById(R.id.sponsorGridView);
-                    partnerGridview.setAdapter(
-                        new SponsorsGridViewAdapter(getActivity(), partner, getSize(partner.getTitle())));
-
-                    layoutContainer.addView(partnerView);
+                for (Partner partnerCategory : partnerCategories.values()) {
+                    adapter.addTitle(partnerCategory.getTitle());
+                    int size = getSize(partnerCategory.getTitle());
+                    if (getType(partnerCategory.getTitle()) == SponsorAdapter.SMALL) {
+                        Pair<Logo, Logo> logos;
+                        for (int i = 0; i < ((partnerCategory.getLogos().size()+1) / 2); i += 2) {
+                            if (i < (partnerCategory.getLogos().size() - 1)) {
+                                logos = new Pair<>(partnerCategory.getLogos().get(i),
+                                    partnerCategory.getLogos().get(i + 1));
+                                adapter.addLogos(logos, size);
+                            } else {
+                                adapter.addLogo(partnerCategory.getLogos().get(i), size);
+                            }
+                        }
+                    } else {
+                        for (Logo logo : partnerCategory.getLogos()) {
+                            adapter.addLogo(logo, size);
+                        }
+                    }
                 }
 
                 hideMessageView();
-                getView().invalidate();
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -73,6 +85,15 @@ public class PartnersFragment extends BaseFragment {
             return;
         }
         FirebaseData.INSTANCE.getPartners(getActivity(), requestListener);
+    }
+
+    private int getType(String title) {
+        if (title.toLowerCase().contains(getString(R.string.platinum)) || title.toLowerCase()
+            .contains(getString(R.string.gold))) {
+            return SponsorAdapter.LARGE;
+        } else {
+            return SponsorAdapter.SMALL;
+        }
     }
 
     private int getSize(String title) {
@@ -89,17 +110,4 @@ public class PartnersFragment extends BaseFragment {
         }
     }
 
-    private int getColor(String title) {
-        if (title.toLowerCase().contains(getString(R.string.platinum))) {
-            return R.color.platinum;
-        } else if (title.toLowerCase().contains(getString(R.string.gold))) {
-            return R.color.gold;
-        } else if (title.toLowerCase().contains(getString(R.string.silver))) {
-            return R.color.silver;
-        } else if (title.toLowerCase().contains(getString(R.string.bronze))) {
-            return R.color.bronze;
-        } else {
-            return Color.BLACK;
-        }
-    }
 }
