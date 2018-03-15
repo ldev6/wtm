@@ -1,7 +1,9 @@
 package com.montreal.wtm.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -50,30 +52,37 @@ public class SponsorAdapter extends RecyclerView.Adapter {
         if (holder instanceof LogosViewHolder) {
 
             LogosViewHolder viewHolder = ((LogosViewHolder) holder);
-
+            Pair<Logo, Logo> logos = (Pair<Logo, Logo>) logosAndTitles.get(position);
             StringBuilder stringBuilder =
                 new StringBuilder().append(context.getResources().getString(R.string.storage_url))
-                    .append(((Pair<Logo, Logo>) logosAndTitles.get(position)).first.getLogoUrl());
+                    .append(logos.first.getLogoUrl());
             Utils.downloadImage(stringBuilder.toString(), viewHolder.first);
+            viewHolder.first.setOnClickListener(v->redirectToWeb(v.getContext(), logos.first.getUrlWebsite()));
 
             stringBuilder = new StringBuilder().append(context.getResources().getString(R.string.storage_url))
                 .append(((Pair<Logo, Logo>) logosAndTitles.get(position)).second.getLogoUrl());
             Utils.downloadImage(stringBuilder.toString(), viewHolder.second);
+            viewHolder.second.setOnClickListener(v->redirectToWeb(v.getContext(), logos.second.getUrlWebsite()));
             viewHolder.setImageSize(sizes.get(position));
         } else if (holder instanceof LogoViewHolder) {
 
             LogoViewHolder viewHolder = ((LogoViewHolder) holder);
-
+            Logo logo = (Logo) logosAndTitles.get(position);
             StringBuilder stringBuilder =
                 new StringBuilder().append(context.getResources().getString(R.string.storage_url))
-                    .append(((Logo) logosAndTitles.get(position)).getLogoUrl());
+                    .append(logo.getLogoUrl());
             Utils.downloadImage(stringBuilder.toString(), viewHolder.first);
             viewHolder.setImageSize(sizes.get(position));
+            viewHolder.first.setOnClickListener(v->redirectToWeb(v.getContext(), logo.getUrlWebsite()));
         } else if (holder instanceof TitleViewHolder) {
             TitleViewHolder viewHolder = ((TitleViewHolder) holder);
             viewHolder.first.setText((String) logosAndTitles.get(position));
             viewHolder.first.setTextColor(getColor(context, (String) logosAndTitles.get(position)));
         }
+    }
+
+    private void redirectToWeb(Context context, String website) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
     }
 
     @Override
