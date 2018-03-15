@@ -1,11 +1,9 @@
 package com.montreal.wtm.utils.ui.fragment;
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
-
 import com.montreal.wtm.R;
 import com.montreal.wtm.utils.view.MessageView;
 
@@ -22,7 +20,9 @@ public abstract class BaseFragment extends Fragment implements MessageView.Messa
     }
 
     public void hideMessageView() {
-        mMessageView.setVisibility(View.GONE);
+        if (mMessageView != null) {
+            mMessageView.setVisibility(View.GONE);
+        }
     }
 
     public void setMessageViewInterface(MessageView.MessageViewInterface messageViewInterface) {
