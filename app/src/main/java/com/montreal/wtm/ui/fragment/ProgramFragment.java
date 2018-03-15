@@ -54,12 +54,12 @@ public class ProgramFragment extends BaseFragment {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
         adapter = new ProgramFragmentPagerAdapter(getChildFragmentManager());
+        setMessageViewInterface(this);
 
-            FirebaseData.INSTANCE.getMyShedule(getActivity(), requestListenerMySchedule);
+        FirebaseData.INSTANCE.getMyShedule(getActivity(), requestListenerMySchedule);
         FirebaseData.INSTANCE.getSessions(getActivity(), requestListenerSession);
         FirebaseData.INSTANCE.getMyRatings(getActivity(), requestListenerRatings);
 
-        setMessageViewInterface(this);
         showProgressBar();
         return v;
     }
