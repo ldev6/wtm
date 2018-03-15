@@ -463,7 +463,7 @@ object FirebaseData {
             val data = gson.fromJson<Nothing?>(jsonFile, mType)
             TODO("Check how to fix this")
             mRequestListener.onDataChange(data)
-          } catch (e: JsonSyntaxException) {
+          } catch (e: Exception) {
             mRequestListener.onCancelled(ErrorFirebase.network)
           }
         }
