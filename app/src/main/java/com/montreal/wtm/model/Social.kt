@@ -29,9 +29,9 @@ class Social : Parcelable, Serializable {
   }
 
   protected constructor(`in`: Parcel) {
-    this.name = `in`.readString()
-    this.link = `in`.readString()
-    this.icon = `in`.readString()
+    this.name = `in`.readString()  ?: ""
+    this.link = `in`.readString() ?: ""
+    this.icon = `in`.readString() ?: ""
   }
 
   companion object {

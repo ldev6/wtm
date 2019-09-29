@@ -25,7 +25,7 @@ import com.montreal.wtm.utils.Utils
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
+//import timber.log.Timber
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -313,7 +313,7 @@ object FirebaseData {
 
   fun saveSession(sessionId: Int, save: Boolean) {
     val uid = FirebaseAuth.getInstance().getCurrentUser()?.getUid();
-    Timber.d("Session id: " + sessionId)
+//    Timber.d("Session id: " + sessionId)
     uid?.let {
       getUserData(uid, USER_SESSIONS)?.child(sessionId?.toString())?.setValue(save)
     }
@@ -321,7 +321,7 @@ object FirebaseData {
 
   fun saveSessionRating(sessionId: Int, rating: Int) {
     val uid = FirebaseAuth.getInstance().getCurrentUser()?.getUid();
-    Timber.d("Session id: " + sessionId + ", rating: " + rating)
+//    Timber.d("Session id: " + sessionId + ", rating: " + rating)
     uid?.let {
       getUserData(uid, RATINGS)?.child(SESSIONS)?.child(sessionId?.toString())?.setValue(rating)
     }
@@ -420,7 +420,7 @@ object FirebaseData {
       }
 
       override fun onCancelled(error: DatabaseError) {
-        Timber.v("Listener was cancelled")
+//        Timber.v("Listener was cancelled")
       }
     })
   }

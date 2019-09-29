@@ -54,12 +54,12 @@ class Speaker : Parcelable {
   }
 
   protected constructor(`in`: Parcel) {
-    this.id = `in`.readInt()
-    this.name = `in`.readString()
-    this.title = `in`.readString()
-    this.shortBio = `in`.readString()
-    this.bio = `in`.readString()
-    this.photoUrl = `in`.readString()
+    this.id = `in`.readInt() ?: 0
+    this.name = `in`.readString() ?: ""
+    this.title = `in`.readString() ?: ""
+    this.shortBio = `in`.readString() ?: ""
+    this.bio = `in`.readString() ?: ""
+    this.photoUrl = `in`.readString() ?: ""
     this.socials = `in`.readSerializable() as ArrayList<Social>
     this.sessionId = `in`.readInt()
   }

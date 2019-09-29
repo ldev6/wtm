@@ -55,10 +55,10 @@ class Session : Parcelable {
 
   protected constructor(`in`: Parcel) {
     this.id = `in`.readInt()
-    this.complexity = `in`.readString()
-    this.title = `in`.readString()
-    this.description = `in`.readString()
-    this.language = `in`.readString()
+    this.complexity = `in`.readString() ?: ""
+    this.title = `in`.readString() ?: ""
+    this.description = `in`.readString() ?: ""
+    this.language = `in`.readString() ?: ""
     this.speakers = `in`.readSerializable() as ArrayList<Int>
     this.tags = `in`.readSerializable() as ArrayList<String>
   }

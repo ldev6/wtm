@@ -9,46 +9,47 @@ import java.util.ArrayList
 @IgnoreExtraProperties
 class Timeslot : Parcelable {
 
-  @PropertyName("startTime")
-  lateinit var startTime: String
+    @PropertyName("startTime")
+    lateinit var startTime: String
 
-  @PropertyName("endTime")
-  lateinit var endTime: String
+    @PropertyName("endTime")
+    lateinit var endTime: String
 
-  @PropertyName("sessions")
-  lateinit var sessionsId: ArrayList<ArrayList<Int>>
+    @PropertyName("sessions")
+    lateinit var sessionsId: ArrayList<ArrayList<Int>>
 
-  constructor()
+    constructor()
 
-  val time: String
-    get() = startTime + " - " + endTime
+    val time: String
+        get() = startTime + " - " + endTime
 
-  override fun describeContents(): Int {
-    return 0
-  }
-
-  override fun writeToParcel(dest: Parcel, flags: Int) {
-    dest.writeString(this.startTime)
-    dest.writeString(this.endTime)
-    dest.writeSerializable(this.sessionsId)
-  }
-
-  protected constructor(`in`: Parcel) {
-    this.startTime = `in`.readString()
-    this.endTime = `in`.readString()
-    this.sessionsId = `in`.readSerializable() as ArrayList<ArrayList<Int>>
-  }
-
-  companion object {
-
-    @JvmField val CREATOR: Parcelable.Creator<Timeslot> = object : Parcelable.Creator<Timeslot> {
-      override fun createFromParcel(source: Parcel): Timeslot {
-        return Timeslot(source)
-      }
-
-      override fun newArray(size: Int): Array<Timeslot?> {
-        return arrayOfNulls(size)
-      }
+    override fun describeContents(): Int {
+        return 0
     }
-  }
+
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeString(this.startTime)
+        dest.writeString(this.endTime)
+        dest.writeSerializable(this.sessionsId)
+    }
+
+    protected constructor(`in`: Parcel) {
+        this.startTime = `in`.readString() ?: ""
+        this.endTime = `in`.readString() ?: ""
+        this.sessionsId = `in`.readSerializable() as ArrayList<ArrayList<Int>>
+    }
+
+    companion object {
+
+        @JvmField
+        val CREATOR: Parcelable.Creator<Timeslot> = object : Parcelable.Creator<Timeslot> {
+            override fun createFromParcel(source: Parcel): Timeslot {
+                return Timeslot(source)
+            }
+
+            override fun newArray(size: Int): Array<Timeslot?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
 }

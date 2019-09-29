@@ -3,8 +3,7 @@ package com.montreal.wtm.ui.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,14 +85,11 @@ public class LocationFragment extends BaseFragment {
 
         if (location.getImageParkingUrl() != null) {
             Utils.downloadImage(location.getImageParkingUrl(), mParkingImageView);
-            mParkingImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String url = location.getImageParkingUrl();
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                }
+            mParkingImageView.setOnClickListener(v -> {
+                String url = location.getImageParkingUrl();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             });
         }
     }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_program">
+
+    <fragment
+        android:id="@+id/nav_program"
+        android:name="com.montreal.wtm.ui.fragment.ProgramFragment"
+        android:label="@string/program"
+        tools:layout="@layout/program_fragment" >
+        <action
+            android:id="@+id/action_nav_program_to_talkFragment"
+            app:destination="@id/talkFragment" />
+    </fragment>
+    
+    <fragment
+        android:id="@+id/nav_map"
+        android:name="com.montreal.wtm.ui.fragment.LocationFragment"
+        android:label="@string/location" />
+    
+    <fragment
+        android:id="@+id/nav_twitter"
+        android:name="com.montreal.wtm.ui.fragment.TwitterFragment"
+        android:label="@string/twitter"
+        tools:layout="@layout/twitter_fragment" />
+    <fragment
+        android:id="@+id/nav_sponsors"
+        android:name="com.montreal.wtm.ui.fragment.PartnersFragment"
+        android:label="@string/sponsors"
+        tools:layout="@layout/sponsors_fragment" />
+    
+    <fragment
+        android:id="@+id/nav_information"
+        android:name="com.montreal.wtm.ui.fragment.InformationFragment"
+        android:label="@string/information"
+        tools:layout="@layout/information_fragment" />
+    <fragment
+        android:id="@+id/nav_speakers"
+        android:name="com.montreal.wtm.ui.fragment.SpeakersFragment"
+        android:label="@string/speakers"
+        tools:layout="@layout/simple_recycler_list" >
+        <action
+            android:id="@+id/action_nav_speakers_to_speaker_info"
+            app:destination="@id/speaker_info"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/speaker_info"
+        android:name="com.montreal.wtm.ui.activity.SpeakerActivity"
+        android:label="Speaker info"
+        tools:layout="@layout/speaker_activity">
+
+        <argument
+            android:name="speaker"
+            app:argType="com.montreal.wtm.model.Speaker" />
+    </fragment>
+    <fragment
+        android:id="@+id/talkFragment"
+        android:name="com.montreal.wtm.ui.fragment.TalkFragment"
+        android:label="content_talk"
+        tools:layout="@layout/content_talk">
+        <argument
+            android:name="talk"
+            app:argType="com.montreal.wtm.model.Talk" />
+    </fragment>
+   
+
+</navigation>

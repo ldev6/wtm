@@ -13,9 +13,9 @@ class Talk(var session: Session, var time: String, var room: String,
   var type: Type
 
   constructor(parcel: Parcel) : this(
-      parcel.readParcelable(Session::class.java.classLoader),
-      parcel.readString(),
-      parcel.readString(),
+      parcel.readParcelable(Session::class.java.classLoader)!!,
+      parcel.readString()?:"",
+      parcel.readString()?:"",
       parcel.readByte() != 0.toByte()) {
 
   }

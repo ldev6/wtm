@@ -1,12 +1,11 @@
 package com.montreal.wtm.ui.adapter;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import com.montreal.wtm.model.Day;
 import com.montreal.wtm.ui.fragment.ProgramDayFragment;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class ProgramFragmentPagerAdapter extends FragmentPagerAdapter {
 

@@ -18,16 +18,16 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity
             android:name=".ui.activity.SpeakerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.activity.TalkActivity"
+            android:name=".ui.fragment.TalkFragment"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 

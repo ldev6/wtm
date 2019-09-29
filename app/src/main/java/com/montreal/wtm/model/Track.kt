@@ -22,7 +22,7 @@ class Track : Parcelable {
   }
 
   protected constructor(`in`: Parcel) {
-    this.title = `in`.readString()
+    this.title = `in`.readString() ?: ""
   }
 
   companion object {

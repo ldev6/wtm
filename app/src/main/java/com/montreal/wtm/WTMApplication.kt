@@ -2,7 +2,7 @@ package com.montreal.wtm
 
 import android.app.Application
 import android.content.Context
-import android.support.v7.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate
 import android.util.Log
 import com.crashlytics.android.Crashlytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -17,9 +17,9 @@ import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
 import io.fabric.sdk.android.Fabric
-import timber.log.Timber
-import timber.log.Timber.DebugTree
-import timber.log.Timber.Tree
+//import timber.log.Timber
+//import timber.log.Timber.DebugTree
+//import timber.log.Timber.Tree
 
 
 class WTMApplication : Application() {
@@ -35,7 +35,7 @@ class WTMApplication : Application() {
     remoteConfig.setConfigSettings(configSettings)
     remoteConfig.setDefaults(R.xml.remote_config_defaults)
     if(BuildConfig.DEBUG) {
-      Timber.plant(DebugTree())
+//      Timber.plant(DebugTree())
     }
 
     //CONFIGURATION
@@ -50,7 +50,7 @@ class WTMApplication : Application() {
         .build()
     Twitter.initialize(config)
 
-    Fabric.with(this, Crashlytics());
+    Fabric.with(this, Crashlytics())
 
     val cacheDir = StorageUtils.getCacheDirectory(applicationContext)
 

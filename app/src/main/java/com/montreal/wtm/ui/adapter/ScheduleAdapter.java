@@ -1,19 +1,18 @@
 package com.montreal.wtm.ui.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseWrapper;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
-import com.montreal.wtm.model.Session;
 import com.montreal.wtm.model.Talk;
-import com.montreal.wtm.ui.activity.TalkActivity;
-import com.montreal.wtm.utils.ui.activity.BaseActivity;
+import com.montreal.wtm.ui.fragment.ProgramFragmentDirections;
 import java.util.ArrayList;
 
 public class ScheduleAdapter extends RecyclerView.Adapter {
@@ -66,7 +65,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
             } else {
                 talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
             }
-            if(talk.getType() == Talk.Type.General) {
+            if (talk.getType() == Talk.Type.General) {
                 talkViewHolder.trackView.setVisibility(View.INVISIBLE);
                 talkViewHolder.talkLocale.setVisibility(View.GONE);
             } else {
@@ -77,10 +76,11 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
                     trackColor = R.color.technical_skill;
                 }
                 talkViewHolder.trackView.setVisibility(View.VISIBLE);
-                talkViewHolder.trackView.setBackgroundColor(talkViewHolder.trackView.getResources().getColor(trackColor));
+                talkViewHolder.trackView.setBackgroundColor(
+                    talkViewHolder.trackView.getResources().getColor(trackColor));
             }
 
-            if(updatable && FirebaseWrapper.Companion.isLogged()) {
+            if (updatable && FirebaseWrapper.Companion.isLogged()) {
                 talkViewHolder.loveImageView.setOnClickListener(v -> {
                     if (talk.getSaved()) {
                         talkViewHolder.loveImageView.setImageResource(R.drawable.ic_favorite_black_empty_24px);
@@ -93,8 +93,18 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
                 });
             }
 
-            talkViewHolder.itemView.setOnClickListener(
-                v -> context.startActivity(TalkActivity.newIntent(context, talk)));
+            talkViewHolder.itemView.setOnClickListener(v -> {
+                //Bundle bundle = new Bundle();
+                //bundle.putParcelable(EXTRA_TALK, talk);
+                Navigation.findNavController(v).navigate(R.id.action_nav_program_to_talkFragment);
+                //ProgramFragmentDirections.ActionNavProgramToTalkFragment action =
+                //    ProgramFragmentDirections.actionNavProgramToTalkFragment(talk);
+                //Navigation.findNavController(v).navigate(action);
+
+                
+                //context.startActivity(TalkActivity.newIntent(context, talk)
+
+            });
             talkViewHolder.timeTextView.setText(talk.getTime());
             talkViewHolder.roomTextView.setText(talk.getRoom());
             talkViewHolder.talkTitleTextView.setText(talk.getSession().getTitle());
@@ -103,8 +113,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return (talks.get(position).getType() == Talk.Type.Break || talks.get(position)
-            .getType() == Talk.Type.Food) ? TYPE_BREAK : TYPE_TALK;
+        return (talks.get(position).getType() == Talk.Type.Break || talks.get(position).getType() == Talk.Type.Food)
+            ? TYPE_BREAK : TYPE_TALK;
     }
 
     @Override

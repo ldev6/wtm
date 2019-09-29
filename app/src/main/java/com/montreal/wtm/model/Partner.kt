@@ -27,8 +27,8 @@ class Partner : Parcelable {
   }
 
   protected constructor(`in`: Parcel) {
-    this.logos = `in`.createTypedArrayList(Logo.CREATOR)
-    this.title = `in`.readString()
+    this.logos = `in`.createTypedArrayList(Logo.CREATOR) ?: ArrayList()
+    this.title = `in`.readString()  ?: ""
   }
 
   companion object {

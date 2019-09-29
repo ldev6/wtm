@@ -30,9 +30,9 @@ class Logo : Parcelable {
   }
 
   protected constructor(`in`: Parcel) {
-    this.logoUrl = `in`.readString()
-    this.name = `in`.readString()
-    this.urlWebsite = `in`.readString()
+    this.logoUrl = `in`.readString() ?: ""
+    this.name = `in`.readString() ?: ""
+    this.urlWebsite = `in`.readString() ?: ""
   }
 
   companion object {

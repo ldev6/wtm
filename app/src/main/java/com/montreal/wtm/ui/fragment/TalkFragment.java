@@ -1,40 +1,44 @@
-package com.montreal.wtm.ui.activity;
+package com.montreal.wtm.ui.fragment;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.ImageViewCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.ImageViewCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseWrapper;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Speaker;
 import com.montreal.wtm.model.Talk;
 import com.montreal.wtm.ui.adapter.SpeakersAdapter;
-import com.montreal.wtm.utils.ui.activity.BaseActivity;
+import com.montreal.wtm.utils.ui.fragment.BaseFragment;
 import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import timber.log.Timber;
+//import timber.log.Timber;
 
-public class TalkActivity extends BaseActivity implements View.OnClickListener {
+public class TalkFragment extends BaseFragment implements View.OnClickListener {
 
-    private static final String EXTRA_TALK = "com.montreal.wtm.talk";
+    public static final String EXTRA_TALK = "com.montreal.wtm.talk";
 
     public static Intent newIntent(Context context, Talk talk) {
-        Intent intent = new Intent(context, TalkActivity.class);
+        Intent intent = new Intent(context, TalkFragment.class);
         intent.putExtra(EXTRA_TALK, talk);
         return intent;
     }
@@ -55,39 +59,41 @@ public class TalkActivity extends BaseActivity implements View.OnClickListener {
     private TextView speakerSubtitle;
     private ImageView[] stars;
 
+    @androidx.annotation.Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container,
+        @androidx.annotation.Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.talk_activity, container, false);
 
-        setContentView(R.layout.talk_activity);
-        Intent intent = getIntent();
-        this.talk = intent.getExtras().getParcelable(EXTRA_TALK);
+        //this.talk = getArguments().getParcelable(EXTRA_TALK);
+        this.talk = TalkFragmentArgs.fromBundle(getArguments()).getTalk();
 
-        toolBar = findViewById(R.id.toolbar);
-        collapsingToolbar = findViewById(R.id.toolbar_layout);
-        avatarImageView = findViewById(R.id.avatarImageView);
-        talkTitle = findViewById(R.id.talk_title);
-        talkDescription = findViewById(R.id.talk_description);
-        speakers = findViewById(R.id.speakers);
-        speakerTitleSection = findViewById(R.id.speaker_title_section);
-        speakerSubtitle = findViewById(R.id.speaker_title);
-        talkLocationTimeLocale = findViewById(R.id.talk_location_time_locale);
-        talkTags = findViewById(R.id.talk_tags);
+        toolBar = v.findViewById(R.id.toolbar);
+        collapsingToolbar = v.findViewById(R.id.toolbar_layout);
+        avatarImageView = v.findViewById(R.id.avatarImageView);
+        talkTitle = v.findViewById(R.id.talk_title);
+        talkDescription = v.findViewById(R.id.talk_description);
+        speakers = v.findViewById(R.id.speakers);
+        speakerTitleSection = v.findViewById(R.id.speaker_title_section);
+        speakerSubtitle = v.findViewById(R.id.speaker_title);
+        talkLocationTimeLocale = v.findViewById(R.id.talk_location_time_locale);
+        talkTags = v.findViewById(R.id.talk_tags);
 
         stars = new ImageView[5];
-        stars[0] = findViewById(R.id.one_star);
-        stars[1] = findViewById(R.id.two_stars);
-        stars[2] = findViewById(R.id.three_stars);
-        stars[3] = findViewById(R.id.four_stars);
-        stars[4] = findViewById(R.id.five_stars);
+        stars[0] = v.findViewById(R.id.one_star);
+        stars[1] = v.findViewById(R.id.two_stars);
+        stars[2] = v.findViewById(R.id.three_stars);
+        stars[3] = v.findViewById(R.id.four_stars);
+        stars[4] = v.findViewById(R.id.five_stars);
 
         for (int i = 0; i < stars.length; i++) {
             stars[i].setOnClickListener(this);
             stars[i].setTag(i + 1);
         }
 
-        setSupportActionBar(toolBar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //int screenHeight = getAnimationScreenHeight();
+        //v.setTranslationY(screenHeight);
+        
 
         talkLocationTimeLocale.setText(talk.getLocationTimeLocale());
         talkTags.setText(talk.getSessionTags());
@@ -98,20 +104,20 @@ public class TalkActivity extends BaseActivity implements View.OnClickListener {
         if (talk.hasSpeakers()) {
             speakerTitleSection.setVisibility(View.VISIBLE);
             speakers.setVisibility(View.VISIBLE);
-            speakersAdapter = new SpeakersAdapter(this);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+            speakersAdapter = new SpeakersAdapter(getContext());
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
             layoutManager.setAutoMeasureEnabled(true);
             speakers.setLayoutManager(layoutManager);
             speakers.setAdapter(speakersAdapter);
             for (int speakerId : talk.getSpeakers()) {
-                FirebaseData.INSTANCE.getSpeakerByInnerSpeakerId(this, requestListener, speakerId);
+                FirebaseData.INSTANCE.getSpeakerByInnerSpeakerId(getActivity(), requestListener, speakerId);
             }
         } else {
             speakerTitleSection.setVisibility(View.GONE);
             speakers.setVisibility(View.GONE);
         }
 
-        fab = findViewById(R.id.fab);
+        fab = v.findViewById(R.id.fab);
         int drawableId = R.drawable.ic_favorite_white_24px;
         if (talk.getSaved()) {
             drawableId = R.drawable.ic_favorite_black_24px;
@@ -120,8 +126,10 @@ public class TalkActivity extends BaseActivity implements View.OnClickListener {
         fab.setOnClickListener(this);
 
         if (FirebaseWrapper.Companion.isLogged()) {
-            FirebaseData.INSTANCE.getMySessionRating(this, requestSessionRatingListener, talk.getSessionId());
+            FirebaseData.INSTANCE.getMySessionRating(getActivity(), requestSessionRatingListener, talk.getSessionId());
         }
+
+        return v;
     }
 
     private FirebaseData.RequestListener<Speaker> requestListener = new FirebaseData.RequestListener<Speaker>() {
@@ -138,16 +146,28 @@ public class TalkActivity extends BaseActivity implements View.OnClickListener {
         }
     };
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+    //@Override
+    //public Animator onCreateAnimator(int transit, boolean enter, int nextAnim) {
+    //    View view = getView();
+    //
+    //    if (view == null) {
+    //        return null;
+    //    }
+    //
+    //    if (enter) {
+    //        view.setElevation(10);
+    //
+    //        view.animate().translationY(0).setDuration(500).start();
+    //    } else if (!enter) {
+    //
+    //        int screenHeight = getAnimationScreenHeight();
+    //
+    //        view.animate().translationY(screenHeight).setDuration(500).start();
+    //    }
+    //  
+    //    return ValueAnimator.ofInt(0, 0).setDuration(500);
+    //}
+   
 
     @Override
     public void onClick(View v) {
@@ -168,7 +188,8 @@ public class TalkActivity extends BaseActivity implements View.OnClickListener {
                     fab.setImageResource(drawableId);
                     Snackbar.make(v, messageId, Snackbar.LENGTH_LONG).show();
                 } else {
-                    promptLogin();
+                    //TODO 
+                    //                    promptLogin();
                 }
                 break;
             case R.id.one_star:
@@ -208,11 +229,11 @@ public class TalkActivity extends BaseActivity implements View.OnClickListener {
         new FirebaseData.RequestListener<Pair<String, Long>>() {
             @Override
             public void onDataChange(@Nullable Pair<String, Long> data) {
-                Timber.d("Received session rating " + data.getFirst() + ", " + data.getSecond());
+                //                Timber.d("Received session rating " + data.getFirst() + ", " + data.getSecond());
                 try {
                     highlightStars(data.getSecond());
                 } catch (NumberFormatException ex) {
-                    Timber.w(ex, "Invalid rating");
+                    //                    Timber.w(ex, "Invalid rating");
                     Crashlytics.logException(ex);
                 }
             }
@@ -222,4 +243,13 @@ public class TalkActivity extends BaseActivity implements View.OnClickListener {
 
             }
         };
+
+    @Override
+    public void retryOnProblem() {
+
+    }
+    
+    private int getAnimationScreenHeight() {
+        return getContext().getResources().getDisplayMetrics().heightPixels;
+    }
 }

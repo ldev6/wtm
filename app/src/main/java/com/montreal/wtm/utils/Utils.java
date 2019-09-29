@@ -9,8 +9,8 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -28,7 +28,7 @@ import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
 import java.io.File;
 import java.util.Locale;
-import timber.log.Timber;
+//import timber.log.Timber;
 
 public class Utils {
     
@@ -49,7 +49,7 @@ public class Utils {
      * @param idView
      * @param fragment
      */
-    public static void changeFragment(FragmentActivity activity, int idView, android.support.v4.app.Fragment fragment) {
+    public static void changeFragment(FragmentActivity activity, int idView, Fragment fragment) {
         if (!fragment.isAdded()) {
             activity.getSupportFragmentManager().beginTransaction().replace(idView, fragment).commit();
         }
@@ -190,7 +190,7 @@ public class Utils {
         if (url != null && url.length() > 0) {
 
             if (enableLog) {
-                Timber.v("Download image: " + url);
+//                Timber.v("Download image: " + url);
             }
 
 

@@ -1,11 +1,10 @@
 package com.montreal.wtm.ui.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ListFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,8 +14,6 @@ import com.montreal.wtm.R;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.twitter.sdk.android.tweetui.SearchTimeline;
 import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
-import com.twitter.sdk.android.tweetui.UserTimeline;
-
 
 public class TwitterFragment extends ListFragment {
 

@@ -1,12 +1,12 @@
 package com.montreal.wtm.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
+import com.google.android.material.tabs.TabLayout;
 import com.montreal.wtm.R;
 import com.montreal.wtm.api.FirebaseData;
 import com.montreal.wtm.model.Day;
@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import org.jetbrains.annotations.NotNull;
-import timber.log.Timber;
+//import timber.log.Timber;
 
 public class ProgramFragment extends BaseFragment {
 
@@ -84,7 +84,7 @@ public class ProgramFragment extends BaseFragment {
     }
 
     private void onLoginChanged(Boolean loggedIn) {
-        Timber.d("Received login change on ProgramFragment %s", loggedIn);
+        //        Timber.d("Received login change on ProgramFragment %s", loggedIn);
         if (loggedIn != null && loggedIn) {
             retryOnProblem();
         }
@@ -122,7 +122,7 @@ public class ProgramFragment extends BaseFragment {
                     return days;
                 }).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(days1 -> {
 
-                    if(adapter != null) {
+                    if (adapter != null) {
                         adapter.updateDays(days1);
                     } else {
                         adapter = new ProgramFragmentPagerAdapter(getChildFragmentManager(), days1);
@@ -141,7 +141,7 @@ public class ProgramFragment extends BaseFragment {
         new FirebaseData.RequestListener<HashMap<String, Boolean>>() {
             @Override
             public void onDataChange(HashMap<String, Boolean> mySchedule) {
-                Timber.v(" Saved schedule " + mySchedule);
+                //                Timber.v(" Saved schedule " + mySchedule);
                 savedSessions = mySchedule;
                 hideMessageView();
                 if (adapter != null) {
@@ -173,7 +173,7 @@ public class ProgramFragment extends BaseFragment {
 
             return getTime(newStartTime) + " - " + getTime(newEndTime);
         } catch (ParseException e) {
-            Timber.e(e, "ParseException");
+            //            Timber.e(e, "ParseException");
         }
         return startTime + " " + endTime;
     }
@@ -207,7 +207,7 @@ public class ProgramFragment extends BaseFragment {
         new FirebaseData.RequestListener<HashMap<String, Long>>() {
             @Override
             public void onDataChange(@org.jetbrains.annotations.Nullable HashMap<String, Long> data) {
-                Timber.d("Received ratings:" + data);
+                //                Timber.d("Received ratings:" + data);
             }
 
             @Override
@@ -221,7 +221,7 @@ public class ProgramFragment extends BaseFragment {
             @Override
             public void onDataChange(HashMap<String, Session> sessionMap) {
                 sessionHashMap = sessionMap;
-                if(getActivity() != null) {
+                if (getActivity() != null) {
                     FirebaseData.INSTANCE.getSchedule(getActivity(), requestListenerDays);
                 }
             }

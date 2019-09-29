@@ -38,10 +38,10 @@ class Day : Parcelable {
   }
 
   protected constructor(`in`: Parcel) {
-    this.date = `in`.readString()
-    this.dateReadable = `in`.readString()
-    this.timeslots = `in`.createTypedArrayList(Timeslot.CREATOR)
-    this.tracks = `in`.createTypedArrayList(Track.CREATOR)
+    this.date = `in`.readString() ?: ""
+    this.dateReadable = `in`.readString() ?: ""
+    this.timeslots = `in`.createTypedArrayList(Timeslot.CREATOR) ?: ArrayList()
+    this.tracks = `in`.createTypedArrayList(Track.CREATOR) ?: ArrayList()
   }
 
   companion object {
